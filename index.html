@@ -1,273 +1,285 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer Verification & Admin Dashboard</title>
-    <style>
-        * { box-sizing: border-box; }
-        body { margin: 0; padding: 15px; font-family: Arial, sans-serif; background: #050d25; color: white; }
-        .container { max-width: 1000px; margin: auto; padding: 25px; border: 1px solid #ffcc00; border-radius: 20px; background: #0c1939; }
-        h1, h2 { color: #ffcc00; text-align: center; }
-        .card { background: #101f42; border: 1px solid #263d70; border-radius: 14px; padding: 18px; margin: 20px 0; }
-        label { display: block; margin: 12px 0 7px; color: #9fb4e8; font-weight: bold; }
-        input, select { width: 100%; padding: 13px; border: 1px solid #293f78; border-radius: 10px; background: #03091b; color: white; font-size: 16px; }
-        button { background: #ffcc00; color: #101010; border: none; padding: 12px 16px; border-radius: 9px; font-weight: bold; font-size: 15px; cursor: pointer; }
-        button:hover { opacity: .85; }
-        .primary { width: 100%; margin-top: 20px; font-size: 17px; padding: 16px; }
-        .secondary { background: #294779; color: white; }
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 18px; }
-        .table-wrap { overflow-x: auto; border-radius: 10px; margin-top: 15px; }
-        table { border-collapse: collapse; width: 100%; min-width: 900px; background: #0b1734; }
-        th, td { border: 1px solid #263d70; padding: 12px; text-align: left; }
-        th { color: #ffcc00; background: #172c55; }
-        .login { max-width: 430px; margin: 60px auto; }
-        .hidden { display: none !important; }
-        .note { color: #a9b8d9; font-size: 13px; line-height: 1.6; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Customer Verification & Admin Dashboard</title>
+<style>
+* { box-sizing: border-box; }
+body { margin: 0; padding: 15px; font-family: Arial, sans-serif; background: #050d25; color: white; }
+.container { max-width: 1000px; margin: auto; padding: 25px; border: 1px solid #ffcc00; border-radius: 20px; background: #0c1939; }
+h1, h2 { color: #ffcc00; text-align: center; }
+.card { background: #101f42; border: 1px solid #263d70; border-radius: 14px; padding: 18px; margin: 20px 0; }
+label { display: block; margin: 12px 0 7px; color: #9fb4e8; font-weight: bold; }
+input, select { width: 100%; padding: 13px; border: 1px solid #293f78; border-radius: 10px; background: #03091b; color: white; font-size: 16px; }
+button { background: #ffcc00; color: #101010; border: none; padding: 12px 16px; border-radius: 9px; font-weight: bold; font-size: 15px; cursor: pointer; }
+button:hover { opacity: .85; }
+.primary { width: 100%; margin-top: 20px; font-size: 17px; padding: 16px; }
+.secondary { background: #294779; color: white; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 18px; }
+.table-wrap { overflow-x: auto; border-radius: 10px; margin-top: 15px; }
+table { border-collapse: collapse; width: 100%; min-width: 950px; background: #0b1734; }
+th, td { border: 1px solid #263d70; padding: 12px; text-align: left; }
+th { color: #ffcc00; background: #172c55; }
+.login { max-width: 430px; margin: 60px auto; }
+.hidden { display: none !important; }
+</style>
 </head>
 <body>
 
-    <!-- ADMIN LOGIN -->
-    <div class="container login" id="loginPage">
-        <h1>🔐 Admin Login</h1>
-        <div class="card">
-            <label>Username</label>
-            <input id="username" placeholder="Username">
-            <label>Password</label>
-            <input id="password" type="password" placeholder="Password">
-            <button class="primary" onclick="login()">Login करें</button>
-            <p id="loginError" style="color:#ff7777"></p>
-        </div>
+<!-- ADMIN LOGIN -->
+<div class="container login" id="loginPage">
+    <h1>🔐 Admin Login</h1>
+    <div class="card">
+        <label>Username</label>
+        <input id="username" placeholder="Username">
+        <label>Password</label>
+        <input id="password" type="password" placeholder="Password">
+        <button class="primary" onclick="login()">Login करें</button>
+        <p id="loginError" style="color:#ff7777"></p>
+    </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="container hidden" id="dashboard">
+    <h1>🛠️ Customer Sheet Control Dashboard</h1>
+    <div class="toolbar">
+        <button class="secondary" onclick="logout()">Logout</button>
     </div>
 
-    <!-- DASHBOARD -->
-    <div class="container hidden" id="dashboard">
-        <h1>🛠️ Customer Sheet Control Dashboard</h1>
-        <div class="toolbar">
-            <button class="secondary" onclick="logout()">Logout</button>
-        </div>
-
-        <!-- NEW CUSTOMER DATA ADD FORM -->
-        <div class="card">
-            <h2>➕ नया कस्टमर डेटा जोड़ें</h2>
-            <div class="form-grid">
-                <div>
-                    <label>लॉटरी / टिकट नंबर</label>
-                    <input id="newLottery" placeholder="e.g. KL-584920">
-                </div>
-                <div>
-                    <label>कस्टमर का नाम</label>
-                    <input id="newName" placeholder="पूरा नाम">
-                </div>
-                <div>
-                    <label>मोबाइल नंबर</label>
-                    <input id="newMobile" placeholder="10 अंकों का मोबाइल नंबर">
-                </div>
-                <div>
-                    <label>प्राइज लेवल</label>
-                    <input id="newPrize" placeholder="e.g. 1st Prize">
-                </div>
-                <div>
-                    <label>UPI ID</label>
-                    <input id="newUpi" placeholder="upi@okhdfcbank">
-                </div>
-                <div>
-                    <label>राशि (Amount)</label>
-                    <input id="newAmount" type="number" placeholder="5000">
-                </div>
+    <!-- NEW CUSTOMER DATA ADD FORM -->
+    <div class="card">
+        <h2>➕ नया कस्टमर डेटा जोड़ें</h2>
+        <div class="form-grid">
+            <div>
+                <label>लॉटरी / टिकट नंबर</label>
+                <input id="newLottery" placeholder="e.g. KL-584920">
             </div>
-            <button class="primary" onclick="addCustomerData()">डेटा सेव करें (Add to Sheet)</button>
-            <p id="addResult" style="margin-top: 15px; font-weight: bold;"></p>
-        </div>
-
-        <!-- SEARCH & VERIFY CUSTOMER DATA -->
-        <div class="card">
-            <h2>🔍 कस्टमर डेटा वेरीफाई करें (Sheet Check)</h2>
-            <div class="form-grid">
-                <div>
-                    <label>लॉटरी नंबर दर्ज करें</label>
-                    <input id="checkLottery" placeholder="e.g. KL-584920">
-                </div>
-                <div style="display: flex; align-items: flex-end;">
-                    <button class="primary" style="margin-top:0;" onclick="verifyCustomerData()">शीट से जाँच करें</button>
-                </div>
+            <div>
+                <label>कस्टमर का नाम</label>
+                <input id="newName" placeholder="पूरा नाम">
             </div>
-            <p id="verifyResult" style="margin-top: 15px; color: #00e69a; font-weight: bold;"></p>
+            <div>
+                <label>मोबाइल नंबर</label>
+                <input id="newMobile" placeholder="10 अंकों का मोबाइल नंबर">
+            </div>
+            <div>
+                <label>प्राइज लेवल</label>
+                <input id="newPrize" placeholder="e.g. 1st Prize">
+            </div>
+            <div>
+                <label>UPI ID</label>
+                <input id="newUpi" placeholder="upi@okhdfcbank">
+            </div>
+            <div>
+                <label>रजिस्ट्रेशन फीस (₹)</label>
+                <input id="newRegFee" type="number" value="3250" readonly style="background: #061128; color: #ffcc00; font-weight: bold;">
+            </div>
+            <div style="grid-column: span 2;">
+                <label>राशि (Amount)</label>
+                <input id="newAmount" type="number" placeholder="5000">
+            </div>
         </div>
-
-        <!-- LIVE SHEET TABLE -->
-        <h2>📊 Google Sheet Live Records</h2>
-        <div class="toolbar">
-            <input id="searchBox" placeholder="नाम या नंबर खोजें..." oninput="renderTable()">
-            <button onclick="loadSheetData()">🔄 Refresh Sheet</button>
-        </div>
-
-        <div class="table-wrap">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Lottery Number</th>
-                        <th>Name</th>
-                        <th>Mobile</th>
-                        <th>Prize Level</th>
-                        <th>UPI ID</th>
-                        <th>Amount</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBody"></tbody>
-            </table>
-        </div>
+        <button class="primary" onclick="addCustomerData()">डेटा सेव करें (Add to Sheet)</button>
+        <p id="addResult" style="margin-top: 15px; font-weight: bold;"></p>
     </div>
 
-    <script>
-        "use strict";
-        const DEMO_USER = "Raja";
-        const DEMO_PASSWORD = "Raja@#8990";
-        let records = [];
-        const API_URL = "https://sheetdb.io/api/v1/vpi9mg3o0yk7q";
+    <!-- SEARCH & VERIFY CUSTOMER DATA -->
+    <div class="card">
+        <h2>🔍 कस्टमर डेटा वेरीफाई करें (Sheet Check)</h2>
+        <div class="form-grid">
+            <div>
+                <label>लॉटरी नंबर दर्ज करें</label>
+                <input id="checkLottery" placeholder="e.g. KL-584920">
+            </div>
+            <div style="display: flex; align-items: flex-end;">
+                <button class="primary" style="margin-top:0;" onclick="verifyCustomerData()">शीट से जाँच करें</button>
+            </div>
+        </div>
+        <p id="verifyResult" style="margin-top: 15px; color: #00e69a; font-weight: bold;"></p>
+    </div>
 
-        function login() {
-            const user = document.getElementById("username").value.trim();
-            const pass = document.getElementById("password").value;
-            if (user === DEMO_USER && pass === DEMO_PASSWORD) {
-                sessionStorage.setItem("adminLoggedIn", "true");
-                showDashboard();
-            } else {
-                document.getElementById("loginError").textContent = "गलत Username या Password";
-            }
-        }
+    <!-- LIVE SHEET TABLE -->
+    <h2>📊 Google Sheet Live Records</h2>
+    <div class="toolbar" style="display: flex; gap: 10px; margin-bottom: 15px;">
+        <input id="searchBox" placeholder="नाम या नंबर खोजें..." oninput="renderTable()" style="flex: 1;">
+        <button onclick="loadSheetData()">🔄 Refresh Sheet</button>
+    </div>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Lottery Number</th>
+                    <th>Name</th>
+                    <th>Mobile</th>
+                    <th>Prize Level</th>
+                    <th>UPI ID</th>
+                    <th>Reg. Fee</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+    </div>
+</div>
 
-        function showDashboard() {
-            document.getElementById("loginPage").classList.add("hidden");
-            document.getElementById("dashboard").classList.remove("hidden");
+<script>
+"use strict";
+const DEMO_USER = "Raja";
+const DEMO_PASSWORD = "Raja@#8990";
+let records = [];
+const API_URL = "https://sheetdb.io/api/v1/vpi9mg3o0yk7q";
+
+function login() {
+    const user = document.getElementById("username").value.trim();
+    const pass = document.getElementById("password").value;
+    if (user === DEMO_USER && pass === DEMO_PASSWORD) {
+        sessionStorage.setItem("adminLoggedIn", "true");
+        showDashboard();
+    } else {
+        document.getElementById("loginError").textContent = "गलत Username या Password";
+    }
+}
+
+function showDashboard() {
+    document.getElementById("loginPage").classList.add("hidden");
+    document.getElementById("dashboard").classList.remove("hidden");
+    loadSheetData();
+}
+
+function logout() {
+    sessionStorage.removeItem("adminLoggedIn");
+    document.getElementById("dashboard").classList.add("hidden");
+    document.getElementById("loginPage").classList.remove("hidden");
+}
+
+async function loadSheetData() {
+    try {
+        let res = await fetch(API_URL);
+        let data = await res.json();
+        records = data.map((item) => ({
+            lottery: item.lottery || item.Lottery || "",
+            name: item.name || item.Name || "",
+            mobile: item.mobile || item.Mobile || "",
+            prize: item.prize || item.Prize || "",
+            upi: item.upi || item.UPI || "",
+            regFee: item.regFee || item.RegFee || "3250",
+            amount: item.amount || item.Amount || "0",
+            status: item.status || item.Status || "Pending"
+        }));
+        renderTable();
+    } catch (err) {
+        console.error("Error loading sheet:", err);
+    }
+}
+
+async function addCustomerData() {
+    const lottery = document.getElementById("newLottery").value.trim();
+    const name = document.getElementById("newName").value.trim();
+    const mobile = document.getElementById("newMobile").value.trim();
+    const prize = document.getElementById("newPrize").value.trim();
+    const upi = document.getElementById("newUpi").value.trim();
+    const regFee = document.getElementById("newRegFee").value.trim();
+    const amount = document.getElementById("newAmount").value.trim();
+    const resultBox = document.getElementById("addResult");
+
+    if (!lottery || !mobile) {
+        resultBox.style.color = "#ff7777";
+        resultBox.textContent = "❌ कृपया कम से कम लॉटरी/टिकट नंबर और मोबाइल नंबर दर्ज करें।";
+        return;
+    }
+
+    const newData = {
+        lottery: lottery,
+        name: name,
+        mobile: mobile,
+        prize: prize || "Standard",
+        upi: upi || "-",
+        regFee: regFee || "3250",
+        amount: amount || "0",
+        status: "Pending"
+    };
+
+    try {
+        resultBox.style.color = "#ffcc00";
+        resultBox.textContent = "⏳ डेटा सेव हो रहा है...";
+        let response = await fetch(API_URL, {
+            method: "POST",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ data: [newData] })
+        });
+
+        if (response.ok) {
+            resultBox.style.color = "#00e69a";
+            resultBox.textContent = "✅ डेटा सफलतापूर्वक Google Sheet में सेव हो गया!";
+            document.getElementById("newLottery").value = "";
+            document.getElementById("newName").value = "";
+            document.getElementById("newMobile").value = "";
+            document.getElementById("newPrize").value = "";
+            document.getElementById("newUpi").value = "";
+            document.getElementById("newAmount").value = "";
             loadSheetData();
+        } else {
+            throw new Error("Failed to save");
         }
+    } catch (err) {
+        console.error("Error saving data:", err);
+        resultBox.style.color = "#ff7777";
+        resultBox.textContent = "❌ डेटा सेव करने में त्रुटि हुई। कृपया पुनः प्रयास करें।";
+    }
+}
 
-        function logout() {
-            sessionStorage.removeItem("adminLoggedIn");
-            document.getElementById("dashboard").classList.add("hidden");
-            document.getElementById("loginPage").classList.remove("hidden");
-        }
+function verifyCustomerData() {
+    const query = document.getElementById("checkLottery").value.trim().toLowerCase();
+    const resultBox = document.getElementById("verifyResult");
+    if (!query) {
+        resultBox.textContent = "कृपया जाँच के लिए लॉटरी नंबर लिखें।";
+        return;
+    }
+    const found = records.find(r => String(r.lottery).toLowerCase() === query);
+    if (found) {
+        resultBox.innerHTML = `✅ डेटा मिल गया!<br>नाम: ${found.name} | प्राइज: ${found.prize} | रजिस्ट्रेशन फीस: ₹${found.regFee} | राशि: ₹${found.amount} | स्थिति: ${found.status}`;
+    } else {
+        resultBox.textContent = "❌ यह लॉटरी नंबर Google Sheet में नहीं मिला।";
+    }
+}
 
-        async function loadSheetData() {
-            try {
-                let res = await fetch(API_URL);
-                let data = await res.json();
-                records = data.map((item, index) => ({
-                    lottery: item.lottery || item.Lottery || "",
-                    name: item.name || item.Name || "",
-                    mobile: item.mobile || item.Mobile || "",
-                    prize: item.prize || item.Prize || "",
-                    upi: item.upi || item.UPI || "",
-                    amount: item.amount || item.Amount || "0",
-                    status: item.status || item.Status || "Pending"
-                }));
-                renderTable();
-            } catch (err) {
-                console.error("Error loading sheet:", err);
-            }
-        }
+function renderTable() {
+    const body = document.getElementById("tableBody");
+    const query = document.getElementById("searchBox").value.trim().toLowerCase();
+    body.replaceChildren();
 
-        async function addCustomerData() {
-            const lottery = document.getElementById("newLottery").value.trim();
-            const name = document.getElementById("newName").value.trim();
-            const mobile = document.getElementById("newMobile").value.trim();
-            const prize = document.getElementById("newPrize").value.trim();
-            const upi = document.getElementById("newUpi").value.trim();
-            const amount = document.getElementById("newAmount").value.trim();
-            const resultBox = document.getElementById("addResult");
+    const filtered = records.filter(record => 
+        [record.name, record.mobile, record.lottery].some(v => String(v || "").toLowerCase().includes(query))
+    );
 
-            if (!lottery || !mobile) {
-                resultBox.style.color = "#ff7777";
-                resultBox.textContent = "❌ कृपया कम से कम लॉटरी/टिकट नंबर और मोबाइल नंबर दर्ज करें।";
-                return;
-            }
+    filtered.forEach(record => {
+        const row = document.createElement("tr");
+        [
+            record.lottery, 
+            record.name, 
+            record.mobile, 
+            record.prize, 
+            record.upi, 
+            "₹" + record.regFee, 
+            "₹" + record.amount, 
+            record.status
+        ].forEach(val => {
+            const cell = document.createElement("td");
+            cell.textContent = val || "-";
+            row.appendChild(cell);
+        });
+        body.appendChild(row);
+    });
+}
 
-            const newData = {
-                lottery: lottery,
-                name: name,
-                mobile: mobile,
-                prize: prize || "Standard",
-                upi: upi || "-",
-                amount: amount || "0",
-                status: "Pending"
-            };
-
-            try {
-                resultBox.style.color = "#ffcc00";
-                resultBox.textContent = "⏳ डेटा सेव हो रहा है...";
-
-                let response = await fetch(API_URL, {
-                    method: "POST",
-                    headers: {
-                        "Accept": "application/json",
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ data: [newData] })
-                });
-
-                if (response.ok) {
-                    resultBox.style.color = "#00e69a";
-                    resultBox.textContent = "✅ डेटा सफलतापूर्वक Google Sheet में सेव हो गया!";
-                    
-                    // फॉर्म को रीसेट करें
-                    document.getElementById("newLottery").value = "";
-                    document.getElementById("newName").value = "";
-                    document.getElementById("newMobile").value = "";
-                    document.getElementById("newPrize").value = "";
-                    document.getElementById("newUpi").value = "";
-                    document.getElementById("newAmount").value = "";
-
-                    // टेबल को रीफ्रेश करें ताकि नया डेटा दिखने लगे
-                    loadSheetData();
-                } else {
-                    throw new Error("Failed to save");
-                }
-            } catch (err) {
-                console.error("Error saving data:", err);
-                resultBox.style.color = "#ff7777";
-                resultBox.textContent = "❌ डेटा सेव करने में त्रुटि हुई। कृपया पुनः प्रयास करें।";
-            }
-        }
-
-        function verifyCustomerData() {
-            const query = document.getElementById("checkLottery").value.trim().toLowerCase();
-            const resultBox = document.getElementById("verifyResult");
-            if (!query) {
-                resultBox.textContent = "कृपया जाँच के लिए लॉटरी नंबर लिखें।";
-                return;
-            }
-            const found = records.find(r => String(r.lottery).toLowerCase() === query);
-            if (found) {
-                resultBox.innerHTML = `✅ डेटा मिल गया!<br>नाम: ${found.name} | प्राइज: ${found.prize} | राशि: ₹${found.amount} | स्थिति: ${found.status}`;
-            } else {
-                resultBox.textContent = "❌ यह लॉटरी नंबर Google Sheet में नहीं मिला।";
-            }
-        }
-
-        function renderTable() {
-            const body = document.getElementById("tableBody");
-            const query = document.getElementById("searchBox").value.trim().toLowerCase();
-            body.replaceChildren();
-            const filtered = records.filter(record => 
-                [record.name, record.mobile, record.lottery].some(v => String(v || "").toLowerCase().includes(query))
-            );
-            filtered.forEach(record => {
-                const row = document.createElement("tr");
-                [record.lottery, record.name, record.mobile, record.prize, record.upi, "₹" + record.amount, record.status].forEach(val => {
-                    const cell = document.createElement("td");
-                    cell.textContent = val || "-";
-                    row.appendChild(cell);
-                });
-                body.appendChild(row);
-            });
-        }
-
-        if (sessionStorage.getItem("adminLoggedIn") === "true") {
-            showDashboard();
-        }
-    </script>
+if (sessionStorage.getItem("adminLoggedIn") === "true") {
+    showDashboard();
+}
+</script>
 </body>
 </html>
