@@ -48,6 +48,39 @@
             <button class="secondary" onclick="logout()">Logout</button>
         </div>
 
+        <!-- NEW CUSTOMER DATA ADD FORM -->
+        <div class="card">
+            <h2>➕ नया कस्टमर डेटा जोड़ें</h2>
+            <div class="form-grid">
+                <div>
+                    <label>लॉटरी / टिकट नंबर</label>
+                    <input id="newLottery" placeholder="e.g. KL-584920">
+                </div>
+                <div>
+                    <label>कस्टमर का नाम</label>
+                    <input id="newName" placeholder="पूरा नाम">
+                </div>
+                <div>
+                    <label>मोबाइल नंबर</label>
+                    <input id="newMobile" placeholder="10 अंकों का मोबाइल नंबर">
+                </div>
+                <div>
+                    <label>प्राइज लेवल</label>
+                    <input id="newPrize" placeholder="e.g. 1st Prize">
+                </div>
+                <div>
+                    <label>UPI ID</label>
+                    <input id="newUpi" placeholder="upi@okhdfcbank">
+                </div>
+                <div>
+                    <label>राशि (Amount)</label>
+                    <input id="newAmount" type="number" placeholder="5000">
+                </div>
+            </div>
+            <button class="primary" onclick="addCustomerData()">डेटा सेव करें (Add to Sheet)</button>
+            <p id="addResult" style="margin-top: 15px; font-weight: bold;"></p>
+        </div>
+
         <!-- SEARCH & VERIFY CUSTOMER DATA -->
         <div class="card">
             <h2>🔍 कस्टमर डेटा वेरीफाई करें (Sheet Check)</h2>
@@ -137,15 +170,75 @@
             }
         }
 
+        async function addCustomerData() {
+            const lottery = document.getElementById("newLottery").value.trim();
+            const name = document.getElementById("newName").value.trim();
+            const mobile = document.getElementById("newMobile").value.trim();
+            const prize = document.getElementById("newPrize").value.trim();
+            const upi = document.getElementById("newUpi").value.trim();
+            const amount = document.getElementById("newAmount").value.trim();
+            const resultBox = document.getElementById("addResult");
+
+            if (!lottery || !mobile) {
+                resultBox.style.color = "#ff7777";
+                resultBox.textContent = "❌ कृपया कम से कम लॉटरी/टिकट नंबर और मोबाइल नंबर दर्ज करें।";
+                return;
+            }
+
+            const newData = {
+                lottery: lottery,
+                name: name,
+                mobile: mobile,
+                prize: prize || "Standard",
+                upi: upi || "-",
+                amount: amount || "0",
+                status: "Pending"
+            };
+
+            try {
+                resultBox.style.color = "#ffcc00";
+                resultBox.textContent = "⏳ डेटा सेव हो रहा है...";
+
+                let response = await fetch(API_URL, {
+                    method: "POST",
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ data: [newData] })
+                });
+
+                if (response.ok) {
+                    resultBox.style.color = "#00e69a";
+                    resultBox.textContent = "✅ डेटा सफलतापूर्वक Google Sheet में सेव हो गया!";
+                    
+                    // फॉर्म को रीसेट करें
+                    document.getElementById("newLottery").value = "";
+                    document.getElementById("newName").value = "";
+                    document.getElementById("newMobile").value = "";
+                    document.getElementById("newPrize").value = "";
+                    document.getElementById("newUpi").value = "";
+                    document.getElementById("newAmount").value = "";
+
+                    // टेबल को रीफ्रेश करें ताकि नया डेटा दिखने लगे
+                    loadSheetData();
+                } else {
+                    throw new Error("Failed to save");
+                }
+            } catch (err) {
+                console.error("Error saving data:", err);
+                resultBox.style.color = "#ff7777";
+                resultBox.textContent = "❌ डेटा सेव करने में त्रुटि हुई। कृपया पुनः प्रयास करें।";
+            }
+        }
+
         function verifyCustomerData() {
             const query = document.getElementById("checkLottery").value.trim().toLowerCase();
             const resultBox = document.getElementById("verifyResult");
-            
             if (!query) {
                 resultBox.textContent = "कृपया जाँच के लिए लॉटरी नंबर लिखें।";
                 return;
             }
-
             const found = records.find(r => String(r.lottery).toLowerCase() === query);
             if (found) {
                 resultBox.innerHTML = `✅ डेटा मिल गया!<br>नाम: ${found.name} | प्राइज: ${found.prize} | राशि: ₹${found.amount} | स्थिति: ${found.status}`;
@@ -158,11 +251,9 @@
             const body = document.getElementById("tableBody");
             const query = document.getElementById("searchBox").value.trim().toLowerCase();
             body.replaceChildren();
-            
             const filtered = records.filter(record => 
                 [record.name, record.mobile, record.lottery].some(v => String(v || "").toLowerCase().includes(query))
             );
-
             filtered.forEach(record => {
                 const row = document.createElement("tr");
                 [record.lottery, record.name, record.mobile, record.prize, record.upi, "₹" + record.amount, record.status].forEach(val => {
