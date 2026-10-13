@@ -1,645 +1,369 @@
-
-<!DOCTYPE html>  <html lang="hi">    <head>    
-<meta charset="UTF-8">    
-<meta name="viewport" content="width=device-width, initial-scale=1.0">    
-<title>Admin Panel & Control Dashboard</title>  <style>    
-* {    
-  box-sizing: border-box;    
-}    body {
-margin: 0;
-padding: 15px;
-font-family: Arial, sans-serif;
-background: #050d25;
-color: white;
-}
-
-.container {
-max-width: 1000px;
-margin: auto;
-padding: 25px;
-border: 1px solid #ffcc00;
-border-radius: 20px;
-background: #0c1939;
-}
-
-h1, h2 {
-color: #ffcc00;
-}
-
-h1 {
-text-align: center;
-font-size: 28px;
-}
-
-.card {
-background: #101f42;
-border: 1px solid #263d70;
-border-radius: 14px;
-padding: 18px;
-margin: 20px 0;
-}
-
-.setting {
-border: 1px dashed #ffcc00;
-border-radius: 12px;
-padding: 15px;
-margin: 15px 0;
-display: flex;
-justify-content: space-between;
-align-items: center;
-gap: 10px;
-}
-
-.setting strong {
-color: #00e69a;
-overflow-wrap: anywhere;
-}
-
-label {
-display: block;
-margin: 12px 0 7px;
-color: #9fb4e8;
-font-weight: bold;
-}
-
-input, select {
-width: 100%;
-padding: 13px;
-border: 1px solid #293f78;
-border-radius: 10px;
-background: #03091b;
-color: white;
-font-size: 16px;
-min-width: 0;
-}
-
-button {
-background: #ffcc00;
-color: #101010;
-border: none;
-padding: 12px 16px;
-border-radius: 9px;
-font-weight: bold;
-font-size: 15px;
-cursor: pointer;
-}
-
-button:hover {
-opacity: .85;
-}
-
-.primary {
-width: 100%;
-margin-top: 20px;
-font-size: 17px;
-padding: 16px;
-}
-
-.danger {
-background: #ff4747;
-color: white;
-}
-
-.secondary {
-background: #294779;
-color: white;
-}
-
-.form-grid {
-display: grid;
-grid-template-columns: 1fr 1fr;
-gap: 12px 18px;
-}
-
-.stats {
-display: grid;
-grid-template-columns: repeat(3, 1fr);
-gap: 12px;
-}
-
-.stat {
-background: #13264d;
-padding: 15px;
-border-radius: 12px;
-text-align: center;
-overflow-wrap: anywhere;
-}
-
-.stat strong {
-display: block;
-font-size: 24px;
-color: #ffcc00;
-margin-top: 8px;
-}
-
-.toolbar {
-display: flex;
-gap: 10px;
-flex-wrap: wrap;
-margin: 15px 0;
-}
-
-.toolbar input {
-flex: 1;
-min-width: 160px;
-}
-
-.table-wrap {
-overflow-x: auto;
-border-radius: 10px;
-}
-
-table {
-border-collapse: collapse;
-width: 100%;
-min-width: 950px;
-background: #0b1734;
-}
-
-th, td {
-border: 1px solid #263d70;
-padding: 12px;
-text-align: left;
-}
-
-th {
-color: #ffcc00;
-background: #172c55;
-}
-
-td button {
-margin: 3px;
-}
-
-.login {
-max-width: 430px;
-margin: 60px auto;
-}
-
-.hidden {
-display: none !important;
-}
-
-.note {
-color: #a9b8d9;
-font-size: 13px;
-line-height: 1.6;
-}
-
-@media(max-width:600px) {
-body {
-padding: 8px;
-}
-
-.container {
-padding: 14px;
-}
-
-h1 {
-font-size: 23px;
-}
-
-.form-grid {
-grid-template-columns: 1fr;
-}
-
-.stats {
-grid-template-columns: 1fr;
-}
-
-.setting {
-align-items: stretch;
-flex-direction: column;
-}
-
-.setting button {
-width: 100%;
-}
-
-.card {
-padding: 13px;
-}
-}
-</style>  </head>  <body>  <!-- LOGIN -->  <div class="container login" id="loginPage">
-
-  <h1>🔐 Admin Login</h1>    <div class="card">    
-    <label>Username</label>    
-    <input id="username" autocomplete="username"    
-           placeholder="Username">  <label>Password</label>    
-<input id="password" type="password"    
-       autocomplete="current-password"    
-       placeholder="Password">    <button class="primary" onclick="login()">    
-  Login करें    
-</button>    <p id="loginError" style="color:#ff7777"></p>    <p class="note">    
-  Demo login विवरण को प्रकाशित वेबसाइट पर सुरक्षित    
-  प्रमाणीकरण का विकल्प न समझें।    
-</p>    </div>    
-</div>  <!-- DASHBOARD -->  <div class="container hidden" id="dashboard">    <h1>🛠️ Admin Panel & Control Dashboard</h1>    <div class="toolbar">    
-    <button class="secondary" onclick="logout()">Logout</button>    
-  </div>    <!-- GLOBAL SETTINGS -->    <div class="setting">    
-    <div>    
-      💳 Global Display UPI ID:<br><br>    
-      <strong id="upiDisplay"></strong>    
-    </div>    
-    <button onclick="changeUPI()">Change UPI</button>    
-  </div>    <div class="setting">    
-    <div>    
-      📞 Helpline Number:<br><br>    
-      <strong id="phoneDisplay"></strong>    
-    </div>    
-    <button onclick="changePhone()">Change Helpline</button>    
-  </div>    <!-- STATISTICS -->    <div class="stats">    
-    <div class="stat">    
-      Total Records    
-      <strong id="totalCount">0</strong>    
-    </div>  <div class="stat">    
-  Pending    
-  <strong id="pendingCount">0</strong>    
-</div>    <div class="stat">    
-  Paid    
-  <strong id="paidCount">0</strong>    
-</div>    </div>    <!-- ADD / EDIT FORM -->    <div class="card" id="recordForm">    
-    <h2 id="formTitle">➕ Add / Manage User & Details</h2>  <input type="hidden" id="editId">    <div class="form-grid">      <div>    
-    <label>Winner Name</label>    
-    <input id="winnerName" placeholder="Full Name">    
-  </div>      <div>    
-    <label>Mobile Number</label>    
-    <input id="mobile" inputmode="numeric"    
-           maxlength="10" placeholder="10 Digit Mobile">    
-  </div>      <div>    
-    <label>Lottery Number</label>    
-    <input id="lotteryNumber"    
-           placeholder="e.g. KL-584920">    
-  </div>      <div>    
-    <label>Prize Level</label>    
-    <select id="prizeLevel">    
-      <option>1st Prize</option>    
-      <option>2nd Prize</option>    
-      <option>3rd Prize</option>    
-      <option>4th Prize</option>    
-      <option>5th Prize</option>    
-      <option>Other</option>    
-    </select>    
-  </div>      <div>    
-    <label>User UPI ID</label>    
-    <input id="userUPI" placeholder="e.g. name@upi">    
-  </div>      <div>    
-    <label>Prize Payout Status</label>    
-    <select id="payoutStatus">    
-      <option>Pending</option>    
-      <option>Paid</option>    
-    </select>    
-  </div>      <div>    
-    <label>Winning Amount (₹)</label>    
-    <input id="winningAmount"    
-           type="number" min="0"    
-           placeholder="Winning Amount">    
-  </div>    </div>    <button class="primary" onclick="saveRecord()">    
-  💾 Save Record    
-</button>    <button class="secondary primary"    
-onclick="resetForm()">
-➕ नया रिकॉर्ड
-</button>
-
-  </div>    <!-- TABLE -->    <h2>📊 Live Spreadsheet View</h2>    <div class="toolbar">    
-    <input id="searchBox"    
-           placeholder="नाम, नंबर या मोबाइल खोजें..."    
-           oninput="renderTable()">  <button onclick="renderTable()">🔄 Refresh</button>    
-<button onclick="downloadCSV()">📥 Download CSV</button>    
-<button onclick="exportBackup()">💾 Backup JSON</button>    </div>    <div class="table-wrap">    
-    <table>    
-      <thead>    
-        <tr>    
-          <th>Actions</th>    
-          <th>Lottery Number</th>    
-          <th>Name</th>    
-          <th>Mobile</th>    
-          <th>Prize Level</th>    
-          <th>UPI ID</th>    
-          <th>Amount</th>    
-          <th>Status</th>    
-        </tr>    
-      </thead>  <tbody id="tableBody"></tbody>    
-</table>    </div>    <p class="note">    
-    रिकॉर्ड इस ब्राउज़र के local storage में सेव होते हैं।    
-    ब्राउज़र का डेटा साफ करने पर रिकॉर्ड मिट सकते हैं।    
-    नियमित रूप से Backup JSON या CSV डाउनलोड करें।    
-  </p>  </div>  <script>    
-"use strict";    /*
-DEMO ONLY:
-यह लॉगिन केवल उदाहरण है, सुरक्षित server authentication नहीं।
-सार्वजनिक वेबसाइट पर वास्तविक authentication backend से करें।
-*/
-
-const DEMO_USER = "Raja";
-const DEMO_PASSWORD = "Raja@#8990";
-
-function login() {
-const user = document.getElementById("username").value.trim();
-const pass = document.getElementById("password").value;
-
-if (user === DEMO_USER && pass === DEMO_PASSWORD) {
-sessionStorage.setItem("adminLoggedIn", "true");
-showDashboard();
-} else {
-document.getElementById("loginError").textContent =
-"गलत Username या Password";
-}
-}{
-const user = document.getElementById("username").value.trim();
-const pass = document.getElementById("password").value;
-
-if (user === DEMO_USER  = "Raja";  DEMO_PASSWORD =Raja@#8999";
-sessionStorage.setItem("adminLoggedIn", "true");
-showDashboard();
-} else {
-document.getElementById("loginError").textContent =
-"गलत Username या Password";
-}
-}
-
-function showDashboard() {
-document.getElementById("loginPage").classList.add("hidden");
-document.getElementById("dashboard").classList.remove("hidden");
-loadData();
-renderTable();
-}
-
-function logout() {
-sessionStorage.removeItem("adminLoggedIn");
-document.getElementById("dashboard").classList.add("hidden");
-document.getElementById("loginPage").classList.remove("hidden");
-document.getElementById("password").value = "";
-}
-
-function updateSettingsDisplay() {
-document.getElementById("upiDisplay").textContent =
-settings.upi || "Not set";
-
-document.getElementById("phoneDisplay").textContent =
-settings.phone || "Not set";
-}
-
-function changeUPI() {
-const value = prompt("नया UPI ID डालें:", settings.upi || "");
-if (value === null) return;
-
-settings.upi = value.trim();
-persistSettings();
-}
-
-function changePhone() {
-const value = prompt(
-"नया Helpline Number डालें:",
-settings.phone || ""
-);
-
-if (value === null) return;
-
-settings.phone = value.trim();
-persistSettings();
-}
-
-function getFormData() {
-return {
-name: document.getElementById("winnerName").value.trim(),
-mobile: document.getElementById("mobile").value.trim(),
-lottery: document.getElementById("lotteryNumber").value.trim(),
-prize: document.getElementById("prizeLevel").value,
-upi: document.getElementById("userUPI").value.trim(),
-status: document.getElementById("payoutStatus").value,
-amount: document.getElementById("winningAmount").value
-};
-}
-
-function saveRecord() {
-const data = getFormData();
-const editId = document.getElementById("editId").value;
-
-if (!data.name || !data.lottery) {
-alert("कृपया Name और Lottery Number भरें।");
-return;
-}
-
-if (data.mobile && !/^[0-9]{10}$/.test(data.mobile)) {
-alert("Mobile Number 10 अंकों का होना चाहिए।");
-return;
-}
-
-if (data.amount !== "" &&
-(!Number.isFinite(Number(data.amount)) ||
-Number(data.amount) < 0)) {
-alert("कृपया सही Winning Amount डालें।");
-return;
-}
-
-if (editId) {
-const index = records.findIndex(
-item => item.id === editId
-);
-
-if (index !== -1) {    
-  records[index] = {    
-    ...records[index],    
-    ...data    
-  };    
-}
-
-} else {
-records.push({
-id: (crypto.randomUUID
-? crypto.randomUUID()
-: String(Date.now()) + Math.random()),
-...data
-});
-}
-
-persistRecords();
-resetForm();
-renderTable();
-alert("रिकॉर्ड सेव हो गया।");
-}
-
-function editRecord(id) {
-const record = records.find(item => item.id === id);
-if (!record) return;
-
-document.getElementById("editId").value = record.id;
-document.getElementById("winnerName").value = record.name;
-document.getElementById("mobile").value = record.mobile;
-document.getElementById("lotteryNumber").value = record.lottery;
-document.getElementById("prizeLevel").value = record.prize;
-document.getElementById("userUPI").value = record.upi;
-document.getElementById("payoutStatus").value = record.status;
-document.getElementById("winningAmount").value = record.amount;
-
-document.getElementById("formTitle").textContent =
-"✏️ Edit Record";
-
-document.getElementById("recordForm").scrollIntoView({
-behavior: "smooth"
-});
-}
-
-function deleteRecord(id) {
-const record = records.find(item => item.id === id);
-if (!record) return;
-
-if (!confirm("क्या आप यह रिकॉर्ड हटाना चाहते हैं?")) {
-return;
-}
-
-records = records.filter(item => item.id !== id);
-persistRecords();
-renderTable();
-}
-
-function resetForm() {
-document.getElementById("editId").value = "";
-
-[
-"winnerName",
-"mobile",
-"lotteryNumber",
-"userUPI",
-"winningAmount"
-].forEach(id => {
-document.getElementById(id).value = "";
-});
-
-document.getElementById("prizeLevel").selectedIndex = 0;
-document.getElementById("payoutStatus").value = "Pending";
-document.getElementById("formTitle").textContent =
-"➕ Add / Manage User & Details";
-}
-
-function renderTable() {
-const body = document.getElementById("tableBody");
-const query = document.getElementById("searchBox").value
-.trim().toLowerCase();
-
-body.replaceChildren();
-
-const filtered = records.filter(record =>
-[
-record.name,
-record.mobile,
-record.lottery,
-record.prize,
-record.upi,
-record.status
-].some(value =>
-String(value || "").toLowerCase().includes(query)
-)
-);
-
-filtered.forEach(record => {
-const row = document.createElement("tr");
-
-const actions = document.createElement("td");    
-
-const editBtn = document.createElement("button");    
-editBtn.textContent = "✏️ Edit";    
-editBtn.onclick = () => editRecord(record.id);    
-
-const deleteBtn = document.createElement("button");    
-deleteBtn.textContent = "🗑 Delete";    
-deleteBtn.className = "danger";    
-deleteBtn.onclick = () => deleteRecord(record.id);    
-
-actions.append(editBtn, deleteBtn);    
-row.appendChild(actions);    
-
-[    
-  record.lottery,    
-  record.name,    
-  record.mobile,    
-  record.prize,    
-  record.upi,    
-  "₹" + (record.amount || "0"),    
-  record.status    
-].forEach(value => {    
-  const cell = document.createElement("td");    
-  cell.textContent = value || "-";    
-  row.appendChild(cell);    
-});    
-
-body.appendChild(row);
-
-});
-
-document.getElementById("totalCount").textContent =
-records.length;
-
-document.getElementById("pendingCount").textContent =
-records.filter(r => r.status === "Pending").length;
-
-document.getElementById("paidCount").textContent =
-records.filter(r => r.status === "Paid").length;
-}
-
-function downloadCSV() {
-const headers = [
-"Lottery Number",
-"Name",
-"Mobile",
-"Prize Level",
-"UPI ID",
-"Winning Amount",
-"Payout Status"
-];
-
-const rows = records.map(r => [
-r.lottery, r.name, r.mobile, r.prize,
-r.upi, r.amount, r.status
-]);
-
-const escapeCSV = value =>
-'"' + String(value ?? "").replace(/"/g, '""') + '"';
-
-const csv = "\uFEFF" +
-[headers, ...rows]
-.map(row => row.map(escapeCSV).join(","))
-.join("\r\n");
-
-downloadFile(
-csv,
-"admin-records.csv",
-"text/csv;charset=utf-8;"
-);
-}
-
-function exportBackup() {
-downloadFile(
-JSON.stringify({ records, settings }, null, 2),
-"admin-backup.json",
-"application/json"
-);
-}
-
-function downloadFile(content, filename, type) {
-const blob = new Blob([content], { type });
-const url = URL.createObjectURL(blob);
-const a = document.createElement("a");
-
-a.href = url;
-a.download = filename;
-a.click();
-
-URL.revokeObjectURL(url);
-}
-
-document.addEventListener("keydown", event => {
-if (event.key === "Enter" &&
-!document.getElementById("loginPage").classList.contains("hidden")) {
-login();
-}
-});
-
-if (sessionStorage.getItem("adminLoggedIn") === "true") {
-showDashboard();
-}
-</script>  </body>
-
-</html><img width="1080" height="2408" alt="1000022690" src="https://github.com/user-attachments/assets/cae20aa5-92b9-4e57-84d7-a6900fa8d4b7" />
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel & Control Dashboard</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { margin: 0; padding: 15px; font-family: Arial, sans-serif; background: #050d25; color: white; }
+        .container { max-width: 1000px; margin: auto; padding: 25px; border: 1px solid #ffcc00; border-radius: 20px; background: #0c1939; }
+        h1, h2 { color: #ffcc00; }
+        h1 { text-align: center; font-size: 28px; }
+        .card { background: #101f42; border: 1px solid #263d70; border-radius: 14px; padding: 18px; margin: 20px 0; }
+        .setting { border: 1px dashed #ffcc00; border-radius: 12px; padding: 15px; margin: 15px 0; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+        .setting strong { color: #00e69a; overflow-wrap: anywhere; }
+        label { display: block; margin: 12px 0 7px; color: #9fb4e8; font-weight: bold; }
+        input, select { width: 100%; padding: 13px; border: 1px solid #293f78; border-radius: 10px; background: #03091b; color: white; font-size: 16px; min-width: 0; }
+        button { background: #ffcc00; color: #101010; border: none; padding: 12px 16px; border-radius: 9px; font-weight: bold; font-size: 15px; cursor: pointer; }
+        button:hover { opacity: .85; }
+        .primary { width: 100%; margin-top: 20px; font-size: 17px; padding: 16px; }
+        .danger { background: #ff4747; color: white; }
+        .secondary { background: #294779; color: white; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 18px; }
+        .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+        .stat { background: #13264d; padding: 15px; border-radius: 12px; text-align: center; overflow-wrap: anywhere; }
+        .stat strong { display: block; font-size: 24px; color: #ffcc00; margin-top: 8px; }
+        .toolbar { display: flex; gap: 10px; flex-wrap: wrap; margin: 15px 0; }
+        .toolbar input { flex: 1; min-width: 160px; }
+        .table-wrap { overflow-x: auto; border-radius: 10px; }
+        table { border-collapse: collapse; width: 100%; min-width: 950px; background: #0b1734; }
+        th, td { border: 1px solid #263d70; padding: 12px; text-align: left; }
+        th { color: #ffcc00; background: #172c55; }
+        td button { margin: 3px; }
+        .login { max-width: 430px; margin: 60px auto; }
+        .hidden { display: none !important; }
+        .note { color: #a9b8d9; font-size: 13px; line-height: 1.6; }
+        @media(max-width:600px) {
+            body { padding: 8px; }
+            .container { padding: 14px; }
+            h1 { font-size: 23px; }
+            .form-grid { grid-template-columns: 1fr; }
+            .stats { grid-template-columns: 1fr; }
+            .setting { align-items: stretch; flex-direction: column; }
+            .setting button { width: 100%; }
+            .card { padding: 13px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- LOGIN -->
+    <div class="container login" id="loginPage">
+        <h1>🔐 Admin Login</h1>
+        <div class="card">
+            <label>Username</label>
+            <input id="username" autocomplete="username" placeholder="Username">
+            
+            <label>Password</label>
+            <input id="password" type="password" autocomplete="current-password" placeholder="Password">
+            
+            <button class="primary" onclick="login()">Login करें</button>
+            <p id="loginError" style="color:#ff7777"></p>
+            <p class="note">Demo login विवरण।</p>
+        </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div class="container hidden" id="dashboard">
+        <h1>🛠️ Admin Panel & Control Dashboard</h1>
+        <div class="toolbar">
+            <button class="secondary" onclick="logout()">Logout</button>
+        </div>
+
+        <!-- GLOBAL SETTINGS -->
+        <div class="setting">
+            <div>
+                💳 Global Display UPI ID:<br><br>
+                <strong id="upiDisplay"></strong>
+            </div>
+            <button onclick="changeUPI()">Change UPI</button>
+        </div>
+
+        <div class="setting">
+            <div>
+                📞 Helpline Number:<br><br>
+                <strong id="phoneDisplay"></strong>
+            </div>
+            <button onclick="changePhone()">Change Helpline</button>
+        </div>
+
+        <!-- STATISTICS -->
+        <div class="stats">
+            <div class="stat">
+                Total Records <strong id="totalCount">0</strong>
+            </div>
+            <div class="stat">
+                Pending <strong id="pendingCount">0</strong>
+            </div>
+            <div class="stat">
+                Paid <strong id="paidCount">0</strong>
+            </div>
+        </div>
+
+        <!-- ADD / EDIT FORM -->
+        <div class="card" id="recordForm">
+            <h2 id="formTitle">➕ Add / Manage User & Details</h2>
+            <input type="hidden" id="editId">
+            
+            <div class="form-grid">
+                <div>
+                    <label>Winner Name</label>
+                    <input id="winnerName" placeholder="Full Name">
+                </div>
+                <div>
+                    <label>Mobile Number</label>
+                    <input id="mobile" inputmode="numeric" maxlength="10" placeholder="10 Digit Mobile">
+                </div>
+                <div>
+                    <label>Lottery Number</label>
+                    <input id="lotteryNumber" placeholder="e.g. KL-584920">
+                </div>
+                <div>
+                    <label>Prize Level</label>
+                    <select id="prizeLevel">
+                        <option>1st Prize</option>
+                        <option>2nd Prize</option>
+                        <option>3rd Prize</option>
+                        <option>4th Prize</option>
+                        <option>5th Prize</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+                <div>
+                    <label>User UPI ID</label>
+                    <input id="userUPI" placeholder="e.g. name@upi">
+                </div>
+                <div>
+                    <label>Prize Payout Status</label>
+                    <select id="payoutStatus">
+                        <option>Pending</option>
+                        <option>Paid</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Winning Amount (₹)</label>
+                    <input id="winningAmount" type="number" min="0" placeholder="Winning Amount">
+                </div>
+            </div>
+            <button class="primary" onclick="saveRecord()">💾 Save Record</button>
+            <button class="secondary primary" onclick="resetForm()">➕ नया रिकॉर्ड</button>
+        </div>
+
+        <!-- TABLE -->
+        <h2>📊 Live Spreadsheet View</h2>
+        <div class="toolbar">
+            <input id="searchBox" placeholder="नाम, नंबर या मोबाइल खोजें..." oninput="renderTable()">
+            <button onclick="renderTable()">🔄 Refresh</button>
+            <button onclick="downloadCSV()">📥 Download CSV</button>
+            <button onclick="exportBackup()">💾 Backup JSON</button>
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Actions</th>
+                        <th>Lottery Number</th>
+                        <th>Name</th>
+                        <th>Mobile</th>
+                        <th>Prize Level</th>
+                        <th>UPI ID</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+        </div>
+        <p class="note">रिकॉर्ड इस ब्राउज़र के local storage में सेव होते हैं।</p>
+    </div>
+
+    <script>
+        "use strict";
+        const DEMO_USER = "Raja";
+        const DEMO_PASSWORD = "Raja@#8990";
+        let records = JSON.parse(localStorage.getItem("adminRecords") || "[]");
+        let settings = JSON.parse(localStorage.getItem("adminSettings") || '{"upi": "Not set", "phone": "Not set"}');
+
+        function login() {
+            const user = document.getElementById("username").value.trim();
+            const pass = document.getElementById("password").value;
+            if (user === DEMO_USER && pass === DEMO_PASSWORD) {
+                sessionStorage.setItem("adminLoggedIn", "true");
+                showDashboard();
+            } else {
+                document.getElementById("loginError").textContent = "गलत Username या Password";
+            }
+        }
+
+        function showDashboard() {
+            document.getElementById("loginPage").classList.add("hidden");
+            document.getElementById("dashboard").classList.remove("hidden");
+            updateSettingsDisplay();
+            renderTable();
+        }
+
+        function logout() {
+            sessionStorage.removeItem("adminLoggedIn");
+            document.getElementById("dashboard").classList.add("hidden");
+            document.getElementById("loginPage").classList.remove("hidden");
+            document.getElementById("password").value = "";
+        }
+
+        function persistRecords() {
+            localStorage.setItem("adminRecords", JSON.stringify(records));
+        }
+
+        function persistSettings() {
+            localStorage.setItem("adminSettings", JSON.stringify(settings));
+            updateSettingsDisplay();
+        }
+
+        function updateSettingsDisplay() {
+            document.getElementById("upiDisplay").textContent = settings.upi || "Not set";
+            document.getElementById("phoneDisplay").textContent = settings.phone || "Not set";
+        }
+
+        function changeUPI() {
+            const value = prompt("नया UPI ID डालें:", settings.upi || "");
+            if (value === null) return;
+            settings.upi = value.trim();
+            persistSettings();
+        }
+
+        function changePhone() {
+            const value = prompt("नया Helpline Number डालें:", settings.phone || "");
+            if (value === null) return;
+            settings.phone = value.trim();
+            persistSettings();
+        }
+
+        function getFormData() {
+            return {
+                name: document.getElementById("winnerName").value.trim(),
+                mobile: document.getElementById("mobile").value.trim(),
+                lottery: document.getElementById("lotteryNumber").value.trim(),
+                prize: document.getElementById("prizeLevel").value,
+                upi: document.getElementById("userUPI").value.trim(),
+                status: document.getElementById("payoutStatus").value,
+                amount: document.getElementById("winningAmount").value
+            };
+        }
+
+        function saveRecord() {
+            const data = getFormData();
+            const editId = document.getElementById("editId").value;
+            if (!data.name || !data.lottery) {
+                alert("कृपया Name और Lottery Number भरें।");
+                return;
+            }
+            if (editId) {
+                const index = records.findIndex(item => item.id === editId);
+                if (index !== -1) {
+                    records[index] = { ...records[index], ...data };
+                }
+            } else {
+                records.push({ id: String(Date.now()), ...data });
+            }
+            persistRecords();
+            resetForm();
+            renderTable();
+            alert("रिकॉर्ड सेव हो गया।");
+        }
+
+        function editRecord(id) {
+            const record = records.find(item => item.id === id);
+            if (!record) return;
+            document.getElementById("editId").value = record.id;
+            document.getElementById("winnerName").value = record.name;
+            document.getElementById("mobile").value = record.mobile;
+            document.getElementById("lotteryNumber").value = record.lottery;
+            document.getElementById("prizeLevel").value = record.prize;
+            document.getElementById("userUPI").value = record.upi;
+            document.getElementById("payoutStatus").value = record.status;
+            document.getElementById("winningAmount").value = record.amount;
+            document.getElementById("formTitle").textContent = "✏️ Edit Record";
+        }
+
+        function deleteRecord(id) {
+            if (!confirm("क्या आप यह रिकॉर्ड हटाना चाहते हैं?")) return;
+            records = records.filter(item => item.id !== id);
+            persistRecords();
+            renderTable();
+        }
+
+        function resetForm() {
+            document.getElementById("editId").value = "";
+            ["winnerName", "mobile", "lotteryNumber", "userUPI", "winningAmount"].forEach(id => {
+                document.getElementById(id).value = "";
+            });
+            document.getElementById("prizeLevel").selectedIndex = 0;
+            document.getElementById("payoutStatus").value = "Pending";
+            document.getElementById("formTitle").textContent = "➕ Add / Manage User & Details";
+        }
+
+        function renderTable() {
+            const body = document.getElementById("tableBody");
+            const query = document.getElementById("searchBox").value.trim().toLowerCase();
+            body.replaceChildren();
+            const filtered = records.filter(record => 
+                [record.name, record.mobile, record.lottery, record.prize, record.upi, record.status]
+                .some(value => String(value || "").toLowerCase().includes(query))
+            );
+            filtered.forEach(record => {
+                const row = document.createElement("tr");
+                const actions = document.createElement("td");
+                
+                const editBtn = document.createElement("button");
+                editBtn.textContent = "✏️ Edit";
+                editBtn.onclick = () => editRecord(record.id);
+                
+                const deleteBtn = document.createElement("button");
+                deleteBtn.textContent = "🗑 Delete";
+                deleteBtn.className = "danger";
+                deleteBtn.onclick = () => deleteRecord(record.id);
+                
+                actions.append(editBtn, deleteBtn);
+                row.appendChild(actions);
+
+                [record.lottery, record.name, record.mobile, record.prize, record.upi, "₹" + (record.amount || "0"), record.status].forEach(value => {
+                    const cell = document.createElement("td");
+                    cell.textContent = value || "-";
+                    row.appendChild(cell);
+                });
+                body.appendChild(row);
+            });
+            document.getElementById("totalCount").textContent = records.length;
+            document.getElementById("pendingCount").textContent = records.filter(r => r.status === "Pending").length;
+            document.getElementById("paidCount").textContent = records.filter(r => r.status === "Paid").length;
+        }
+
+        function downloadCSV() {
+            const headers = ["Lottery Number", "Name", "Mobile", "Prize Level", "UPI ID", "Winning Amount", "Payout Status"];
+            const rows = records.map(r => [r.lottery, r.name, r.mobile, r.prize, r.upi, r.amount, r.status]);
+            const csv = [headers, ...rows].map(e => e.join(",")).join("\n");
+            const blob = new Blob([csv], { type: "text/csv" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "records.csv";
+            a.click();
+        }
+
+        function exportBackup() {
+            const blob = new Blob([JSON.stringify(records)], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "backup.json";
+            a.click();
+        }
+
+        if (sessionStorage.getItem("adminLoggedIn") === "true") {
+            showDashboard();
+        }
+    </script>
+</body>
+</html>
 
