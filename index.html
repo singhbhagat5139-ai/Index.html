@@ -7,832 +7,90 @@
 
 <style>
 *{box-sizing:border-box}
-
 body{
-    margin:0;
-    padding:12px;
-    background:#07122e;
-    color:white;
-    font-family:Arial,sans-serif;
+ margin:0;padding:15px;
+ font-family:Arial,sans-serif;
+ background:#080f2b;color:white
 }
-
-.wrap{
-    max-width:1000px;
-    margin:auto;
-    padding:20px;
-    border:1px solid #ffcc00;
-    border-radius:18px;
-    background:#0b1738;
+.container{
+ max-width:1000px;margin:auto;padding:20px;
+ background:#111d46;border:2px solid #ffd21c;
+ border-radius:18px
 }
-
-h1,h2{color:#ffcc00}
-
-h1{
-    text-align:center;
-    font-size:clamp(24px,4vw,36px);
-}
-
-h2{font-size:21px}
-
+h1,h2{color:#ffd21c}
 .card{
-    background:#0a1837;
-    border:1px solid #263d70;
-    border-radius:12px;
-    padding:16px;
-    margin:15px 0;
+ background:#0a1536;padding:15px;
+ border:1px solid #334477;
+ border-radius:12px;margin:15px 0
 }
-
-.global{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:12px;
-    flex-wrap:wrap;
-    border:1px dashed #ffcc00;
-}
-
-.value{
-    color:#00e6a0;
-    font-weight:bold;
-    font-size:20px;
-    overflow-wrap:anywhere;
-}
-
-button{
-    padding:12px 15px;
-    border:0;
-    border-radius:8px;
-    font-weight:bold;
-    cursor:pointer;
-    margin:3px;
-}
-
-.yellow{background:#ffcc00;color:#111}
-.blue{background:#254477;color:white}
-.red{background:#c62828;color:white}
-
 input,select{
-    width:100%;
-    padding:13px;
-    margin:5px 0 10px;
-    background:#030a1c;
-    color:white;
-    border:1px solid #294275;
-    border-radius:8px;
-    font-size:16px;
+ width:100%;padding:12px;margin:7px 0;
+ border-radius:7px;border:1px solid #435580;
+ background:#050b1c;color:white
 }
-
-label{
-    display:block;
-    color:#9aadd8;
-    font-weight:bold;
+button{
+ padding:11px 15px;margin:5px 3px;
+ border:0;border-radius:7px;
+ background:#ffd21c;color:#111;
+ font-weight:bold;cursor:pointer
 }
-
+.secondary{background:#20345e;color:white}
 .grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
+ display:grid;grid-template-columns:1fr 1fr;gap:10px
 }
-
-.full{grid-column:1/-1}
-
-.actions{
-    display:flex;
-    flex-wrap:wrap;
-    gap:5px;
-}
-
-.tablewrap{
-    overflow:auto;
-    border:1px solid #263d70;
-    border-radius:8px;
-}
-
-table{
-    width:100%;
-    min-width:800px;
-    border-collapse:collapse;
-}
-
-th,td{
-    text-align:left;
-    padding:11px;
-    border-bottom:1px solid #263d70;
-}
-
-th{
-    color:#ffcc00;
-    background:#172b58;
-}
-
-td{background:#0a1837}
-
-.statgrid{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:10px;
-}
-
-.stat{
-    background:#13264f;
-    padding:14px;
-    border-radius:10px;
-}
-
-.stat span{color:#9aadd8}
-
-.stat b{
-    display:block;
-    color:#ffcc00;
-    font-size:24px;
-    margin-top:8px;
-}
-
-.small{
-    font-size:12px;
-    line-height:1.5;
-    color:#a9b8dc;
-}
-
-#app{display:none}
-
-#loginPage{
-    min-height:90vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-}
-
-.login{
-    max-width:390px;
-    width:100%;
-    padding:25px;
-    background:#0d1b40;
-    border:1px solid #ffcc00;
-    border-radius:16px;
-}
-
-.login h1{font-size:28px}
-
-.login button{width:100%}
-
-#error{
-    color:#ff9999;
-    text-align:center;
-    margin:10px 0;
-}
-
-.paid{color:#00e6a0}
-.pending{color:#ffcc00}
-
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:600px}
+th,td{border:1px solid #34436b;padding:10px;text-align:left}
+th{color:#ffd21c}
+.hidden{display:none}
+#message{white-space:pre-wrap;color:#ffd21c}
 @media(max-width:600px){
-    body{padding:6px}
-    .wrap{padding:12px}
-    .grid{grid-template-columns:1fr}
-    .full{grid-column:auto}
-    .statgrid{grid-template-columns:1fr 1fr}
-    .global button{width:100%}
+ .grid{grid-template-columns:1fr}
+ .container{padding:12px}
 }
 </style>
 </head>
 
 <body>
+<div class="container">
 
-<!-- LOGIN PAGE -->
+<h1>🎛️ Admin Control Panel</h1>
 
-<div id="loginPage">
+<!-- LOGIN -->
+<div class="card" id="loginBox">
+<h2>🔐 Admin Login</h2>
 
-<form class="login" id="loginForm">
+<input id="username" placeholder="Username">
+<input id="password" type="password" placeholder="Password">
 
-<h1>🔐 Admin Login</h1>
-
-<label>Username</label>
-<input
-    id="username"
-    required
-    autocomplete="username"
-    placeholder="Username"
->
-
-<label>Password</label>
-<input
-    id="password"
-    type="password"
-    required
-    autocomplete="current-password"
-    placeholder="Password"
->
-
-<button class="yellow" type="submit">
-Login
-</button>
-
-<div id="error"></div>
-
-<p class="small">
-यह डेमो लॉगिन है। सार्वजनिक वेबसाइट के लिए सुरक्षित
-server-side authentication जरूरी है।
-</p>
-
-</form>
+<button onclick="login()">Login</button>
+<p id="loginMessage"></p>
 </div>
 
-<!-- ADMIN PANEL -->
-
-<div id="app">
-
-<div class="wrap">
-
-<h1>🛠️ Admin Panel & Control Dashboard</h1>
-
-<!-- GLOBAL UPI -->
-
-<div class="card global">
-
-<div>
-<h2>💳 Global Display UPI ID</h2>
-<div id="upiView" class="value">yourupi@bank</div>
-</div>
-
-<button class="yellow" onclick="changeUPI()">
-Change UPI
-</button>
-
-</div>
-
-<!-- HELPLINE -->
-
-<div class="card global">
-
-<div>
-<h2>📞 Helpline Number</h2>
-<div id="phoneView" class="value">
-+91 9876543210
-</div>
-</div>
-
-<button class="yellow" onclick="changePhone()">
-Change Helpline
-</button>
-
-</div>
-
-<!-- ADD RECORD -->
+<!-- DASHBOARD -->
+<div id="dashboard" class="hidden">
 
 <div class="card">
+<h2>💳 UPI & Helpline Settings</h2>
 
-<h2>➕ Add / Manage User & Details</h2>
+<label>UPI ID</label>
+<input id="upi" placeholder="example@upi">
 
-<form id="recordForm" class="grid">
+<label>Helpline Number</label>
+<input id="helpline" placeholder="Mobile number">
 
+<button onclick="saveSettings()">Save Settings</button>
+</div>
+
+<div class="card">
+<h2>➕ Add Record</h2>
+
+<div class="grid">
 <div>
-<label>Winner Name</label>
-<input id="name" required placeholder="Full Name">
+<label>Name</label>
+<input id="name" placeholder="Winner name">
 </div>
 
 <div>
 <label>Mobile Number</label>
-<input
-    id="mobile"
-    required
-    inputmode="numeric"
-    pattern="[0-9]{10}"
-    maxlength="10"
-    placeholder="10 Digit Mobile"
->
-</div>
-
-<div>
-<label>Lottery Number</label>
-<input
-    id="lottery"
-    required
-    placeholder="e.g. KL-584920"
->
-</div>
-
-<div>
-<label>Prize Level</label>
-<select id="prize">
-<option>1st Prize</option>
-<option>2nd Prize</option>
-<option>3rd Prize</option>
-<option>4th Prize</option>
-<option>5th Prize</option>
-<option>Other</option>
-</select>
-</div>
-
-<div>
-<label>User UPI ID</label>
-<input id="userupi" placeholder="e.g. name@upi">
-</div>
-
-<div>
-<label>Prize Payout Status</label>
-<select id="status">
-<option>Pending</option>
-<option>Paid</option>
-</select>
-</div>
-
-<div class="full">
-<label>Winning Amount</label>
-<input
-    id="amount"
-    required
-    placeholder="e.g. ₹25,00,000"
->
-</div>
-
-<div class="full actions">
-
-<button class="yellow" id="saveBtn" type="submit">
-Save Record
-</button>
-
-<button
-    type="button"
-    class="blue"
-    onclick="clearForm()"
->
-Clear Form
-</button>
-
-</div>
-
-</form>
-
-<p class="small">
-डेटा इसी ब्राउज़र में सेव होगा।
-यह संस्करण Google Sheets से कनेक्ट नहीं है।
-</p>
-
-</div>
-
-<!-- DASHBOARD -->
-
-<div class="statgrid">
-
-<div class="stat">
-<span>Total Records</span>
-<b id="total">0</b>
-</div>
-
-<div class="stat">
-<span>Pending Payouts</span>
-<b id="pending">0</b>
-</div>
-
-<div class="stat">
-<span>Paid Payouts</span>
-<b id="paid">0</b>
-</div>
-
-</div>
-
-<!-- RECORD TABLE -->
-
-<div class="card">
-
-<div class="actions"
-     style="justify-content:space-between;align-items:center">
-
-<h2>📊 Live Spreadsheet View</h2>
-
-<button class="blue" onclick="render()">
-🔄 Refresh Table
-</button>
-
-</div>
-
-<input
-    id="search"
-    placeholder="Search name, mobile, lottery number..."
-    oninput="render()"
->
-
-<div class="actions">
-
-<button class="blue" onclick="downloadCSV()">
-Download CSV
-</button>
-
-<button class="blue" onclick="backupJSON()">
-Backup JSON
-</button>
-
-<button class="red" onclick="deleteAll()">
-Delete All Records
-</button>
-
-</div>
-
-<div class="tablewrap">
-
-<table>
-
-<thead>
-<tr>
-<th>Actions</th>
-<th>Lottery Number</th>
-<th>Name</th>
-<th>Mobile</th>
-<th>Prize</th>
-<th>UPI</th>
-<th>Amount</th>
-<th>Status</th>
-</tr>
-</thead>
-
-<tbody id="rows"></tbody>
-
-</table>
-</div>
-</div>
-
-<button class="red" onclick="logout()">
-Logout
-</button>
-
-</div>
-</div>
-
-<script>
-const USERNAME = "Raja";
-const PASSWORD = "Raja@#8990";
-
-const KEY = "lottery_panel_records_v1";
-const SETTINGS_KEY = "lottery_panel_settings_v1";
-
-let records = [];
-let editId = null;
-
-let settings = {
-    upi: "yourupi@bank",
-    phone: "+91 9876543210"
-};
-
-const $ = id => document.getElementById(id);
-
-/* LOGIN */
-
-$("loginForm").addEventListener("submit", function(e) {
-    e.preventDefault();
-
-    if (
-        $("username").value.trim() === USERNAME &&
-        $("password").value === PASSWORD
-    ) {
-        $("loginPage").style.display = "none";
-        $("app").style.display = "block";
-        $("error").textContent = "";
-        render();
-    } else {
-        $("error").textContent =
-            "Username या Password गलत है।";
-    }
-});
-
-function logout() {
-    $("app").style.display = "none";
-    $("loginPage").style.display = "flex";
-    $("password").value = "";
-}
-
-/* LOAD AND SAVE */
-
-function loadData() {
-    try {
-        records = JSON.parse(localStorage.getItem(KEY) || "[]");
-
-        if (!Array.isArray(records)) {
-            records = [];
-        }
-    } catch(e) {
-        records = [];
-    }
-
-    try {
-        settings = {
-            ...settings,
-            ...JSON.parse(
-                localStorage.getItem(SETTINGS_KEY) || "{}"
-            )
-        };
-    } catch(e) {}
-}
-
-function saveData() {
-    try {
-        localStorage.setItem(KEY, JSON.stringify(records));
-        localStorage.setItem(
-            SETTINGS_KEY,
-            JSON.stringify(settings)
-        );
-        return true;
-    } catch(e) {
-        alert("डेटा सेव नहीं हो सका।");
-        return false;
-    }
-}
-
-/* GLOBAL SETTINGS */
-
-function updateSettingsView() {
-    $("upiView").textContent = settings.upi;
-    $("phoneView").textContent = settings.phone;
-}
-
-function changeUPI() {
-    const value = prompt(
-        "नया Global UPI ID डालें:",
-        settings.upi
-    );
-
-    if (value === null || !value.trim()) return;
-
-    const old = settings.upi;
-    settings.upi = value.trim();
-
-    if (saveData()) {
-        updateSettingsView();
-    } else {
-        settings.upi = old;
-    }
-}
-
-function changePhone() {
-    const value = prompt(
-        "नया Helpline Number डालें:",
-        settings.phone
-    );
-
-    if (value === null || !value.trim()) return;
-
-    const old = settings.phone;
-    settings.phone = value.trim();
-
-    if (saveData()) {
-        updateSettingsView();
-    } else {
-        settings.phone = old;
-    }
-}
-
-/* ADD AND EDIT */
-
-$("recordForm").addEventListener("submit", function(e) {
-    e.preventDefault();
-
-    const record = {
-        id: editId || makeId(),
-        name: $("name").value.trim(),
-        mobile: $("mobile").value.trim(),
-        lottery: $("lottery").value.trim(),
-        prize: $("prize").value,
-        upi: $("userupi").value.trim(),
-        status: $("status").value,
-        amount: $("amount").value.trim()
-    };
-
-    if (!/^[0-9]{10}$/.test(record.mobile)) {
-        alert("10 अंकों का मोबाइल नंबर भरें।");
-        return;
-    }
-
-    const duplicate = records.some(r =>
-        r.lottery.toLowerCase() ===
-            record.lottery.toLowerCase() &&
-        r.id !== editId
-    );
-
-    if (duplicate) {
-        alert("यह Lottery Number पहले से मौजूद है।");
-        return;
-    }
-
-    const old = records.map(r => ({...r}));
-
-    if (editId) {
-        records = records.map(r =>
-            r.id === editId ? record : r
-        );
-    } else {
-        records.unshift(record);
-    }
-
-    if (saveData()) {
-        clearForm();
-        render();
-        alert("Record सेव हो गया।");
-    } else {
-        records = old;
-    }
-});
-
-function makeId() {
-    return Date.now().toString(36) +
-        Math.random().toString(36).slice(2, 8);
-}
-
-function clearForm() {
-    editId = null;
-    $("recordForm").reset();
-    $("saveBtn").textContent = "Save Record";
-}
-
-function editRecord(id) {
-    const r = records.find(x => x.id === id);
-    if (!r) return;
-
-    editId = id;
-
-    $("name").value = r.name;
-    $("mobile").value = r.mobile;
-    $("lottery").value = r.lottery;
-    $("prize").value = r.prize;
-    $("userupi").value = r.upi;
-    $("status").value = r.status;
-    $("amount").value = r.amount;
-
-    $("saveBtn").textContent = "Update Record";
-
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
-}
-
-/* DELETE */
-
-function deleteRecord(id) {
-    if (!confirm("यह रिकॉर्ड हटाएँ?")) return;
-
-    const old = records;
-    records = records.filter(r => r.id !== id);
-
-    if (saveData()) {
-        render();
-    } else {
-        records = old;
-    }
-}
-
-function deleteAll() {
-    if (!records.length) {
-        alert("कोई रिकॉर्ड नहीं है।");
-        return;
-    }
-
-    if (!confirm("क्या सभी रिकॉर्ड हटाने हैं?")) return;
-
-    const old = records;
-    records = [];
-
-    if (saveData()) {
-        render();
-    } else {
-        records = old;
-    }
-}
-
-/* HTML SAFETY */
-
-function escapeHTML(value) {
-    return String(value ?? "").replace(
-        /[&<>"']/g,
-        char => ({
-            "&": "&amp;",
-            "<": "&lt;",
-            ">": "&gt;",
-            '"': "&quot;",
-            "'": "&#39;"
-        }[char])
-    );
-}
-
-/* TABLE */
-
-function render() {
-    updateSettingsView();
-
-    const query = $("search").value.toLowerCase();
-
-    const list = records.filter(r =>
-        [
-            r.name, r.mobile, r.lottery,
-            r.prize, r.upi, r.status, r.amount
-        ].some(value =>
-            String(value || "").toLowerCase().includes(query)
-        )
-    );
-
-    $("total").textContent = records.length;
-
-    $("pending").textContent = records.filter(
-        r => r.status === "Pending"
-    ).length;
-
-    $("paid").textContent = records.filter(
-        r => r.status === "Paid"
-    ).length;
-
-    $("rows").innerHTML = list.map(r => `
-        <tr>
-            <td>
-                <button class="yellow"
-                    onclick="editRecord('${r.id}')">
-                    Edit
-                </button>
-
-                <button class="red"
-                    onclick="deleteRecord('${r.id}')">
-                    Delete
-                </button>
-            </td>
-
-            <td>${escapeHTML(r.lottery)}</td>
-            <td>${escapeHTML(r.name)}</td>
-            <td>${escapeHTML(r.mobile)}</td>
-            <td>${escapeHTML(r.prize)}</td>
-            <td>${escapeHTML(r.upi || "-")}</td>
-            <td>${escapeHTML(r.amount)}</td>
-
-            <td class="${
-                r.status === "Paid" ? "paid" : "pending"
-            }">
-                ${escapeHTML(r.status)}
-            </td>
-        </tr>
-    `).join("");
-}
-
-/* CSV DOWNLOAD */
-
-function downloadCSV() {
-    const data = [
-        [
-            "Lottery Number",
-            "Name",
-            "Mobile",
-            "Prize",
-            "UPI",
-            "Amount",
-            "Status"
-        ],
-        ...records.map(r => [
-            r.lottery,
-            r.name,
-            r.mobile,
-            r.prize,
-            r.upi,
-            r.amount,
-            r.status
-        ])
-    ];
-
-    const csv = "\uFEFF" + data.map(row =>
-        row.map(value =>
-            '"' + String(value ?? "").replace(/"/g, '""') + '"'
-        ).join(",")
-    ).join("\r\n");
-
-    downloadFile(
-        csv,
-        "lottery_records.csv",
-        "text/csv;charset=utf-8"
-    );
-}
-
-/* JSON BACKUP */
-
-function backupJSON() {
-    downloadFile(
-        JSON.stringify({records, settings}, null, 2),
-        "lottery_backup.json",
-        "application/json"
-    );
-}
-
-function downloadFile(data, filename, type) {
-    const url = URL.createObjectURL(
-        new Blob([data], {type})
-    );
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = filename;
-    a.click();
-
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-}
-
-/* START */
-
-loadData();
-updateSettingsView();
-</script>
-
-</body>
-</html>
+<input id="mobile" maxlength="10" inputmode
