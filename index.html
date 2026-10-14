@@ -5,24 +5,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Customer Verification & Admin Dashboard</title>
 <style>
-* { box-sizing: border-box; }
-body { margin: 0; padding: 15px; font-family: Arial, sans-serif; background: #050d25; color: white; }
-.container { max-width: 1000px; margin: auto; padding: 25px; border: 1px solid #ffcc00; border-radius: 20px; background: #0c1939; }
-h1, h2 { color: #ffcc00; text-align: center; }
-.card { background: #101f42; border: 1px solid #263d70; border-radius: 14px; padding: 18px; margin: 20px 0; }
-label { display: block; margin: 12px 0 7px; color: #9fb4e8; font-weight: bold; }
-input, select { width: 100%; padding: 13px; border: 1px solid #293f78; border-radius: 10px; background: #03091b; color: white; font-size: 16px; }
-button { background: #ffcc00; color: #101010; border: none; padding: 12px 16px; border-radius: 9px; font-weight: bold; font-size: 15px; cursor: pointer; }
-button:hover { opacity: .85; }
-.primary { width: 100%; margin-top: 20px; font-size: 17px; padding: 16px; }
-.secondary { background: #294779; color: white; }
-.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 18px; }
-.table-wrap { overflow-x: auto; border-radius: 10px; margin-top: 15px; }
-table { border-collapse: collapse; width: 100%; min-width: 950px; background: #0b1734; }
-th, td { border: 1px solid #263d70; padding: 12px; text-align: left; }
-th { color: #ffcc00; background: #172c55; }
-.login { max-width: 430px; margin: 60px auto; }
-.hidden { display: none !important; }
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 15px; font-family: Arial, sans-serif; background: #050d25; color: white; }
+    .container { max-width: 1000px; margin: auto; padding: 25px; border: 1px solid #ffcc00; border-radius: 20px; background: #0c1939; }
+    h1, h2 { color: #ffcc00; text-align: center; }
+    .card { background: #101f42; border: 1px solid #263d70; border-radius: 14px; padding: 18px; margin: 20px 0; }
+    label { display: block; margin: 12px 0 7px; color: #9fb4e8; font-weight: bold; }
+    input, select { width: 100%; padding: 13px; border: 1px solid #293f78; border-radius: 10px; background: #03091b; color: white; font-size: 16px; }
+    button { background: #ffcc00; color: #101010; border: none; padding: 12px 16px; border-radius: 9px; font-weight: bold; font-size: 15px; cursor: pointer; }
+    button:hover { opacity: .85; }
+    .primary { width: 100%; margin-top: 20px; font-size: 17px; padding: 16px; }
+    .secondary { background: #294779; color: white; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 18px; }
+    .table-wrap { overflow-x: auto; border-radius: 10px; margin-top: 15px; }
+    table { border-collapse: collapse; width: 100%; min-width: 950px; background: #0b1734; }
+    th, td { border: 1px solid #263d70; padding: 12px; text-align: left; }
+    th { color: #ffcc00; background: #172c55; }
+    .login { max-width: 430px; margin: 60px auto; }
+    .hidden { display: none !important; }
 </style>
 </head>
 <body>
@@ -47,7 +47,7 @@ th { color: #ffcc00; background: #172c55; }
         <button class="secondary" onclick="logout()">Logout</button>
     </div>
 
-    <!-- NEW CUSTOMER DATA ADD FORM -->
+    <!-- NEW CUSTOMER DATA ADD FORM (डेटा सेव करने का ऑप्शन) -->
     <div class="card">
         <h2>➕ नया कस्टमर डेटा जोड़ें</h2>
         <div class="form-grid">
@@ -260,13 +260,13 @@ function renderTable() {
     filtered.forEach(record => {
         const row = document.createElement("tr");
         [
-            record.lottery, 
-            record.name, 
-            record.mobile, 
-            record.prize, 
-            record.upi, 
-            "₹" + record.regFee, 
-            "₹" + record.amount, 
+            record.lottery,
+            record.name,
+            record.mobile,
+            record.prize,
+            record.upi,
+            "₹" + record.regFee,
+            "₹" + record.amount,
             record.status
         ].forEach(val => {
             const cell = document.createElement("td");
