@@ -3,94 +3,528 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Panel & Control Dashboard</title>
+<title>Admin Panel</title>
 
 <style>
-*{box-sizing:border-box}
-body{
- margin:0;padding:15px;
- font-family:Arial,sans-serif;
- background:#080f2b;color:white
+* {
+  box-sizing: border-box;
 }
-.container{
- max-width:1000px;margin:auto;padding:20px;
- background:#111d46;border:2px solid #ffd21c;
- border-radius:18px
+
+body {
+  margin: 0;
+  padding: 15px;
+  background: #080f26;
+  color: white;
+  font-family: Arial, sans-serif;
 }
-h1,h2{color:#ffd21c}
-.card{
- background:#0a1536;padding:15px;
- border:1px solid #334477;
- border-radius:12px;margin:15px 0
+
+.container {
+  max-width: 850px;
+  margin: auto;
+  padding: 20px;
+  background: linear-gradient(145deg, #17264f, #101a38);
+  border: 2px solid #ffcc00;
+  border-radius: 20px;
+  box-shadow: 0 0 20px #0008;
 }
-input,select{
- width:100%;padding:12px;margin:7px 0;
- border-radius:7px;border:1px solid #435580;
- background:#050b1c;color:white
+
+h1 {
+  text-align: center;
+  color: #ffcc00;
+  font-size: 25px;
+  margin-top: 5px;
 }
-button{
- padding:11px 15px;margin:5px 3px;
- border:0;border-radius:7px;
- background:#ffd21c;color:#111;
- font-weight:bold;cursor:pointer
+
+h2 {
+  color: #ffcc00;
+  font-size: 20px;
+  margin-top: 0;
 }
-.secondary{background:#20345e;color:white}
-.grid{
- display:grid;grid-template-columns:1fr 1fr;gap:10px
+
+.card {
+  background: #111c3d;
+  border: 1px solid #344675;
+  border-radius: 15px;
+  padding: 20px;
+  margin: 20px 0;
 }
-.table-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;min-width:600px}
-th,td{border:1px solid #34436b;padding:10px;text-align:left}
-th{color:#ffd21c}
-.hidden{display:none}
-#message{white-space:pre-wrap;color:#ffd21c}
-@media(max-width:600px){
- .grid{grid-template-columns:1fr}
- .container{padding:12px}
+
+.setting {
+  border: 1px dashed #ffcc00;
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.setting-info {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.setting-title {
+  color: #ffcc00;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.setting-value {
+  color: #63e6a0;
+  font-weight: bold;
+  font-size: 17px;
+}
+
+button {
+  background: #ffcc00;
+  color: #101010;
+  border: none;
+  border-radius: 8px;
+  padding: 13px 18px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:active {
+  transform: scale(.98);
+}
+
+.setting button {
+  min-width: 130px;
+}
+
+label {
+  display: block;
+  color: #c5d0ee;
+  font-weight: bold;
+  margin: 10px 0 7px;
+}
+
+input, select {
+  width: 100%;
+  padding: 14px;
+  background: #050a17;
+  color: white;
+  border: 1px solid #354777;
+  border-radius: 9px;
+  font-size: 16px;
+  outline: none;
+}
+
+input:focus, select:focus {
+  border-color: #ffcc00;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.full {
+  grid-column: 1 / -1;
+}
+
+.submit-btn {
+  width: 100%;
+  margin-top: 20px;
+  font-size: 17px;
+  padding: 17px;
+}
+
+.table-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.table-heading button {
+  border: 1px solid #ffcc00;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  margin-top: 20px;
+  border: 1px solid #304477;
+  border-radius: 10px;
+}
+
+table {
+  width: 100%;
+  min-width: 650px;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 12px;
+  text-align: left;
+  border: 1px solid #26385f;
+}
+
+th {
+  color: #ffcc00;
+  background: #192a55;
+}
+
+td {
+  color: #e5eaff;
+}
+
+#message {
+  overflow-wrap: anywhere;
+  color: #ffcc00;
+  margin-top: 12px;
+}
+
+@media(max-width: 520px) {
+  body {
+    padding: 7px;
+  }
+
+  .container {
+    padding: 12px;
+  }
+
+  .card {
+    padding: 13px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .full {
+    grid-column: auto;
+  }
+
+  .setting {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .setting button {
+    width: 100%;
+  }
+
+  .table-heading {
+    align-items: stretch;
+    flex-direction: column;
+  }
 }
 </style>
 </head>
 
 <body>
+
 <div class="container">
 
-<h1>🎛️ Admin Control Panel</h1>
+  <h1>🎟️ Admin Panel & Control Dashboard</h1>
 
-<!-- LOGIN -->
-<div class="card" id="loginBox">
-<h2>🔐 Admin Login</h2>
+  <!-- UPI SETTINGS -->
+  <div class="card">
 
-<input id="username" placeholder="Username">
-<input id="password" type="password" placeholder="Password">
+    <div class="setting">
+      <div class="setting-info">
+        <div class="setting-title">💳 Display UPI ID:</div>
+        <div class="setting-value" id="displayUpi">
+          keralaLottery@paytm
+        </div>
+        <div class="setting-value">(Default)</div>
+      </div>
 
-<button onclick="login()">Login</button>
-<p id="loginMessage"></p>
+      <button onclick="changeUPI()">Change UPI</button>
+    </div>
+
+    <div class="setting">
+      <div class="setting-info">
+        <div class="setting-title">📞 Helpline Number:</div>
+        <div class="setting-value" id="displayHelpline">
+          +91 9876543210
+        </div>
+        <div class="setting-value">(Default)</div>
+      </div>
+
+      <button onclick="changeHelpline()">
+        Change Helpline
+      </button>
+    </div>
+
+  </div>
+
+  <!-- ADD WINNER -->
+  <div class="card">
+
+    <h2>➕ Add New Winner Record</h2>
+
+    <form id="winnerForm">
+
+      <div class="form-grid">
+
+        <div>
+          <label for="winnerName">Winner Name:</label>
+          <input id="winnerName"
+                 placeholder="Full Name"
+                 required>
+        </div>
+
+        <div>
+          <label for="mobile">Mobile Number:</label>
+          <input id="mobile"
+                 type="tel"
+                 inputmode="numeric"
+                 maxlength="10"
+                 pattern="[0-9]{10}"
+                 placeholder="10 Digit Mobile"
+                 required>
+        </div>
+
+        <div>
+          <label for="lotteryNumber">Lottery Number:</label>
+          <input id="lotteryNumber"
+                 placeholder="e.g. KL-584920"
+                 required>
+        </div>
+
+        <div>
+          <label for="prizeLevel">Prize Level:</label>
+          <select id="prizeLevel">
+            <option>1st Prize</option>
+            <option>2nd Prize</option>
+            <option>3rd Prize</option>
+            <option>4th Prize</option>
+            <option>5th Prize</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <div class="full">
+          <label for="winningAmount">Winning Amount:</label>
+          <input id="winningAmount"
+                 placeholder="e.g. Rs 25,00,00,000/-"
+                 required>
+        </div>
+
+      </div>
+
+      <button class="submit-btn" type="submit">
+        Add Record to Google Sheet
+      </button>
+
+    </form>
+
+  </div>
+
+  <!-- LIVE TABLE -->
+  <div class="card">
+
+    <div class="table-heading">
+      <h2>📊 Live Google Sheet Spreadsheet View</h2>
+
+      <button onclick="loadRecords()">
+        🔄 Refresh Table
+      </button>
+    </div>
+
+    <input id="search"
+           placeholder="Search Lottery Number, Name or Mobile"
+           oninput="renderTable()">
+
+    <div id="message" role="status" aria-live="polite">
+      Google Sheets कनेक्शन सेट करना बाकी है।
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Lottery Number</th>
+            <th>Name</th>
+            <th>Mobile</th>
+            <th>Prize</th>
+            <th>Winning Amount</th>
+          </tr>
+        </thead>
+
+        <tbody id="tableBody">
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
 </div>
 
-<!-- DASHBOARD -->
-<div id="dashboard" class="hidden">
+<script>
+/*
+  अपना Apps Script Web App URL यहाँ डालें।
+  URL आमतौर पर /exec पर समाप्त होता है।
+*/
+const SCRIPT_URL = "";
 
-<div class="card">
-<h2>💳 UPI & Helpline Settings</h2>
+let records = [];
 
-<label>UPI ID</label>
-<input id="upi" placeholder="example@upi">
+const $ = id => document.getElementById(id);
 
-<label>Helpline Number</label>
-<input id="helpline" placeholder="Mobile number">
+function showMessage(text) {
+  $("message").textContent = text;
+}
 
-<button onclick="saveSettings()">Save Settings</button>
-</div>
+// UPI को इस ब्राउज़र में बदलना
+function changeUPI() {
+  const current = $("displayUpi").textContent;
+  const value = prompt("नई UPI ID डालें:", current);
 
-<div class="card">
-<h2>➕ Add Record</h2>
+  if (value && value.trim()) {
+    $("displayUpi").textContent = value.trim();
+    localStorage.setItem("admin_upi", value.trim());
+  }
+}
 
-<div class="grid">
-<div>
-<label>Name</label>
-<input id="name" placeholder="Winner name">
-</div>
+// हेल्पलाइन बदलना
+function changeHelpline() {
+  const current = $("displayHelpline").textContent;
+  const value = prompt("नया हेल्पलाइन नंबर डालें:", current);
 
-<div>
-<label>Mobile Number</label>
-<input id="mobile" maxlength="10" inputmode
+  if (value && value.trim()) {
+    $("displayHelpline").textContent = value.trim();
+    localStorage.setItem("admin_helpline", value.trim());
+  }
+}
+
+// पहले सेव की गई सेटिंग्स
+$("displayUpi").textContent =
+  localStorage.getItem("admin_upi") || "keralaLottery@paytm";
+
+$("displayHelpline").textContent =
+  localStorage.getItem("admin_helpline") || "+91 9876543210";
+
+// Google Sheet में नया रिकॉर्ड जोड़ना
+$("winnerForm").addEventListener("submit", async function(event) {
+  event.preventDefault();
+
+  if (!SCRIPT_URL) {
+    showMessage(
+      "पहले SCRIPT_URL में अपना Apps Script Web App URL डालें।"
+    );
+    return;
+  }
+
+  const button = this.querySelector("button[type=submit]");
+  button.disabled = true;
+
+  const record = {
+    action: "add",
+    name: $("winnerName").value.trim(),
+    mobile: $("mobile").value.trim(),
+    ticket: $("lotteryNumber").value.trim(),
+    prize: $("prizeLevel").value,
+    amount: $("winningAmount").value.trim(),
+    status: "Pending",
+    upiId: $("displayUpi").textContent.trim()
+  };
+
+  try {
+    showMessage("रिकॉर्ड सेव हो रहा है...");
+
+    const response = await fetch(SCRIPT_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "text/plain;charset=utf-8"
+      },
+      body: JSON.stringify(record)
+    });
+
+    const result = await response.json();
+
+    if (!result.success) {
+      throw new Error(result.message || "Record save failed");
+    }
+
+    showMessage("रिकॉर्ड Google Sheet में सेव हो गया।");
+    this.reset();
+    await loadRecords();
+
+  } catch (error) {
+    showMessage(
+      "रिकॉर्ड सेव नहीं हुआ। Apps Script URL और Deploy permissions जाँचें।"
+    );
+  } finally {
+    button.disabled = false;
+  }
+});
+
+// Google Sheet से रिकॉर्ड लाना
+async function loadRecords() {
+  if (!SCRIPT_URL) {
+    showMessage(
+      "Google Sheets जोड़ने के लिए SCRIPT_URL सेट करना जरूरी है।"
+    );
+    return;
+  }
+
+  showMessage("Google Sheet से डेटा लोड हो रहा है...");
+
+  try {
+    const response = await fetch(SCRIPT_URL + "?action=list");
+    const result = await response.json();
+
+    if (!result.success) {
+      throw new Error("Unable to load records");
+    }
+
+    records = result.records || [];
+    renderTable();
+
+    showMessage("कुल रिकॉर्ड: " + records.length);
+
+  } catch (error) {
+    showMessage(
+      "डेटा लोड नहीं हुआ। Apps Script URL और permissions जाँचें।"
+    );
+  }
+}
+
+// टेबल में डेटा दिखाना
+function renderTable() {
+  const query = $("search").value.toLowerCase().trim();
+  const tbody = $("tableBody");
+
+  tbody.replaceChildren();
+
+  records
+    .filter(record => [
+      record.ticket,
+      record.name,
+      record.mobile,
+      record.prize,
+      record.amount
+    ].some(value =>
+      String(value || "").toLowerCase().includes(query)
+    ))
+    .forEach(record => {
+      const tr = document.createElement("tr");
+
+      [
+        record.ticket,
+        record.name,
+        record.mobile,
+        record.prize,
+        record.amount
+      ].forEach(value => {
+        const td = document.createElement("td");
+        td.textContent = value || "-";
+        tr.appendChild(td);
+      });
+
+      tbody.appendChild(tr);
+    });
+}
+</script>
+
+</body>
+</html>
