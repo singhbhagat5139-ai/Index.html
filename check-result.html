@@ -5,169 +5,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Customer Result Verification Portal</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-    }
-    body {
-      background: #070d24;
-      color: #fff;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 15px 12px;
-    }
-    .support-bar {
-      width: 100%;
-      max-width: 440px;
-      background: #121c3b;
-      border: 1px solid #ffcc00;
-      border-radius: 10px;
-      padding: 10px 14px;
-      margin-bottom: 15px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .support-label {
-      font-size: 11px;
-      color: #ffcc00;
-      font-weight: bold;
-    }
-    .support-num {
-      font-size: 15px;
-      font-weight: bold;
-      color: #fff;
-      text-decoration: none;
-    }
-    .call-btn {
-      background: #22c55e;
-      color: #fff;
-      padding: 6px 12px;
-      border-radius: 6px;
-      font-size: 12px;
-      font-weight: bold;
-      text-decoration: none;
-    }
-    .header {
-      text-align: center;
-      margin-bottom: 15px;
-    }
-    .header h1 {
-      font-size: 18px;
-      color: #ffcc00;
-      margin-top: 5px;
-    }
-    .header p {
-      color: #8c9fc2;
-      font-size: 12px;
-    }
-    .card {
-      width: 100%;
-      max-width: 440px;
-      background: #101a38;
-      border: 1px solid rgba(255, 204, 0, 0.3);
-      border-radius: 12px;
-      padding: 18px;
-      margin-bottom: 18px;
-    }
-    label {
-      display: block;
-      color: #ccd9f0;
-      font-size: 12px;
-      margin-bottom: 5px;
-      font-weight: bold;
-    }
-    input {
-      width: 100%;
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px solid #2e4374;
-      background: #070d22;
-      color: #fff;
-      font-size: 14px;
-      margin-bottom: 12px;
-      outline: none;
-    }
-    .check-btn {
-      width: 100%;
-      background: #ffcc00;
-      color: #000;
-      font-weight: bold;
-      border: none;
-      padding: 12px;
-      border-radius: 8px;
-      font-size: 15px;
-      cursor: pointer;
-    }
-    #statusMsg {
-      text-align: center;
-      margin-top: 10px;
-      font-size: 13px;
-      font-weight: bold;
-      display: none;
-    }
-    #resultBox {
-      display: none;
-      margin-top: 15px;
-      border-top: 1px dashed rgba(255, 255, 255, 0.2);
-      padding-top: 15px;
-      text-align: center;
-    }
-    .winner-status {
-      background: rgba(34, 197, 94, 0.15);
-      border: 1px solid #22c55e;
-      border-radius: 8px;
-      padding: 12px;
-    }
-    .withdraw-btn {
-      display: inline-block;
-      margin-top: 10px;
-      background: #22c55e;
-      color: #fff;
-      padding: 10px 18px;
-      border-radius: 6px;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 14px;
-      border: none;
-      cursor: pointer;
-    }
-    .winners-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-      font-size: 12px;
-    }
-    .winners-table th, .winners-table td {
-      padding: 8px 4px;
-      text-align: center;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    }
-    .winners-table th {
-      color: #ffcc00;
-      font-weight: bold;
-    }
-    .badge {
-      color: #ffcc00;
-      font-weight: bold;
-    }
-    .prize-tag {
-      color: #22c55e;
-      font-weight: bold;
-    }
-    .person-tag {
-      color: #8c9fc2;
-      font-size: 11px;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+    body { background: #070d24; color: #fff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 15px 12px; }
+    .support-bar { width: 100%; max-width: 440px; background: #121c3b; border: 1px solid #ffcc00; border-radius: 10px; padding: 10px 14px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+    .support-label { font-size: 11px; color: #ffcc00; font-weight: bold; }
+    .support-num { font-size: 15px; font-weight: bold; color: #fff; text-decoration: none; }
+    .call-btn { background: #22c55e; color: #fff; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: bold; text-decoration: none; }
+    .header { text-align: center; margin-bottom: 15px; }
+    .header h1 { font-size: 18px; color: #ffcc00; margin-top: 5px; }
+    .header p { color: #8c9fc2; font-size: 12px; }
+    .card { width: 100%; max-width: 440px; background: #101a38; border: 1px solid rgba(255, 204, 0, 0.3); border-radius: 12px; padding: 18px; margin-bottom: 18px; }
+    label { display: block; color: #ccd9f0; font-size: 12px; margin-bottom: 5px; font-weight: bold; }
+    input { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #2e4374; background: #070d22; color: #fff; font-size: 14px; margin-bottom: 12px; outline: none; }
+    .check-btn { width: 100%; background: #ffcc00; color: #000; font-weight: bold; border: none; padding: 12px; border-radius: 8px; font-size: 15px; cursor: pointer; }
+    #statusMsg { text-align: center; margin-top: 10px; font-size: 13px; font-weight: bold; display: none; }
+    #resultBox { display: none; margin-top: 15px; border-top: 1px dashed rgba(255, 255, 255, 0.2); padding-top: 15px; text-align: center; }
+    .winner-status { background: rgba(34, 197, 94, 0.15); border: 1px solid #22c55e; border-radius: 8px; padding: 12px; }
+    .withdraw-btn { display: inline-block; margin-top: 10px; background: #22c55e; color: #fff; padding: 10px 18px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 14px; border: none; cursor: pointer; }
+    .winners-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; }
+    .winners-table th, .winners-table td { padding: 8px 4px; text-align: center; border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
+    .winners-table th { color: #ffcc00; font-weight: bold; }
+    .badge { color: #ffcc00; font-weight: bold; }
+    .prize-tag { color: #22c55e; font-weight: bold; }
+    .person-tag { color: #8c9fc2; font-size: 11px; }
   </style>
 </head>
 <body>
 
-  <!-- Support Bar -->
   <div class="support-bar">
     <div>
       <div class="support-label">CUSTOMER SUPPORT</div>
@@ -176,13 +40,11 @@
     <a href="tel:9876543210" class="call-btn">Call Now</a>
   </div>
 
-  <!-- Header -->
   <div class="header">
     <h1>Result Verification Portal</h1>
     <p>Apna number ya ticket check karke prize claim karein</p>
   </div>
 
-  <!-- Search Card -->
   <div class="card">
     <label for="userQuery">ENTER MOBILE NO / TICKET NO</label>
     <input type="text" id="userQuery" placeholder="Jaise: 9876543210 ya TKT-101">
@@ -199,7 +61,6 @@
     </div>
   </div>
 
-  <!-- Winners Table Card -->
   <div class="card">
     <h2 style="font-size: 15px; color: #ffcc00; text-align: center; margin-bottom: 8px;">🏆 Winning Prize Structure (Rank 1 to 10)</h2>
     <table class="winners-table">
@@ -215,7 +76,6 @@
     </table>
   </div>
 
-  <!-- JavaScript -->
   <script>
     const topTenWinners = [
       { rank: "1st", ticket: "TKT-8842", prize: "₹25,00,00,000", persons: "1 Person" },
@@ -226,7 +86,7 @@
       { rank: "6th", ticket: "TKT-1209", prize: "₹1,00,000", persons: "36 Persons" },
       { rank: "7th", ticket: "TKT-7734", prize: "₹75,000", persons: "99 Persons" },
       { rank: "8th", ticket: "TKT-5521", prize: "₹25,000", persons: "120 Persons" },
-      { rank: "9th", ticket: "TKT-2981", prize: "₹10,00,000", persons: "179 Persons" },
+      { rank: "9th", ticket: "TKT-2981", prize: "₹10,000", persons: "179 Persons" },
       { rank: "10th", ticket: "TKT-6019", prize: "₹2,500", persons: "200 Persons" }
     ];
 
@@ -248,7 +108,6 @@
         { id: "9123456780", ticket: "TKT-102", prize: "₹1,00,000" },
         { id: "9988776655", ticket: "TKT-103", prize: "₹25,000" }
       ];
-
       try {
         const storageKeys = ["winners", "allWinners", "lotteryWinners", "users", "winnerList"];
         for (let k of storageKeys) {
@@ -271,7 +130,6 @@
       const val = document.getElementById("userQuery").value.trim().toLowerCase();
       const statusMsg = document.getElementById("statusMsg");
       const resultBox = document.getElementById("resultBox");
-
       statusMsg.style.display = "none";
       resultBox.style.display = "none";
 
