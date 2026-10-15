@@ -5,7 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Customer Result Verification Portal</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
     body {
       background: #070d24;
       color: #fff;
@@ -27,8 +32,17 @@
       justify-content: space-between;
       align-items: center;
     }
-    .support-label { font-size: 11px; color: #ffcc00; font-weight: bold; }
-    .support-num { font-size: 15px; font-weight: bold; color: #fff; text-decoration: none; }
+    .support-label {
+      font-size: 11px;
+      color: #ffcc00;
+      font-weight: bold;
+    }
+    .support-num {
+      font-size: 15px;
+      font-weight: bold;
+      color: #fff;
+      text-decoration: none;
+    }
     .call-btn {
       background: #22c55e;
       color: #fff;
@@ -38,9 +52,19 @@
       font-weight: bold;
       text-decoration: none;
     }
-    .header { text-align: center; margin-bottom: 15px; }
-    .header h1 { font-size: 18px; color: #ffcc00; margin-top: 5px; }
-    .header p { color: #8c9fc2; font-size: 12px; }
+    .header {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+    .header h1 {
+      font-size: 18px;
+      color: #ffcc00;
+      margin-top: 5px;
+    }
+    .header p {
+      color: #8c9fc2;
+      font-size: 12px;
+    }
     .card {
       width: 100%;
       max-width: 440px;
@@ -50,7 +74,13 @@
       padding: 18px;
       margin-bottom: 18px;
     }
-    label { display: block; color: #ccd9f0; font-size: 12px; margin-bottom: 5px; font-weight: bold; }
+    label {
+      display: block;
+      color: #ccd9f0;
+      font-size: 12px;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
     input {
       width: 100%;
       padding: 12px;
@@ -117,14 +147,27 @@
       text-align: center;
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
-    .winners-table th { color: #ffcc00; font-weight: bold; }
-    .badge { color: #ffcc00; font-weight: bold; }
-    .prize-tag { color: #22c55e; font-weight: bold; }
-    .person-tag { color: #8c9fc2; font-size: 11px; }
+    .winners-table th {
+      color: #ffcc00;
+      font-weight: bold;
+    }
+    .badge {
+      color: #ffcc00;
+      font-weight: bold;
+    }
+    .prize-tag {
+      color: #22c55e;
+      font-weight: bold;
+    }
+    .person-tag {
+      color: #8c9fc2;
+      font-size: 11px;
+    }
   </style>
 </head>
 <body>
 
+  <!-- Support Bar -->
   <div class="support-bar">
     <div>
       <div class="support-label">CUSTOMER SUPPORT</div>
@@ -133,16 +176,17 @@
     <a href="tel:9876543210" class="call-btn">Call Now</a>
   </div>
 
+  <!-- Header -->
   <div class="header">
     <h1>Result Verification Portal</h1>
     <p>Apna number ya ticket check karke prize claim karein</p>
   </div>
 
+  <!-- Search Card -->
   <div class="card">
     <label for="userQuery">ENTER MOBILE NO / TICKET NO</label>
     <input type="text" id="userQuery" placeholder="Jaise: 9876543210 ya TKT-101">
     <button class="check-btn" onclick="checkUserResult()">CHECK RESULT</button>
-
     <div id="statusMsg"></div>
 
     <div id="resultBox">
@@ -155,6 +199,7 @@
     </div>
   </div>
 
+  <!-- Winners Table Card -->
   <div class="card">
     <h2 style="font-size: 15px; color: #ffcc00; text-align: center; margin-bottom: 8px;">🏆 Winning Prize Structure (Rank 1 to 10)</h2>
     <table class="winners-table">
@@ -170,96 +215,97 @@
     </table>
   </div>
 
-<script>
-  const topTenWinners = [
-    { rank: "1st", ticket: "TKT-8842", prize: "₹25,00,00,000", persons: "1 Person" },
-    { rank: "2nd", ticket: "TKT-6512", prize: "₹10,00,00,000", persons: "1 Person" },
-    { rank: "3rd", ticket: "TKT-3129", prize: "₹75,00,000", persons: "1 Person" },
-    { rank: "4th", ticket: "TKT-9910", prize: "₹25,00,000", persons: "12 Persons" },
-    { rank: "5th", ticket: "TKT-4418", prize: "₹12,00,000", persons: "16 Persons" },
-    { rank: "6th", ticket: "TKT-1209", prize: "₹1,00,000", persons: "36 Persons" },
-    { rank: "7th", ticket: "TKT-7734", prize: "₹75,000", persons: "99 Persons" },
-    { rank: "8th", ticket: "TKT-5521", prize: "₹25,000", persons: "120 Persons" },
-    { rank: "9th", ticket: "TKT-2981", prize: "₹10,000", persons: "179 Persons" },
-    { rank: "10th", ticket: "TKT-6019", prize: "₹2,500", persons: "200 Persons" }
-  ];
-
-  function loadTopWinners() {
-    const tbody = document.getElementById("topWinnersList");
-    tbody.innerHTML = topTenWinners.map(w => `
-      <tr>
-        <td class="badge">${w.rank}</td>
-        <td>${w.ticket}</td>
-        <td class="prize-tag">${w.prize}</td>
-        <td class="person-tag">${w.persons}</td>
-      </tr>
-    `).join("");
-  }
-
-  function getAllWinnersData() {
-    let list = [
-      { id: "9876543210", ticket: "TKT-101", prize: "₹25,00,000" },
-      { id: "9123456780", ticket: "TKT-102", prize: "₹1,00,000" },
-      { id: "9988776655", ticket: "TKT-103", prize: "₹25,000" }
+  <!-- JavaScript -->
+  <script>
+    const topTenWinners = [
+      { rank: "1st", ticket: "TKT-8842", prize: "₹25,00,00,000", persons: "1 Person" },
+      { rank: "2nd", ticket: "TKT-6512", prize: "₹10,00,00,000", persons: "1 Person" },
+      { rank: "3rd", ticket: "TKT-3129", prize: "₹75,00,000", persons: "1 Person" },
+      { rank: "4th", ticket: "TKT-9910", prize: "₹25,00,000", persons: "12 Persons" },
+      { rank: "5th", ticket: "TKT-4418", prize: "₹12,00,000", persons: "16 Persons" },
+      { rank: "6th", ticket: "TKT-1209", prize: "₹1,00,000", persons: "36 Persons" },
+      { rank: "7th", ticket: "TKT-7734", prize: "₹75,000", persons: "99 Persons" },
+      { rank: "8th", ticket: "TKT-5521", prize: "₹25,000", persons: "120 Persons" },
+      { rank: "9th", ticket: "TKT-2981", prize: "₹10,000", persons: "179 Persons" },
+      { rank: "10th", ticket: "TKT-6019", prize: "₹2,500", persons: "200 Persons" }
     ];
 
-    try {
-      const storageKeys = ["winners", "allWinners", "lotteryWinners", "users", "winnerList"];
-      for (let k of storageKeys) {
-        const item = localStorage.getItem(k);
-        if (item) {
-          const parsed = JSON.parse(item);
-          if (Array.isArray(parsed) && parsed.length > 0) {
-            list = parsed.concat(list);
-            break;
+    function loadTopWinners() {
+      const tbody = document.getElementById("topWinnersList");
+      tbody.innerHTML = topTenWinners.map(w => `
+        <tr>
+          <td class="badge">${w.rank}</td>
+          <td>${w.ticket}</td>
+          <td class="prize-tag">${w.prize}</td>
+          <td class="person-tag">${w.persons}</td>
+        </tr>
+      `).join("");
+    }
+
+    function getAllWinnersData() {
+      let list = [
+        { id: "9876543210", ticket: "TKT-101", prize: "₹25,00,000" },
+        { id: "9123456780", ticket: "TKT-102", prize: "₹1,00,000" },
+        { id: "9988776655", ticket: "TKT-103", prize: "₹25,000" }
+      ];
+
+      try {
+        const storageKeys = ["winners", "allWinners", "lotteryWinners", "users", "winnerList"];
+        for (let k of storageKeys) {
+          const item = localStorage.getItem(k);
+          if (item) {
+            const parsed = JSON.parse(item);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              list = parsed.concat(list);
+              break;
+            }
           }
         }
+      } catch (e) {
+        console.log("Storage check error:", e);
       }
-    } catch (e) {
-      console.log("Storage check error:", e);
-    }
-    return list;
-  }
-
-  function checkUserResult() {
-    const val = document.getElementById("userQuery").value.trim().toLowerCase();
-    const statusMsg = document.getElementById("statusMsg");
-    const resultBox = document.getElementById("resultBox");
-
-    statusMsg.style.display = "none";
-    resultBox.style.display = "none";
-
-    if (!val) {
-      statusMsg.style.color = "#ef4444";
-      statusMsg.textContent = "Kripya apna mobile number ya ticket number daalein.";
-      statusMsg.style.display = "block";
-      return;
+      return list;
     }
 
-    const allWinners = getAllWinnersData();
+    function checkUserResult() {
+      const val = document.getElementById("userQuery").value.trim().toLowerCase();
+      const statusMsg = document.getElementById("statusMsg");
+      const resultBox = document.getElementById("resultBox");
 
-    const matched = allWinners.find(item => {
-      const phone = (item.mobile || item.phone || item.id || "").toString().toLowerCase();
-      const ticket = (item.ticket || item.ticketNo || item.ticket_number || "").toString().toLowerCase();
-      return phone === val || ticket === val;
-    });
+      statusMsg.style.display = "none";
+      resultBox.style.display = "none";
 
-    if (matched) {
-      document.getElementById("resTicket").textContent = matched.ticket || matched.ticketNo || matched.ticket_number || "Verified";
-      document.getElementById("resPrize").textContent = matched.prize || matched.amount || matched.winning_prize || "₹25,000";
-      resultBox.style.display = "block";
-    } else {
-      statusMsg.style.color = "#ef4444";
-      statusMsg.textContent = "Aapka ticket/number list me nahi mila.";
-      statusMsg.style.display = "block";
+      if (!val) {
+        statusMsg.style.color = "#ef4444";
+        statusMsg.textContent = "Kripya apna mobile number ya ticket number daalein.";
+        statusMsg.style.display = "block";
+        return;
+      }
+
+      const allWinners = getAllWinnersData();
+      const matched = allWinners.find(item => {
+        const phone = (item.mobile || item.phone || item.id || "").toString().toLowerCase();
+        const ticket = (item.ticket || item.ticketNo || item.ticket_number || "").toString().toLowerCase();
+        return phone === val || ticket === val;
+      });
+
+      if (matched) {
+        document.getElementById("resTicket").textContent = matched.ticket || matched.ticketNo || matched.ticket_number || "Verified";
+        document.getElementById("resPrize").textContent = matched.prize || matched.amount || matched.winning_prize || "₹25,000";
+        resultBox.style.display = "block";
+      } else {
+        statusMsg.style.color = "#ef4444";
+        statusMsg.textContent = "Aapka ticket/number list me nahi mila.";
+        statusMsg.style.display = "block";
+      }
     }
-  }
 
-  function initiateWithdraw() {
-    alert("Withdrawal request lag gayi hai! Hamari team aapse sampark karegi.");
-  }
+    function initiateWithdraw() {
+      alert("Withdrawal request lag gayi hai! Hamari team aapse sampark karegi.");
+    }
 
-  loadTopWinners();
-</script>
+    // Page load hone par table populate karein
+    loadTopWinners();
+  </script>
 </body>
 </html>
