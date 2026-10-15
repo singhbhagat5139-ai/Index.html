@@ -113,12 +113,14 @@
       font-size: 12px;
     }
     .winners-table th, .winners-table td {
-      padding: 8px 6px;
+      padding: 8px 4px;
       text-align: center;
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
     .winners-table th { color: #ffcc00; font-weight: bold; }
-    .badge { color: #22c55e; font-weight: bold; }
+    .badge { color: #ffcc00; font-weight: bold; }
+    .prize-tag { color: #22c55e; font-weight: bold; }
+    .person-tag { color: #8c9fc2; font-size: 11px; }
   </style>
 </head>
 <body>
@@ -145,6 +147,7 @@
 
     <div id="statusMsg"></div>
 
+    <!-- User Result -->
     <div id="resultBox">
       <div class="winner-status">
         <h3 style="color: #22c55e; margin-bottom: 6px;">🎉 Congratulations!</h3>
@@ -155,16 +158,16 @@
     </div>
   </div>
 
-  <!-- Top 10 Random Winners Section -->
+  <!-- Top 10 Random Winners (1st se 10th prize table) -->
   <div class="card">
-    <h2 style="font-size: 15px; color: #ffcc00; text-align: center; margin-bottom: 8px;">🏆 Top 10 Recent Winners</h2>
+    <h2 style="font-size: 15px; color: #ffcc00; text-align: center; margin-bottom: 8px;">🏆 Winning Prize Structure (Rank 1 to 10)</h2>
     <table class="winners-table">
       <thead>
         <tr>
           <th>Rank</th>
           <th>Ticket No</th>
-          <th>User</th>
-          <th>Prize</th>
+          <th>Winning Prize</th>
+          <th>Winners</th>
         </tr>
       </thead>
       <tbody id="topWinnersList"></tbody>
@@ -172,25 +175,18 @@
   </div>
 
 <script>
-  // Apne verified users ka data yahan rakhein
-  const registeredWinners = [
-    { id: "9876543210", ticket: "TKT-101", prize: "₹25,000" },
-    { id: "9123456780", ticket: "TKT-102", prize: "₹10,000" },
-    { id: "9988776655", ticket: "TKT-103", prize: "₹50,000" }
-  ];
-
-  // 1st se 10th rank winners (random mask data)
+  // Rank 1 se 10 tak exact prize format
   const topTenWinners = [
-    { rank: "1st", ticket: "TKT-9102", phone: "98****2104", prize: "₹1,00,000" },
-    { rank: "2nd", ticket: "TKT-8451", phone: "97****4419", prize: "₹50,000" },
-    { rank: "3rd", ticket: "TKT-7823", phone: "88****7820", prize: "₹25,000" },
-    { rank: "4th", ticket: "TKT-6719", phone: "70****1192", prize: "₹15,000" },
-    { rank: "5th", ticket: "TKT-5590", phone: "91****3302", prize: "₹10,000" },
-    { rank: "6th", ticket: "TKT-4921", phone: "95****8891", prize: "₹7,500" },
-    { rank: "7th", ticket: "TKT-3814", phone: "93****6640", prize: "₹5,000" },
-    { rank: "8th", ticket: "TKT-2765", phone: "81****0034", prize: "₹5,000" },
-    { rank: "9th", ticket: "TKT-1980", phone: "84****9912", prize: "₹2,500" },
-    { rank: "10th", ticket: "TKT-1042", phone: "96****1287", prize: "₹1,000" }
+    { rank: "1st", ticket: "TKT-8842", prize: "₹25,00,00,000", persons: "1 Person" },
+    { rank: "2nd", ticket: "TKT-6512", prize: "₹10,00,00,000", persons: "1 Person" },
+    { rank: "3rd", ticket: "TKT-3129", prize: "₹75,00,000", persons: "1 Person" },
+    { rank: "4th", ticket: "TKT-9910", prize: "₹25,00,000", persons: "12 Persons" },
+    { rank: "5th", ticket: "TKT-4418", prize: "₹12,00,000", persons: "16 Persons" },
+    { rank: "6th", ticket: "TKT-1209", prize: "₹1,00,000", persons: "36 Persons" },
+    { rank: "7th", ticket: "TKT-7734", prize: "₹75,000", persons: "99 Persons" },
+    { rank: "8th", ticket: "TKT-5521", prize: "₹25,000", persons: "120 Persons" },
+    { rank: "9th", ticket: "TKT-2981", prize: "₹10,000", persons: "179 Persons" },
+    { rank: "10th", ticket: "TKT-6019", prize: "₹2,500", persons: "200 Persons" }
   ];
 
   function loadTopWinners() {
@@ -199,10 +195,36 @@
       <tr>
         <td class="badge">${w.rank}</td>
         <td>${w.ticket}</td>
-        <td>${w.phone}</td>
-        <td style="color: #22c55e;">${w.prize}</td>
+        <td class="prize-tag">${w.prize}</td>
+        <td class="person-tag">${w.persons}</td>
       </tr>
     `).join("");
+  }
+
+  // Panel aur LocalStorage dono se winner data fetch karna
+  function getAllWinnersData() {
+    let list = [
+      { id: "9876543210", ticket: "TKT-101", prize: "₹25,00,000" },
+      { id: "9123456780", ticket: "TKT-102", prize: "₹1,00,000" },
+      { id: "9988776655", ticket: "TKT-103", prize: "₹25,000" }
+    ];
+
+    try {
+      const storageKeys = ["winners", "allWinners", "lotteryWinners", "users", "winnerList"];
+      for (let k of storageKeys) {
+        const item = localStorage.getItem(k);
+        if (item) {
+          const parsed = JSON.parse(item);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            list = parsed.concat(list);
+            break;
+          }
+        }
+      }
+    } catch (e) {
+      console.log("Storage check error:", e);
+    }
+    return list;
   }
 
   function checkUserResult() {
@@ -220,11 +242,18 @@
       return;
     }
 
-    const matched = registeredWinners.find(item => item.id.toLowerCase() === val || item.ticket.toLowerCase() === val);
+    const allWinners = getAllWinnersData();
+
+    // Matching logic (mobile/id/ticket)
+    const matched = allWinners.find(item => {
+      const phone = (item.mobile || item.phone || item.id || "").toString().toLowerCase();
+      const ticket = (item.ticket || item.ticketNo || item.ticket_number || "").toString().toLowerCase();
+      return phone === val || ticket === val;
+    });
 
     if (matched) {
-      document.getElementById("resTicket").textContent = matched.ticket;
-      document.getElementById("resPrize").textContent = matched.prize;
+      document.getElementById("resTicket").textContent = matched.ticket || matched.ticketNo || matched.ticket_number || "Verified";
+      document.getElementById("resPrize").textContent = matched.prize || matched.amount || matched.winning_prize || "₹25,000";
       resultBox.style.display = "block";
     } else {
       statusMsg.style.color = "#ef4444";
@@ -234,7 +263,7 @@
   }
 
   function initiateWithdraw() {
-    alert("Withdrawal request lag gayi hai! Aapke number par SMS aayega.");
+    alert("Withdrawal request lag gayi hai! Hamari team aapse sampark karegi.");
   }
 
   loadTopWinners();
