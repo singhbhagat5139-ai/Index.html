@@ -6,368 +6,57 @@
   <title>Official Customer Result Verification Portal</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Poppins', sans-serif;
-    }
-
-    body {
-      background: radial-gradient(circle at top, #132247 0%, #060b1c 100%);
-      color: #ffffff;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 15px 12px;
-    }
-
-    .support-bar {
-      width: 100%;
-      max-width: 440px;
-      background: linear-gradient(135deg, #1b284e, #0e1733);
-      border: 1px solid #ffcc00;
-      border-radius: 12px;
-      padding: 10px 14px;
-      margin-bottom: 16px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-    }
-    .support-info {
-      display: flex;
-      flex-direction: column;
-    }
-    .support-label {
-      font-size: 11px;
-      color: #ffcc00;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-    }
-    .support-num {
-      font-size: 15px;
-      font-weight: 800;
-      color: #ffffff;
-      text-decoration: none;
-    }
-    .call-btn {
-      background: #22c55e;
-      color: #fff;
-      padding: 7px 14px;
-      border-radius: 8px;
-      font-size: 12px;
-      font-weight: 700;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .header {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    .badge {
-      display: inline-block;
-      background: rgba(255, 204, 0, 0.15);
-      border: 1px solid #ffcc00;
-      color: #ffcc00;
-      padding: 4px 14px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      margin-bottom: 6px;
-    }
-    .header h1 {
-      font-size: 20px;
-      font-weight: 700;
-      color: #fff;
-    }
-    .header p {
-      color: #8c9fc2;
-      font-size: 12.5px;
-      margin-top: 4px;
-    }
-
-    .card {
-      width: 100%;
-      max-width: 440px;
-      background: rgba(18, 29, 61, 0.85);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 204, 0, 0.35);
-      border-radius: 16px;
-      padding: 22px 18px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-    }
-
-    .form-group {
-      margin-bottom: 14px;
-    }
-    label {
-      display: block;
-      color: #ccd9f0;
-      font-size: 13px;
-      margin-bottom: 6px;
-      font-weight: 600;
-    }
-    input {
-      width: 100%;
-      padding: 13px;
-      border-radius: 10px;
-      border: 1px solid #2e4374;
-      background: #080f24;
-      color: #fff;
-      font-size: 14px;
-      outline: none;
-      transition: 0.3s;
-    }
-    input:focus {
-      border-color: #ffcc00;
-      box-shadow: 0 0 10px rgba(255, 204, 0, 0.3);
-    }
-
-    .check-btn {
-      width: 100%;
-      background: linear-gradient(135deg, #ffcc00, #ff9900);
-      color: #000;
-      font-weight: 700;
-      border: none;
-      padding: 14px;
-      border-radius: 10px;
-      font-size: 16px;
-      cursor: pointer;
-      box-shadow: 0 6px 15px rgba(255, 204, 0, 0.3);
-      transition: transform 0.2s;
-    }
-    .check-btn:active {
-      transform: scale(0.98);
-    }
-
-    #statusMsg {
-      text-align: center;
-      margin-top: 15px;
-      font-size: 14px;
-      font-weight: 600;
-    }
-
-    #resultBox {
-      display: none;
-      margin-top: 20px;
-      border-top: 1px dashed rgba(255, 255, 255, 0.15);
-      padding-top: 20px;
-      animation: fadeIn 0.4s ease;
-    }
-
-    .winner-status {
-      text-align: center;
-      background: rgba(40, 167, 69, 0.15);
-      border: 1px solid #28a745;
-      color: #4ade80;
-      padding: 6px;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 700;
-      margin-bottom: 15px;
-    }
-
-    .prize-highlight {
-      text-align: center;
-      background: linear-gradient(135deg, #182852, #101c3d);
-      border: 1px solid rgba(255, 204, 0, 0.4);
-      border-radius: 12px;
-      padding: 14px;
-      margin-bottom: 15px;
-    }
-    .prize-title {
-      color: #ffcc00;
-      font-size: 12.5px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-    .prize-amount {
-      font-size: 25px;
-      font-weight: 800;
-      color: #fff;
-      margin-top: 4px;
-    }
-
-    .info-list {
-      background: #0a132c;
-      border-radius: 10px;
-      padding: 12px 14px;
-      margin-bottom: 15px;
-    }
-    .info-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 7px 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      font-size: 13px;
-    }
-    .info-row:last-child {
-      border-bottom: none;
-    }
-    .info-row span {
-      color: #8c9fc2;
-    }
-    .info-row strong {
-      color: #e5edff;
-    }
-
-    .withdraw-box {
-      background: #0a142e;
-      border: 1px solid #273863;
-      border-radius: 12px;
-      padding: 15px;
-      margin-top: 15px;
-    }
-    .withdraw-box h3 {
-      font-size: 13.5px;
-      color: #ffcc00;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .bank-input {
-      margin-bottom: 10px;
-    }
-    .bank-input label {
-      font-size: 11.5px;
-      color: #94a3b8;
-      margin-bottom: 4px;
-    }
-    .bank-input input {
-      padding: 10px 12px;
-      font-size: 13px;
-    }
-
-    .fee-notice {
-      background: rgba(255, 204, 0, 0.1);
-      border: 1px solid rgba(255, 204, 0, 0.3);
-      border-radius: 8px;
-      padding: 10px 12px;
-      margin: 12px 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 13px;
-    }
-    .fee-notice span {
-      color: #e2e8f0;
-      font-weight: 600;
-    }
-    .fee-notice strong {
-      color: #ffcc00;
-      font-size: 15px;
-    }
-
-    .pay-btn {
-      display: block;
-      width: 100%;
-      background: linear-gradient(135deg, #22c55e, #16a34a);
-      color: #fff;
-      text-decoration: none;
-      padding: 14px;
-      border-radius: 10px;
-      font-weight: 700;
-      font-size: 15px;
-      text-align: center;
-      box-shadow: 0 6px 15px rgba(34, 197, 94, 0.3);
-    }
-
-    .winner-board {
-      margin-top: 25px;
-      background: #09122a;
-      border: 1px solid #1f305c;
-      border-radius: 12px;
-      padding: 15px;
-    }
-    .winner-board-title {
-      font-size: 12.5px;
-      font-weight: 700;
-      color: #ffcc00;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-      border-bottom: 1px solid #1c2b52;
-      padding-bottom: 8px;
-    }
-    .live-dot {
-      display: inline-block;
-      width: 8px;
-      height: 8px;
-      background: #22c55e;
-      border-radius: 50%;
-      margin-right: 5px;
-    }
-    .winner-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 8px 0;
-      font-size: 12px;
-      border-bottom: 1px dashed rgba(255,255,255,0.06);
-    }
-    .winner-item:last-child {
-      border-bottom: none;
-    }
-    .rank-tag {
-      width: 22px;
-      height: 22px;
-      background: #182852;
-      border-radius: 50%;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 11px;
-      font-weight: 700;
-      color: #ffcc00;
-      margin-right: 8px;
-    }
-    .ticket-code {
-      font-family: monospace;
-      color: #e2e8f0;
-      font-weight: 600;
-    }
-    .prize-level-badge {
-      font-size: 10px;
-      background: #1c2e59;
-      color: #93c5fd;
-      padding: 2px 6px;
-      border-radius: 4px;
-      margin-left: 5px;
-    }
-    .prize-side {
-      text-align: right;
-    }
-    .prize-tag {
-      color: #4ade80;
-      font-weight: 700;
-      display: block;
-    }
-    .winners-count {
-      color: #718096;
-      font-size: 10px;
-    }
-
-    .trust-footer {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      margin-top: 25px;
-      font-size: 11px;
-      color: #64748b;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+    body { background: radial-gradient(circle at top, #132247 0%, #060b1c 100%); color: #ffffff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 15px 12px; }
+    .support-bar { width: 100%; max-width: 440px; background: linear-gradient(135deg, #1b284e, #0e1733); border: 1px solid #ffcc00; border-radius: 12px; padding: 10px 14px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.4); }
+    .support-info { display: flex; flex-direction: column; }
+    .support-label { font-size: 11px; color: #ffcc00; font-weight: 700; letter-spacing: 0.5px; }
+    .support-num { font-size: 15px; font-weight: 800; color: #ffffff; text-decoration: none; }
+    .call-btn { background: #22c55e; color: #fff; padding: 7px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; }
+    .header { text-align: center; margin-bottom: 20px; }
+    .badge { display: inline-block; background: rgba(255, 204, 0, 0.15); border: 1px solid #ffcc00; color: #ffcc00; padding: 4px 14px; border-radius: 20px; font-size: 11px; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 6px; }
+    .header h1 { font-size: 20px; font-weight: 700; color: #fff; }
+    .header p { color: #8c9fc2; font-size: 12.5px; margin-top: 4px; }
+    .card { width: 100%; max-width: 440px; background: rgba(18, 29, 61, 0.85); backdrop-filter: blur(10px); border: 1px solid rgba(255, 204, 0, 0.35); border-radius: 16px; padding: 22px 18px; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5); }
+    .form-group { margin-bottom: 14px; }
+    label { display: block; color: #ccd9f0; font-size: 13px; margin-bottom: 6px; font-weight: 600; }
+    input { width: 100%; padding: 13px; border-radius: 10px; border: 1px solid #2e4374; background: #080f24; color: #fff; font-size: 14px; outline: none; transition: 0.3s; }
+    input:focus { border-color: #ffcc00; box-shadow: 0 0 10px rgba(255, 204, 0, 0.3); }
+    .check-btn { width: 100%; background: linear-gradient(135deg, #ffcc00, #ff9900); color: #000; font-weight: 700; border: none; padding: 14px; border-radius: 10px; font-size: 16px; cursor: pointer; box-shadow: 0 6px 15px rgba(255, 204, 0, 0.3); transition: transform 0.2s; }
+    .check-btn:active { transform: scale(0.98); }
+    #statusMsg { text-align: center; margin-top: 15px; font-size: 14px; font-weight: 600; }
+    #resultBox { display: none; margin-top: 20px; border-top: 1px dashed rgba(255, 255, 255, 0.15); padding-top: 20px; animation: fadeIn 0.4s ease; }
+    .winner-status { text-align: center; background: rgba(40, 167, 69, 0.15); border: 1px solid #28a745; color: #4ade80; padding: 6px; border-radius: 8px; font-size: 13px; font-weight: 700; margin-bottom: 15px; }
+    .prize-highlight { text-align: center; background: linear-gradient(135deg, #182852, #101c3d); border: 1px solid rgba(255, 204, 0, 0.4); border-radius: 12px; padding: 14px; margin-bottom: 15px; }
+    .prize-title { color: #ffcc00; font-size: 12.5px; text-transform: uppercase; letter-spacing: 1px; }
+    .prize-amount { font-size: 25px; font-weight: 800; color: #fff; margin-top: 4px; }
+    .info-list { background: #0a132c; border-radius: 10px; padding: 12px 14px; margin-bottom: 15px; }
+    .info-row { display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.05); font-size: 13px; }
+    .info-row:last-child { border-bottom: none; }
+    .info-row span { color: #8c9fc2; }
+    .info-row strong { color: #e5edff; }
+    .withdraw-box { background: #0a142e; border: 1px solid #273863; border-radius: 12px; padding: 15px; margin-top: 15px; }
+    .withdraw-box h3 { font-size: 13.5px; color: #ffcc00; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+    .bank-input { margin-bottom: 10px; }
+    .bank-input label { font-size: 11.5px; color: #94a3b8; margin-bottom: 4px; }
+    .bank-input input { padding: 10px 12px; font-size: 13px; }
+    .fee-notice { background: rgba(255, 204, 0, 0.1); border: 1px solid rgba(255, 204, 0, 0.3); border-radius: 8px; padding: 10px 12px; margin: 12px 0; display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
+    .fee-notice span { color: #e2e8f0; font-weight: 600; }
+    .fee-notice strong { color: #ffcc00; font-size: 15px; }
+    .pay-btn { display: block; width: 100%; background: linear-gradient(135deg, #22c55e, #16a34a); color: #fff; text-decoration: none; padding: 14px; border-radius: 10px; font-weight: 700; font-size: 15px; text-align: center; box-shadow: 0 6px 15px rgba(34, 197, 94, 0.3); }
+    .winner-board { margin-top: 25px; background: #09122a; border: 1px solid #1f305c; border-radius: 12px; padding: 15px; }
+    .winner-board-title { font-size: 12.5px; font-weight: 700; color: #ffcc00; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid #1c2b52; padding-bottom: 8px; }
+    .live-dot { display: inline-block; width: 8px; height: 8px; background: #22c55e; border-radius: 50%; margin-right: 5px; }
+    .winner-item { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; font-size: 12px; border-bottom: 1px dashed rgba(255,255,255,0.06); }
+    .winner-item:last-child { border-bottom: none; }
+    .rank-tag { width: 22px; height: 22px; background: #182852; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #ffcc00; margin-right: 8px; }
+    .ticket-code { font-family: monospace; color: #e2e8f0; font-weight: 600; }
+    .prize-level-badge { font-size: 10px; background: #1c2e59; color: #93c5fd; padding: 2px 6px; border-radius: 4px; margin-left: 5px; }
+    .prize-side { text-align: right; }
+    .prize-tag { color: #4ade80; font-weight: 700; display: block; }
+    .winners-count { color: #718096; font-size: 10px; }
+    .trust-footer { display: flex; justify-content: center; gap: 15px; margin-top: 25px; font-size: 11px; color: #64748b; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
   </style>
 </head>
 <body>
@@ -407,18 +96,9 @@
       </div>
 
       <div class="info-list">
-        <div class="info-row">
-          <span>Winner Name</span>
-          <strong id="resName">-</strong>
-        </div>
-        <div class="info-row">
-          <span>Ticket Number</span>
-          <strong id="resTicket">-</strong>
-        </div>
-        <div class="info-row">
-          <span>Registered Mobile</span>
-          <strong id="resMobile">-</strong>
-        </div>
+        <div class="info-row"><span>Winner Name</span><strong id="resName">-</strong></div>
+        <div class="info-row"><span>Ticket Number</span><strong id="resTicket">-</strong></div>
+        <div class="info-row"><span>Registered Mobile</span><strong id="resMobile">-</strong></div>
       </div>
 
       <!-- Withdraw Section -->
@@ -488,7 +168,6 @@
       { rank: "10th Prize", prize: "₹2,500", count: "200 Winners" }
     ];
 
-    // SheetDB se real saved winners lakar board par auto show karega
     async function loadWinnerBoard() {
       const container = document.getElementById("winnerListContainer");
       const series = ["KL", "WB", "SK", "DL", "PB", "MH", "RJ", "KA", "GJ", "TN"];
@@ -506,7 +185,6 @@
         let ticketNum = "";
         let levelName = prizeData[i].rank;
 
-        // Agar pannel me is rank ka customer save hai to wahi dikhayega
         const match = savedRecords.find(item => item.prize && item.prize.toLowerCase().includes((i + 1).toString()));
         if (match && match.ticket) {
           ticketNum = match.ticket;
