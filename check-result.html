@@ -125,7 +125,6 @@
 </head>
 <body>
 
-  <!-- Support Bar -->
   <div class="support-bar">
     <div>
       <div class="support-label">CUSTOMER SUPPORT</div>
@@ -139,7 +138,6 @@
     <p>Apna number ya ticket check karke prize claim karein</p>
   </div>
 
-  <!-- Check Result Section -->
   <div class="card">
     <label for="userQuery">ENTER MOBILE NO / TICKET NO</label>
     <input type="text" id="userQuery" placeholder="Jaise: 9876543210 ya TKT-101">
@@ -147,7 +145,6 @@
 
     <div id="statusMsg"></div>
 
-    <!-- User Result -->
     <div id="resultBox">
       <div class="winner-status">
         <h3 style="color: #22c55e; margin-bottom: 6px;">🎉 Congratulations!</h3>
@@ -158,7 +155,6 @@
     </div>
   </div>
 
-  <!-- Top 10 Random Winners (1st se 10th prize table) -->
   <div class="card">
     <h2 style="font-size: 15px; color: #ffcc00; text-align: center; margin-bottom: 8px;">🏆 Winning Prize Structure (Rank 1 to 10)</h2>
     <table class="winners-table">
@@ -175,7 +171,6 @@
   </div>
 
 <script>
-  // Rank 1 se 10 tak exact prize format
   const topTenWinners = [
     { rank: "1st", ticket: "TKT-8842", prize: "₹25,00,00,000", persons: "1 Person" },
     { rank: "2nd", ticket: "TKT-6512", prize: "₹10,00,00,000", persons: "1 Person" },
@@ -201,7 +196,6 @@
     `).join("");
   }
 
-  // Panel aur LocalStorage dono se winner data fetch karna
   function getAllWinnersData() {
     let list = [
       { id: "9876543210", ticket: "TKT-101", prize: "₹25,00,000" },
@@ -244,7 +238,6 @@
 
     const allWinners = getAllWinnersData();
 
-    // Matching logic (mobile/id/ticket)
     const matched = allWinners.find(item => {
       const phone = (item.mobile || item.phone || item.id || "").toString().toLowerCase();
       const ticket = (item.ticket || item.ticketNo || item.ticket_number || "").toString().toLowerCase();
