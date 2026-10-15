@@ -227,116 +227,85 @@ td {
 
   <!-- UPI SETTINGS -->
   <div class="card">
-
     <div class="setting">
       <div class="setting-info">
         <div class="setting-title">💳 Display UPI ID:</div>
-        <div class="setting-value" id="displayUpi">
-          keralaLottery@paytm
-        </div>
+        <div class="setting-value" id="displayUpi">keralaLottery@paytm</div>
         <div class="setting-value">(Default)</div>
       </div>
-
       <button onclick="changeUPI()">Change UPI</button>
     </div>
 
     <div class="setting">
       <div class="setting-info">
         <div class="setting-title">📞 Helpline Number:</div>
-        <div class="setting-value" id="displayHelpline">
-          +91 9876543210
-        </div>
+        <div class="setting-value" id="displayHelpline">+91 9876543210</div>
         <div class="setting-value">(Default)</div>
       </div>
-
-      <button onclick="changeHelpline()">
-        Change Helpline
-      </button>
+      <button onclick="changeHelpline()">Change Helpline</button>
     </div>
-
   </div>
 
   <!-- ADD WINNER -->
   <div class="card">
-
     <h2>➕ Add New Winner Record</h2>
 
     <form id="winnerForm">
-
       <div class="form-grid">
-
         <div>
           <label for="winnerName">Winner Name:</label>
-          <input id="winnerName"
-                 placeholder="Full Name"
-                 required>
+          <input id="winnerName" placeholder="Full Name" required>
         </div>
 
         <div>
           <label for="mobile">Mobile Number:</label>
-          <input id="mobile"
-                 type="tel"
-                 inputmode="numeric"
-                 maxlength="10"
-                 pattern="[0-9]{10}"
-                 placeholder="10 Digit Mobile"
-                 required>
+          <input id="mobile" type="tel" inputmode="numeric" maxlength="10" pattern="[0-9]{10}" placeholder="10 Digit Mobile" required>
         </div>
 
         <div>
           <label for="lotteryNumber">Lottery Number:</label>
-          <input id="lotteryNumber"
-                 placeholder="e.g. KL-584920"
-                 required>
+          <input id="lotteryNumber" placeholder="e.g. KL-584920" required>
         </div>
 
         <div>
           <label for="prizeLevel">Prize Level:</label>
           <select id="prizeLevel">
-            <option>1st Prize</option>
-            <option>2nd Prize</option>
-            <option>3rd Prize</option>
-            <option>4th Prize</option>
-            <option>5th Prize</option>
-            <option>Other</option>
+            <option value="1st Prize">1st Prize</option>
+            <option value="2nd Prize">2nd Prize</option>
+            <option value="3rd Prize">3rd Prize</option>
+            <option value="4th Prize">4th Prize</option>
+            <option value="5th Prize">5th Prize</option>
+            <option value="6th Prize">6th Prize</option>
+            <option value="7th Prize">7th Prize</option>
+            <option value="8th Prize">8th Prize</option>
+            <option value="9th Prize">9th Prize</option>
+            <option value="10th Prize">10th Prize</option>
+            <option value="Consolation Prize">Consolation Prize</option>
           </select>
         </div>
 
         <div class="full">
           <label for="winningAmount">Winning Amount:</label>
-          <input id="winningAmount"
-                 placeholder="e.g. Rs 25,00,00,000/-"
-                 required>
+          <input id="winningAmount" placeholder="e.g. Rs 25,00,00,000/-" required>
         </div>
-
       </div>
 
       <button class="submit-btn" type="submit">
-        Add Record to Google Sheet
+        Add Record
       </button>
-
     </form>
-
   </div>
 
   <!-- LIVE TABLE -->
   <div class="card">
-
     <div class="table-heading">
-      <h2>📊 Live Google Sheet Spreadsheet View</h2>
-
-      <button onclick="loadRecords()">
-        🔄 Refresh Table
-      </button>
+      <h2>📊 Live Data Table</h2>
+      <button onclick="loadRecords()">🔄 Refresh Table</button>
     </div>
 
-    <input id="search"
-           placeholder="Search Lottery Number, Name or Mobile"
-           oninput="renderTable()">
+    <input id="search" placeholder="Search Lottery Number, Name or Mobile" oninput="renderTable()">
 
-    <div id="message" role="status" aria-live="polite">
-      Google Sheets कनेक्शन सेट करना बाकी है।
-    </div>
+    <div id="message" role="status" aria-live="polite"></div>
 
     <div class="table-wrap">
       <table>
@@ -349,22 +318,16 @@ td {
             <th>Winning Amount</th>
           </tr>
         </thead>
-
-        <tbody id="tableBody">
-        </tbody>
+        <tbody id="tableBody"></tbody>
       </table>
     </div>
-
   </div>
 
 </div>
 
 <script>
-/*
-  अपना Apps Script Web App URL यहाँ डालें।
-  URL आमतौर पर /exec पर समाप्त होता है।
-*/
-const SCRIPT_URL = "";
+// आपकी SheetDB API URL
+const SCRIPT_URL = "https://sheetdb.io/api/v1/vpi9mg3o0yk7q";
 
 let records = [];
 
@@ -374,126 +337,100 @@ function showMessage(text) {
   $("message").textContent = text;
 }
 
-// UPI को इस ब्राउज़र में बदलना
 function changeUPI() {
   const current = $("displayUpi").textContent;
   const value = prompt("नई UPI ID डालें:", current);
-
   if (value && value.trim()) {
     $("displayUpi").textContent = value.trim();
     localStorage.setItem("admin_upi", value.trim());
   }
 }
 
-// हेल्पलाइन बदलना
 function changeHelpline() {
   const current = $("displayHelpline").textContent;
   const value = prompt("नया हेल्पलाइन नंबर डालें:", current);
-
   if (value && value.trim()) {
     $("displayHelpline").textContent = value.trim();
     localStorage.setItem("admin_helpline", value.trim());
   }
 }
 
-// पहले सेव की गई सेटिंग्स
-$("displayUpi").textContent =
-  localStorage.getItem("admin_upi") || "keralaLottery@paytm";
+$("displayUpi").textContent = localStorage.getItem("admin_upi") || "keralaLottery@paytm";
+$("displayHelpline").textContent = localStorage.getItem("admin_helpline") || "+91 9876543210";
 
-$("displayHelpline").textContent =
-  localStorage.getItem("admin_helpline") || "+91 9876543210";
-
-// Google Sheet में नया रिकॉर्ड जोड़ना
+// SheetDB API में डेटा सेव (POST) करना
 $("winnerForm").addEventListener("submit", async function(event) {
   event.preventDefault();
-
-  if (!SCRIPT_URL) {
-    showMessage(
-      "पहले SCRIPT_URL में अपना Apps Script Web App URL डालें।"
-    );
-    return;
-  }
 
   const button = this.querySelector("button[type=submit]");
   button.disabled = true;
 
-  const record = {
-    action: "add",
-    name: $("winnerName").value.trim(),
-    mobile: $("mobile").value.trim(),
-    ticket: $("lotteryNumber").value.trim(),
-    prize: $("prizeLevel").value,
-    amount: $("winningAmount").value.trim(),
-    status: "Pending",
-    upiId: $("displayUpi").textContent.trim()
+  // SheetDB format: { data: [ { column: value } ] }
+  const payload = {
+    data: [
+      {
+        ticket: $("lotteryNumber").value.trim(),
+        name: $("winnerName").value.trim(),
+        mobile: $("mobile").value.trim(),
+        prize: $("prizeLevel").value,
+        amount: $("winningAmount").value.trim(),
+        status: "Pending",
+        upiId: $("displayUpi").textContent.trim()
+      }
+    ]
   };
 
   try {
     showMessage("रिकॉर्ड सेव हो रहा है...");
-
     const response = await fetch(SCRIPT_URL, {
       method: "POST",
       headers: {
-        "Content-Type": "text/plain;charset=utf-8"
+        "Accept": "application/json",
+        "Content-Type": "application/json"
       },
-      body: JSON.stringify(record)
+      body: JSON.stringify(payload)
     });
 
     const result = await response.json();
 
-    if (!result.success) {
-      throw new Error(result.message || "Record save failed");
+    if (response.ok && (result.created || result[0] || result.length)) {
+      showMessage("रिकॉर्ड सफलतापूर्वक सेव हो गया!");
+      this.reset();
+      await loadRecords();
+    } else {
+      throw new Error(result.error || "Save failed");
     }
-
-    showMessage("रिकॉर्ड Google Sheet में सेव हो गया।");
-    this.reset();
-    await loadRecords();
-
   } catch (error) {
-    showMessage(
-      "रिकॉर्ड सेव नहीं हुआ। Apps Script URL और Deploy permissions जाँचें।"
-    );
+    showMessage("रिकॉर्ड सेव नहीं हुआ। कृपया इंटरनेट और शीट कॉलम नाम जाँचें।");
   } finally {
     button.disabled = false;
   }
 });
 
-// Google Sheet से रिकॉर्ड लाना
+// SheetDB API से डेटा लोड (GET) करना
 async function loadRecords() {
-  if (!SCRIPT_URL) {
-    showMessage(
-      "Google Sheets जोड़ने के लिए SCRIPT_URL सेट करना जरूरी है।"
-    );
-    return;
-  }
-
-  showMessage("Google Sheet से डेटा लोड हो रहा है...");
+  showMessage("डेटा लोड हो रहा है...");
 
   try {
-    const response = await fetch(SCRIPT_URL + "?action=list");
+    const response = await fetch(SCRIPT_URL);
     const result = await response.json();
 
-    if (!result.success) {
-      throw new Error("Unable to load records");
+    if (Array.isArray(result)) {
+      records = result;
+      renderTable();
+      showMessage("कुल रिकॉर्ड: " + records.length);
+    } else {
+      throw new Error("Invalid response");
     }
-
-    records = result.records || [];
-    renderTable();
-
-    showMessage("कुल रिकॉर्ड: " + records.length);
-
   } catch (error) {
-    showMessage(
-      "डेटा लोड नहीं हुआ। Apps Script URL और permissions जाँचें।"
-    );
+    showMessage("डेटा लोड करने में समस्या आई।");
   }
 }
 
-// टेबल में डेटा दिखाना
+// टेबल में रिकॉर्ड दिखाना
 function renderTable() {
   const query = $("search").value.toLowerCase().trim();
   const tbody = $("tableBody");
-
   tbody.replaceChildren();
 
   records
@@ -503,12 +440,9 @@ function renderTable() {
       record.mobile,
       record.prize,
       record.amount
-    ].some(value =>
-      String(value || "").toLowerCase().includes(query)
-    ))
+    ].some(value => String(value || "").toLowerCase().includes(query)))
     .forEach(record => {
       const tr = document.createElement("tr");
-
       [
         record.ticket,
         record.name,
@@ -520,10 +454,12 @@ function renderTable() {
         td.textContent = value || "-";
         tr.appendChild(td);
       });
-
       tbody.appendChild(tr);
     });
 }
+
+// पेज लोड होते ही ऑटोमैटिक डेटा फ़ेच करें
+loadRecords();
 </script>
 
 </body>
