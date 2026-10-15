@@ -393,13 +393,11 @@ function changeHelpline() {
   }
 }
 
-// LocalStorage से वैल्यू सेट करें
 $("displayUpi").textContent = localStorage.getItem("admin_upi") || "keralaLottery@paytm";
 $("displayHelpline").textContent = localStorage.getItem("admin_helpline") || "+91 9876543210";
 $("displayRegFee").textContent = "₹ " + (localStorage.getItem("admin_reg_fee") || "3250");
 updatePaymentLink();
 
-// SheetDB API में डेटा सेव (POST) करना
 $("winnerForm").addEventListener("submit", async function(event) {
   event.preventDefault();
 
@@ -452,7 +450,6 @@ $("winnerForm").addEventListener("submit", async function(event) {
   }
 });
 
-// SheetDB API से डेटा लोड (GET) करना
 async function loadRecords() {
   showMessage("डेटा लोड हो रहा है...");
 
@@ -472,7 +469,6 @@ async function loadRecords() {
   }
 }
 
-// टेबल में रिकॉर्ड दिखाना
 function renderTable() {
   const query = $("search").value.toLowerCase().trim();
   const tbody = $("tableBody");
@@ -509,7 +505,6 @@ function renderTable() {
         tr.appendChild(td);
       });
 
-      // Pay Button
       const payTd = document.createElement("td");
       const a = document.createElement("a");
       a.href = payLink;
