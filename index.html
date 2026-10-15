@@ -3,524 +3,174 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Panel</title>
-
+<title>Admin Dashboard</title>
 <style>
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  padding: 15px;
-  background: #080f26;
-  color: white;
-  font-family: Arial, sans-serif;
-}
-
-.container {
-  max-width: 850px;
-  margin: auto;
-  padding: 20px;
-  background: linear-gradient(145deg, #17264f, #101a38);
-  border: 2px solid #ffcc00;
-  border-radius: 20px;
-  box-shadow: 0 0 20px #0008;
-}
-
-h1 {
-  text-align: center;
-  color: #ffcc00;
-  font-size: 25px;
-  margin-top: 5px;
-}
-
-h2 {
-  color: #ffcc00;
-  font-size: 20px;
-  margin-top: 0;
-}
-
-.card {
-  background: #111c3d;
-  border: 1px solid #344675;
-  border-radius: 15px;
-  padding: 20px;
-  margin: 20px 0;
-}
-
-.setting {
-  border: 1px dashed #ffcc00;
-  border-radius: 12px;
-  padding: 15px;
-  margin-bottom: 15px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.setting-info {
-  min-width: 0;
-  overflow-wrap: anywhere;
-}
-
-.setting-title {
-  color: #ffcc00;
-  font-weight: bold;
-  margin-bottom: 8px;
-}
-
-.setting-value {
-  color: #63e6a0;
-  font-weight: bold;
-  font-size: 17px;
-}
-
-button, .pay-link-btn {
-  background: #ffcc00;
-  color: #101010;
-  border: none;
-  border-radius: 8px;
-  padding: 13px 18px;
-  font-size: 15px;
-  font-weight: bold;
-  cursor: pointer;
-  text-decoration: none;
-  display: inline-block;
-  text-align: center;
-}
-
-button:active, .pay-link-btn:active {
-  transform: scale(.98);
-}
-
-.setting button, .setting .pay-link-btn {
-  min-width: 140px;
-}
-
-label {
-  display: block;
-  color: #c5d0ee;
-  font-weight: bold;
-  margin: 10px 0 7px;
-}
-
-input, select {
-  width: 100%;
-  padding: 14px;
-  background: #050a17;
-  color: white;
-  border: 1px solid #354777;
-  border-radius: 9px;
-  font-size: 16px;
-  outline: none;
-}
-
-input:focus, select:focus {
-  border-color: #ffcc00;
-}
-
-.form-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 15px;
-}
-
-.full {
-  grid-column: 1 / -1;
-}
-
-.submit-btn {
-  width: 100%;
-  margin-top: 20px;
-  font-size: 17px;
-  padding: 17px;
-}
-
-.table-heading {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.table-heading button {
-  border: 1px solid #ffcc00;
-}
-
-.table-wrap {
-  overflow-x: auto;
-  margin-top: 20px;
-  border: 1px solid #304477;
-  border-radius: 10px;
-}
-
-table {
-  width: 100%;
-  min-width: 750px;
-  border-collapse: collapse;
-}
-
-th, td {
-  padding: 12px;
-  text-align: left;
-  border: 1px solid #26385f;
-}
-
-th {
-  color: #ffcc00;
-  background: #192a55;
-}
-
-td {
-  color: #e5eaff;
-}
-
-#message {
-  overflow-wrap: anywhere;
-  color: #ffcc00;
-  margin-top: 12px;
-}
-
-@media(max-width: 520px) {
-  body {
-    padding: 7px;
-  }
-
-  .container {
-    padding: 12px;
-  }
-
-  .card {
-    padding: 13px;
-  }
-
-  .form-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .full {
-    grid-column: auto;
-  }
-
-  .setting {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .setting button, .setting .pay-link-btn {
-    width: 100%;
-  }
-
-  .table-heading {
-    align-items: stretch;
-    flex-direction: column;
-  }
-}
+  * { box-sizing: border-box; font-family: Arial, sans-serif; }
+  body { margin: 0; padding: 15px; background: #080f26; color: white; }
+  .box { max-width: 600px; margin: auto; background: #111c3d; border: 2px solid #ffcc00; border-radius: 12px; padding: 15px; margin-bottom: 20px; }
+  h2 { color: #ffcc00; margin-top: 0; text-align: center; }
+  label { display: block; margin: 10px 0 5px; color: #ffcc00; font-size: 14px; }
+  input, select, button { width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #354777; background: #050a17; color: white; font-size: 15px; }
+  button { background: #ffcc00; color: #000; font-weight: bold; border: none; margin-top: 15px; cursor: pointer; }
+  .pay-btn { display: inline-block; background: #28a745; color: white; text-decoration: none; padding: 6px 12px; border-radius: 5px; font-weight: bold; }
+  table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px; }
+  th, td { border: 1px solid #354777; padding: 8px; text-align: left; }
+  th { background: #17264f; color: #ffcc00; }
+  #msg { text-align: center; color: #ffcc00; margin-top: 10px; font-weight: bold; }
+  .scroll-tbl { overflow-x: auto; }
 </style>
 </head>
-
 <body>
 
-<div class="container">
+<div class="box">
+  <h2>⚙️ Settings & Payment</h2>
+  <label>UPI ID:</label>
+  <input id="upiId" value="keralaLottery@paytm">
+  
+  <label>Registration Fee (₹):</label>
+  <input id="regFee" value="3250">
+  
+  <button type="button" onclick="saveSettings()">Save Settings</button>
+</div>
 
-  <h1>🎟️ Admin Panel & Control Dashboard</h1>
+<div class="box">
+  <h2>➕ Add Winner Record</h2>
+  <form id="winnerForm">
+    <label>Winner Name:</label>
+    <input id="name" placeholder="Full Name" required>
 
-  <!-- UPI & PAYMENT SETTINGS -->
-  <div class="card">
-    <div class="setting">
-      <div class="setting-info">
-        <div class="setting-title">💳 Display UPI ID:</div>
-        <div class="setting-value" id="displayUpi">keralaLottery@paytm</div>
-      </div>
-      <button onclick="changeUPI()">Change UPI</button>
-    </div>
+    <label>Mobile Number:</label>
+    <input id="mobile" type="tel" maxlength="10" placeholder="10 Digit Number" required>
 
-    <div class="setting">
-      <div class="setting-info">
-        <div class="setting-title">💰 Registration Fees:</div>
-        <div class="setting-value" id="displayRegFee">₹ 3250</div>
-      </div>
-      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-        <button onclick="changeFee()">Change Fee</button>
-        <a id="payNowBtn" class="pay-link-btn" href="#" target="_blank">Pay ₹3250 UPI</a>
-      </div>
-    </div>
+    <label>Lottery Number:</label>
+    <input id="ticket" placeholder="e.g. KL-584920" required>
 
-    <div class="setting">
-      <div class="setting-info">
-        <div class="setting-title">📞 Helpline Number:</div>
-        <div class="setting-value" id="displayHelpline">+91 9876543210</div>
-      </div>
-      <button onclick="changeHelpline()">Change Helpline</button>
-    </div>
+    <label>Prize Level:</label>
+    <select id="prize">
+      <option>1st Prize</option>
+      <option>2nd Prize</option>
+      <option>3rd Prize</option>
+      <option>4th Prize</option>
+      <option>5th Prize</option>
+      <option>6th Prize</option>
+      <option>7th Prize</option>
+      <option>8th Prize</option>
+      <option>9th Prize</option>
+      <option>10th Prize</option>
+      <option>Consolation Prize</option>
+    </select>
+
+    <label>Winning Amount:</label>
+    <input id="amount" placeholder="e.g. Rs 25,00,000/-" required>
+
+    <button type="submit" id="subBtn">Add Record to Sheet</button>
+  </form>
+  <div id="msg"></div>
+</div>
+
+<div class="box">
+  <h2>📊 Winner Records</h2>
+  <button type="button" onclick="loadData()">🔄 Refresh Table</button>
+  <div class="scroll-tbl">
+    <table>
+      <thead>
+        <tr>
+          <th>Ticket</th>
+          <th>Name</th>
+          <th>Mobile</th>
+          <th>Prize</th>
+          <th>Amount</th>
+          <th>Fee</th>
+          <th>Pay Option</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
   </div>
-
-  <!-- ADD WINNER -->
-  <div class="card">
-    <h2>➕ Add New Winner Record</h2>
-
-    <form id="winnerForm">
-      <div class="form-grid">
-        <div>
-          <label for="winnerName">Winner Name:</label>
-          <input id="winnerName" placeholder="Full Name" required>
-        </div>
-
-        <div>
-          <label for="mobile">Mobile Number:</label>
-          <input id="mobile" type="tel" inputmode="numeric" maxlength="10" pattern="[0-9]{10}" placeholder="10 Digit Mobile" required>
-        </div>
-
-        <div>
-          <label for="lotteryNumber">Lottery Number:</label>
-          <input id="lotteryNumber" placeholder="e.g. KL-584920" required>
-        </div>
-
-        <div>
-          <label for="prizeLevel">Prize Level:</label>
-          <select id="prizeLevel">
-            <option value="1st Prize">1st Prize</option>
-            <option value="2nd Prize">2nd Prize</option>
-            <option value="3rd Prize">3rd Prize</option>
-            <option value="4th Prize">4th Prize</option>
-            <option value="5th Prize">5th Prize</option>
-            <option value="6th Prize">6th Prize</option>
-            <option value="7th Prize">7th Prize</option>
-            <option value="8th Prize">8th Prize</option>
-            <option value="9th Prize">9th Prize</option>
-            <option value="10th Prize">10th Prize</option>
-            <option value="Consolation Prize">Consolation Prize</option>
-          </select>
-        </div>
-
-        <div>
-          <label for="winningAmount">Winning Amount:</label>
-          <input id="winningAmount" placeholder="e.g. Rs 25,00,00,000/-" required>
-        </div>
-
-        <div>
-          <label for="regFeeInput">Registration Fee (₹):</label>
-          <input id="regFeeInput" value="3250" required>
-        </div>
-      </div>
-
-      <button class="submit-btn" type="submit">
-        Add Record
-      </button>
-    </form>
-  </div>
-
-  <!-- LIVE TABLE -->
-  <div class="card">
-    <div class="table-heading">
-      <h2>📊 Live Data Table</h2>
-      <button onclick="loadRecords()">🔄 Refresh Table</button>
-    </div>
-
-    <input id="search" placeholder="Search Lottery Number, Name or Mobile" oninput="renderTable()">
-
-    <div id="message" role="status" aria-live="polite"></div>
-
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Lottery Number</th>
-            <th>Name</th>
-            <th>Mobile</th>
-            <th>Prize</th>
-            <th>Winning Amount</th>
-            <th>Fee</th>
-            <th>Pay Option</th>
-          </tr>
-        </thead>
-        <tbody id="tableBody"></tbody>
-      </table>
-    </div>
-  </div>
-
 </div>
 
 <script>
-const SCRIPT_URL = "https://sheetdb.io/api/v1/vpi9mg3o0yk7q";
-
-let records = [];
-
+const API_URL = "https://sheetdb.io/api/v1/vpi9mg3o0yk7q";
 const $ = id => document.getElementById(id);
 
-function showMessage(text) {
-  $("message").textContent = text;
+// Load saved UPI and Fee
+$("upiId").value = localStorage.getItem("upi") || "keralaLottery@paytm";
+$("regFee").value = localStorage.getItem("fee") || "3250";
+
+function saveSettings() {
+  localStorage.setItem("upi", $("upiId").value.trim());
+  localStorage.setItem("fee", $("regFee").value.trim());
+  alert("Settings Saved!");
+  loadData();
 }
 
-function updatePaymentLink() {
-  const upi = $("displayUpi").textContent.trim();
-  const fee = $("displayRegFee").textContent.replace(/[^0-9]/g, "").trim() || "3250";
-  const upiLink = `upi://pay?pa=${encodeURIComponent(upi)}&pn=Lottery%20Registration&am=${fee}&cu=INR&tn=Registration%20Fee`;
-  $("payNowBtn").href = upiLink;
-  $("payNowBtn").textContent = `Pay ₹${fee} via UPI`;
-  $("regFeeInput").value = fee;
-}
+// Save Data (POST)
+$("winnerForm").addEventListener("submit", async function(e) {
+  e.preventDefault();
+  $("subBtn").disabled = true;
+  $("msg").textContent = "रिकॉर्ड सेव हो रहा है...";
 
-function changeUPI() {
-  const current = $("displayUpi").textContent;
-  const value = prompt("नई UPI ID डालें:", current);
-  if (value && value.trim()) {
-    $("displayUpi").textContent = value.trim();
-    localStorage.setItem("admin_upi", value.trim());
-    updatePaymentLink();
-  }
-}
-
-function changeFee() {
-  const current = $("displayRegFee").textContent.replace(/[^0-9]/g, "");
-  const value = prompt("Registration Fee राशि डालें (उदा. 3250):", current);
-  if (value && value.trim()) {
-    $("displayRegFee").textContent = "₹ " + value.trim();
-    localStorage.setItem("admin_reg_fee", value.trim());
-    updatePaymentLink();
-  }
-}
-
-function changeHelpline() {
-  const current = $("displayHelpline").textContent;
-  const value = prompt("नया हेल्पलाइन नंबर डालें:", current);
-  if (value && value.trim()) {
-    $("displayHelpline").textContent = value.trim();
-    localStorage.setItem("admin_helpline", value.trim());
-  }
-}
-
-$("displayUpi").textContent = localStorage.getItem("admin_upi") || "keralaLottery@paytm";
-$("displayHelpline").textContent = localStorage.getItem("admin_helpline") || "+91 9876543210";
-$("displayRegFee").textContent = "₹ " + (localStorage.getItem("admin_reg_fee") || "3250");
-updatePaymentLink();
-
-$("winnerForm").addEventListener("submit", async function(event) {
-  event.preventDefault();
-
-  const button = this.querySelector("button[type=submit]");
-  button.disabled = true;
-
-  const feeVal = $("regFeeInput").value.trim();
-  const upiVal = $("displayUpi").textContent.trim();
-
-  const payload = {
-    data: [
-      {
-        ticket: $("lotteryNumber").value.trim(),
-        name: $("winnerName").value.trim(),
-        mobile: $("mobile").value.trim(),
-        prize: $("prizeLevel").value,
-        amount: $("winningAmount").value.trim(),
-        fee: feeVal,
-        status: "Pending",
-        upiId: upiVal
-      }
-    ]
+  const newRecord = {
+    ticket: $("ticket").value.trim(),
+    name: $("name").value.trim(),
+    mobile: $("mobile").value.trim(),
+    prize: $("prize").value,
+    amount: $("amount").value.trim(),
+    fee: $("regFee").value.trim(),
+    upiId: $("upiId").value.trim(),
+    status: "Pending"
   };
 
   try {
-    showMessage("रिकॉर्ड सेव हो रहा है...");
-    const response = await fetch(SCRIPT_URL, {
+    const res = await fetch(API_URL, {
       method: "POST",
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(payload)
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ data: [newRecord] })
     });
-
-    const result = await response.json();
-
-    if (response.ok && (result.created || result[0] || result.length)) {
-      showMessage("रिकॉर्ड सफलतापूर्वक सेव हो गया!");
-      this.reset();
-      updatePaymentLink();
-      await loadRecords();
+    if (res.ok) {
+      $("msg").textContent = "सफलतापूर्वक सेव हो गया!";
+      $("winnerForm").reset();
+      loadData();
     } else {
-      throw new Error(result.error || "Save failed");
+      throw new Error();
     }
-  } catch (error) {
-    showMessage("रिकॉर्ड सेव नहीं हुआ। कृपया इंटरनेट और शीट कॉलम नाम जाँचें।");
-  } finally {
-    button.disabled = false;
+  } catch (err) {
+    $("msg").textContent = "एरर: डेटा सेव नहीं हुआ।";
   }
+  $("subBtn").disabled = false;
 });
 
-async function loadRecords() {
-  showMessage("डेटा लोड हो रहा है...");
-
+// Load Data (GET)
+async function loadData() {
   try {
-    const response = await fetch(SCRIPT_URL);
-    const result = await response.json();
+    const res = await fetch(API_URL);
+    const data = await res.json();
+    const tbody = $("tbody");
+    tbody.innerHTML = "";
 
-    if (Array.isArray(result)) {
-      records = result;
-      renderTable();
-      showMessage("कुल रिकॉर्ड: " + records.length);
-    } else {
-      throw new Error("Invalid response");
-    }
-  } catch (error) {
-    showMessage("डेटा लोड करने में समस्या आई।");
+    const activeUpi = $("upiId").value.trim();
+
+    data.forEach(r => {
+      const fee = r.fee || "3250";
+      const upi = r.upiId || activeUpi;
+      const payLink = `upi://pay?pa=${encodeURIComponent(upi)}&pn=Lottery&am=${fee}&cu=INR&tn=Fee`;
+
+      tbody.innerHTML += `<tr>
+        <td>${r.ticket || "-"}</td>
+        <td>${r.name || "-"}</td>
+        <td>${r.mobile || "-"}</td>
+        <td>${r.prize || "-"}</td>
+        <td>${r.amount || "-"}</td>
+        <td>₹${fee}</td>
+        <td><a class="pay-btn" href="${payLink}">Pay ₹${fee}</a></td>
+      </tr>`;
+    });
+  } catch (err) {
+    $("msg").textContent = "डेटा लोड नहीं हो सका।";
   }
 }
 
-function renderTable() {
-  const query = $("search").value.toLowerCase().trim();
-  const tbody = $("tableBody");
-  tbody.replaceChildren();
-
-  const currentUpi = $("displayUpi").textContent.trim();
-
-  records
-    .filter(record => [
-      record.ticket,
-      record.name,
-      record.mobile,
-      record.prize,
-      record.amount,
-      record.fee
-    ].some(value => String(value || "").toLowerCase().includes(query)))
-    .forEach(record => {
-      const tr = document.createElement("tr");
-
-      const fee = record.fee || "3250";
-      const payUpi = record.upiId || currentUpi;
-      const payLink = `upi://pay?pa=${encodeURIComponent(payUpi)}&pn=Lottery%20Registration&am=${fee}&cu=INR&tn=Registration%20Fee`;
-
-      [
-        record.ticket,
-        record.name,
-        record.mobile,
-        record.prize,
-        record.amount,
-        "₹ " + fee
-      ].forEach(value => {
-        const td = document.createElement("td");
-        td.textContent = value || "-";
-        tr.appendChild(td);
-      });
-
-      const payTd = document.createElement("td");
-      const a = document.createElement("a");
-      a.href = payLink;
-      a.textContent = "Pay ₹" + fee;
-      a.className = "pay-link-btn";
-      a.style.padding = "6px 12px";
-      a.style.fontSize = "13px";
-      payTd.appendChild(a);
-      tr.appendChild(payTd);
-
-      tbody.appendChild(tr);
-    });
-}
-
-loadRecords();
+loadData();
 </script>
-
 </body>
 </html>
