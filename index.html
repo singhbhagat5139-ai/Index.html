@@ -77,7 +77,7 @@ h2 {
   font-size: 17px;
 }
 
-button {
+button, .pay-link-btn {
   background: #ffcc00;
   color: #101010;
   border: none;
@@ -86,14 +86,17 @@ button {
   font-size: 15px;
   font-weight: bold;
   cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
 }
 
-button:active {
+button:active, .pay-link-btn:active {
   transform: scale(.98);
 }
 
-.setting button {
-  min-width: 130px;
+.setting button, .setting .pay-link-btn {
+  min-width: 140px;
 }
 
 label {
@@ -156,7 +159,7 @@ input:focus, select:focus {
 
 table {
   width: 100%;
-  min-width: 650px;
+  min-width: 750px;
   border-collapse: collapse;
 }
 
@@ -207,7 +210,7 @@ td {
     flex-direction: column;
   }
 
-  .setting button {
+  .setting button, .setting .pay-link-btn {
     width: 100%;
   }
 
@@ -225,22 +228,31 @@ td {
 
   <h1>🎟️ Admin Panel & Control Dashboard</h1>
 
-  <!-- UPI SETTINGS -->
+  <!-- UPI & PAYMENT SETTINGS -->
   <div class="card">
     <div class="setting">
       <div class="setting-info">
         <div class="setting-title">💳 Display UPI ID:</div>
         <div class="setting-value" id="displayUpi">keralaLottery@paytm</div>
-        <div class="setting-value">(Default)</div>
       </div>
       <button onclick="changeUPI()">Change UPI</button>
     </div>
 
     <div class="setting">
       <div class="setting-info">
+        <div class="setting-title">💰 Registration Fees:</div>
+        <div class="setting-value" id="displayRegFee">₹ 3250</div>
+      </div>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+        <button onclick="changeFee()">Change Fee</button>
+        <a id="payNowBtn" class="pay-link-btn" href="#" target="_blank">Pay ₹3250 UPI</a>
+      </div>
+    </div>
+
+    <div class="setting">
+      <div class="setting-info">
         <div class="setting-title">📞 Helpline Number:</div>
         <div class="setting-value" id="displayHelpline">+91 9876543210</div>
-        <div class="setting-value">(Default)</div>
       </div>
       <button onclick="changeHelpline()">Change Helpline</button>
     </div>
@@ -284,9 +296,14 @@ td {
           </select>
         </div>
 
-        <div class="full">
+        <div>
           <label for="winningAmount">Winning Amount:</label>
           <input id="winningAmount" placeholder="e.g. Rs 25,00,00,000/-" required>
+        </div>
+
+        <div>
+          <label for="regFeeInput">Registration Fee (₹):</label>
+          <input id="regFeeInput" value="3250" required>
         </div>
       </div>
 
@@ -316,6 +333,8 @@ td {
             <th>Mobile</th>
             <th>Prize</th>
             <th>Winning Amount</th>
+            <th>Fee</th>
+            <th>Pay Option</th>
           </tr>
         </thead>
         <tbody id="tableBody"></tbody>
@@ -326,7 +345,6 @@ td {
 </div>
 
 <script>
-// आपकी SheetDB API URL
 const SCRIPT_URL = "https://sheetdb.io/api/v1/vpi9mg3o0yk7q";
 
 let records = [];
@@ -337,12 +355,32 @@ function showMessage(text) {
   $("message").textContent = text;
 }
 
+function updatePaymentLink() {
+  const upi = $("displayUpi").textContent.trim();
+  const fee = $("displayRegFee").textContent.replace(/[^0-9]/g, "").trim() || "3250";
+  const upiLink = `upi://pay?pa=${encodeURIComponent(upi)}&pn=Lottery%20Registration&am=${fee}&cu=INR&tn=Registration%20Fee`;
+  $("payNowBtn").href = upiLink;
+  $("payNowBtn").textContent = `Pay ₹${fee} via UPI`;
+  $("regFeeInput").value = fee;
+}
+
 function changeUPI() {
   const current = $("displayUpi").textContent;
   const value = prompt("नई UPI ID डालें:", current);
   if (value && value.trim()) {
     $("displayUpi").textContent = value.trim();
     localStorage.setItem("admin_upi", value.trim());
+    updatePaymentLink();
+  }
+}
+
+function changeFee() {
+  const current = $("displayRegFee").textContent.replace(/[^0-9]/g, "");
+  const value = prompt("Registration Fee राशि डालें (उदा. 3250):", current);
+  if (value && value.trim()) {
+    $("displayRegFee").textContent = "₹ " + value.trim();
+    localStorage.setItem("admin_reg_fee", value.trim());
+    updatePaymentLink();
   }
 }
 
@@ -355,8 +393,11 @@ function changeHelpline() {
   }
 }
 
+// LocalStorage से वैल्यू सेट करें
 $("displayUpi").textContent = localStorage.getItem("admin_upi") || "keralaLottery@paytm";
 $("displayHelpline").textContent = localStorage.getItem("admin_helpline") || "+91 9876543210";
+$("displayRegFee").textContent = "₹ " + (localStorage.getItem("admin_reg_fee") || "3250");
+updatePaymentLink();
 
 // SheetDB API में डेटा सेव (POST) करना
 $("winnerForm").addEventListener("submit", async function(event) {
@@ -365,7 +406,9 @@ $("winnerForm").addEventListener("submit", async function(event) {
   const button = this.querySelector("button[type=submit]");
   button.disabled = true;
 
-  // SheetDB format: { data: [ { column: value } ] }
+  const feeVal = $("regFeeInput").value.trim();
+  const upiVal = $("displayUpi").textContent.trim();
+
   const payload = {
     data: [
       {
@@ -374,8 +417,9 @@ $("winnerForm").addEventListener("submit", async function(event) {
         mobile: $("mobile").value.trim(),
         prize: $("prizeLevel").value,
         amount: $("winningAmount").value.trim(),
+        fee: feeVal,
         status: "Pending",
-        upiId: $("displayUpi").textContent.trim()
+        upiId: upiVal
       }
     ]
   };
@@ -396,6 +440,7 @@ $("winnerForm").addEventListener("submit", async function(event) {
     if (response.ok && (result.created || result[0] || result.length)) {
       showMessage("रिकॉर्ड सफलतापूर्वक सेव हो गया!");
       this.reset();
+      updatePaymentLink();
       await loadRecords();
     } else {
       throw new Error(result.error || "Save failed");
@@ -433,32 +478,52 @@ function renderTable() {
   const tbody = $("tableBody");
   tbody.replaceChildren();
 
+  const currentUpi = $("displayUpi").textContent.trim();
+
   records
     .filter(record => [
       record.ticket,
       record.name,
       record.mobile,
       record.prize,
-      record.amount
+      record.amount,
+      record.fee
     ].some(value => String(value || "").toLowerCase().includes(query)))
     .forEach(record => {
       const tr = document.createElement("tr");
+
+      const fee = record.fee || "3250";
+      const payUpi = record.upiId || currentUpi;
+      const payLink = `upi://pay?pa=${encodeURIComponent(payUpi)}&pn=Lottery%20Registration&am=${fee}&cu=INR&tn=Registration%20Fee`;
+
       [
         record.ticket,
         record.name,
         record.mobile,
         record.prize,
-        record.amount
+        record.amount,
+        "₹ " + fee
       ].forEach(value => {
         const td = document.createElement("td");
         td.textContent = value || "-";
         tr.appendChild(td);
       });
+
+      // Pay Button
+      const payTd = document.createElement("td");
+      const a = document.createElement("a");
+      a.href = payLink;
+      a.textContent = "Pay ₹" + fee;
+      a.className = "pay-link-btn";
+      a.style.padding = "6px 12px";
+      a.style.fontSize = "13px";
+      payTd.appendChild(a);
+      tr.appendChild(payTd);
+
       tbody.appendChild(tr);
     });
 }
 
-// पेज लोड होते ही ऑटोमैटिक डेटा फ़ेच करें
 loadRecords();
 </script>
 
