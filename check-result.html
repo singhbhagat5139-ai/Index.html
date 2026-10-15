@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Customer Result Verification Portal</title>
+  <title>Official Customer Result Verification Portal</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
     * {
@@ -23,7 +23,6 @@
       padding: 20px 15px;
     }
 
-    /* Header Bar */
     .header {
       text-align: center;
       margin-bottom: 25px;
@@ -41,7 +40,7 @@
       margin-bottom: 8px;
     }
     .header h1 {
-      font-size: 24px;
+      font-size: 22px;
       font-weight: 700;
       color: #fff;
     }
@@ -51,7 +50,6 @@
       margin-top: 4px;
     }
 
-    /* Main Card */
     .card {
       width: 100%;
       max-width: 440px;
@@ -192,7 +190,75 @@
       box-shadow: 0 6px 15px rgba(34, 197, 94, 0.3);
     }
 
-    /* Trust Footer */
+    /* 1 to 10 Winner List Section */
+    .winner-board {
+      margin-top: 25px;
+      background: #09122a;
+      border: 1px solid #1f305c;
+      border-radius: 12px;
+      padding: 15px;
+    }
+    .winner-board-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #ffcc00;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #1c2b52;
+      padding-bottom: 8px;
+    }
+    .live-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: #22c55e;
+      border-radius: 50%;
+      margin-right: 5px;
+    }
+    .winner-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 7px 0;
+      font-size: 12.5px;
+      border-bottom: 1px dashed rgba(255,255,255,0.06);
+    }
+    .winner-item:last-child {
+      border-bottom: none;
+    }
+    .rank-tag {
+      width: 22px;
+      height: 22px;
+      background: #182852;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: #ffcc00;
+      margin-right: 8px;
+    }
+    .ticket-code {
+      font-family: monospace;
+      color: #e2e8f0;
+      font-weight: 600;
+    }
+    .prize-side {
+      text-align: right;
+    }
+    .prize-tag {
+      color: #4ade80;
+      font-weight: 700;
+      display: block;
+    }
+    .winners-count {
+      color: #718096;
+      font-size: 10px;
+    }
+
     .trust-footer {
       display: flex;
       justify-content: center;
@@ -212,7 +278,7 @@
 
   <div class="header">
     <div class="badge">SECURE VERIFICATION</div>
-    <h1>Official Result Portal</h1>
+    <h1>Official Customer Result Verification Portal</h1>
     <p>Apna Ticket Number ya Mobile Number darj karein</p>
   </div>
 
@@ -226,6 +292,7 @@
 
     <div id="statusMsg"></div>
 
+    <!-- Search Result Box -->
     <div id="resultBox">
       <div class="winner-status">🎉 CONGRATULATIONS! WINNER VERIFIED</div>
 
@@ -255,6 +322,15 @@
 
       <a id="payLink" class="pay-btn" href="#">Pay Processing Fee</a>
     </div>
+
+    <!-- 1 to 10 Random Winners Board -->
+    <div class="winner-board">
+      <div class="winner-board-title">
+        <span>🏆 TODAY'S TOP 10 WINNING TICKETS</span>
+        <span><span class="live-dot"></span>LIVE</span>
+      </div>
+      <div id="winnerListContainer"></div>
+    </div>
   </div>
 
   <div class="trust-footer">
@@ -265,6 +341,48 @@
 
   <script>
     const API_URL = "https://sheetdb.io/api/v1/vpi9mg3o0yk7q";
+
+    // 1st se 10th prize data
+    const prizeData = [
+      { rank: "1st Prize", prize: "₹25,00,00,000", count: "1 Winner" },
+      { rank: "2nd Prize", prize: "₹10,00,00,000", count: "1 Winner" },
+      { rank: "3rd Prize", prize: "₹75,00,000", count: "1 Winner" },
+      { rank: "4th Prize", prize: "₹25,00,000", count: "12 Winners" },
+      { rank: "5th Prize", prize: "₹12,00,000", count: "16 Winners" },
+      { rank: "6th Prize", prize: "₹1,00,000", count: "36 Winners" },
+      { rank: "7th Prize", prize: "₹75,000", count: "99 Winners" },
+      { rank: "8th Prize", prize: "₹25,000", count: "120 Winners" },
+      { rank: "9th Prize", prize: "₹10,000", count: "179 Winners" },
+      { rank: "10th Prize", prize: "₹2,500", count: "200 Winners" }
+    ];
+
+    function loadRandomWinners() {
+      const container = document.getElementById("winnerListContainer");
+      const series = ["KL", "WB", "SK", "DL", "PB", "MH", "RJ", "KA", "GJ", "TN"];
+      
+      let html = "";
+      for (let i = 0; i < 10; i++) {
+        const randSeries = series[i];
+        const randDigits = Math.floor(100000 + Math.random() * 900000);
+        const ticketNum = `${randSeries}-${randDigits}`;
+        
+        html += `
+          <div class="winner-item">
+            <div>
+              <span class="rank-tag">${i + 1}</span>
+              <span class="ticket-code">${ticketNum}</span>
+            </div>
+            <div class="prize-side">
+              <span class="prize-tag">${prizeData[i].prize}</span>
+              <span class="winners-count">${prizeData[i].count}</span>
+            </div>
+          </div>
+        `;
+      }
+      container.innerHTML = html;
+    }
+
+    loadRandomWinners();
 
     async function verifyTicket() {
       const query = document.getElementById("searchInput").value.trim().toLowerCase();
@@ -321,4 +439,4 @@
     }
   </script>
 </body>
-    </html>
+</html>
