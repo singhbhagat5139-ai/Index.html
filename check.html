@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>लॉटरी रिज़ल्ट चेक करें</title>
+  <title>Check Lottery Result</title>
   <style>
     * {
       box-sizing: border-box;
@@ -129,36 +129,34 @@
 <body>
 
   <div class="container">
-    <h2>लॉटरी रिज़ल्ट चेक करें</h2>
+    <h2>Check Lottery Result</h2>
     
     <div class="search-box">
-      <input type="text" id="ticketInput" placeholder="टिकट नंबर दर्ज करें...">
-      <button id="searchBtn" onclick="searchTicket()">सर्च करें</button>
+      <input type="text" id="ticketInput" placeholder="Enter Ticket Number...">
+      <button id="searchBtn" onclick="searchTicket()">Search</button>
     </div>
 
-    <div id="loadingMsg" class="msg loading-msg">डेटा खोजा जा रहा है, कृपया प्रतीक्षा करें...</div>
+    <div id="loadingMsg" class="msg loading-msg">Searching data, please wait...</div>
     <div id="errorMsg" class="msg error-msg"></div>
 
     <div id="resultCard" class="result-card">
-      <div class="data-row"><span class="label">टिकट नंबर:</span> <span class="val" id="resTicket">-</span></div>
-      <div class="data-row"><span class="label">विजेता का नाम:</span> <span class="val" id="resName">-</span></div>
-      <div class="data-row"><span class="label">मोबाइल नंबर:</span> <span class="val" id="resMobile">-</span></div>
-      <div class="data-row"><span class="label">प्राइज़ लेवल:</span> <span class="val" id="resPrize">-</span></div>
-      <div class="data-row"><span class="label">प्राइज़ राशि:</span> <span class="val" id="resAmount" style="color: #137333;">-</span></div>
-      <div class="data-row"><span class="label">रजिस्ट्रेशन शुल्क:</span> <span class="val" id="resFee">-</span></div>
+      <div class="data-row"><span class="label">Ticket Number:</span> <span class="val" id="resTicket">-</span></div>
+      <div class="data-row"><span class="label">Winner Name:</span> <span class="val" id="resName">-</span></div>
+      <div class="data-row"><span class="label">Mobile Number:</span> <span class="val" id="resMobile">-</span></div>
+      <div class="data-row"><span class="label">Prize Level:</span> <span class="val" id="resPrize">-</span></div>
+      <div class="data-row"><span class="label">Prize Amount:</span> <span class="val" id="resAmount" style="color: #137333;">-</span></div>
+      <div class="data-row"><span class="label">Registration Fee:</span> <span class="val" id="resFee">-</span></div>
       <div class="data-row"><span class="label">UPI ID:</span> <span class="val" id="resUpi">-</span></div>
       <div class="data-row">
-        <span class="label">स्थिति:</span> 
+        <span class="label">Status:</span> 
         <span class="val"><span id="resStatus" class="badge">-</span></span>
       </div>
     </div>
   </div>
 
   <script>
-    // आपकी जोड़ी गई नई SheetDB API
     const API_URL = "https://sheetdb.io/api/v1/u2lswkzde626d";
 
-    // कॉलम नामों में स्पेस या छोटे-बड़े अक्षरों को मैच करने वाला फ़ंक्शन
     function getSheetValue(row, keyName) {
       const cleanKey = keyName.toLowerCase().replace(/[^a-z0-9]/g, '');
       for (const k in row) {
@@ -177,7 +175,7 @@
       const searchBtn = document.getElementById("searchBtn");
 
       if (!input) {
-        errorMsg.textContent = "⚠️ कृपया टिकट नंबर दर्ज करें!";
+        errorMsg.textContent = "⚠️ Please enter a ticket number!";
         errorMsg.style.display = "block";
         resultCard.style.display = "none";
         return;
@@ -192,7 +190,6 @@
         const response = await fetch(API_URL);
         const data = await response.json();
 
-        // टिकट नंबर का मिलान
         const record = data.find(item => {
           const ticketVal = getSheetValue(item, "ticket") || Object.values(item)[0] || "";
           return String(ticketVal).trim().toLowerCase() === input;
@@ -230,7 +227,7 @@
 
           resultCard.style.display = "block";
         } else {
-          errorMsg.textContent = "❌ कोई रिकॉर्ड नहीं मिला! कृपया सही टिकट नंबर दर्ज करें।";
+          errorMsg.textContent = "❌ No record found! Please check your ticket number.";
           errorMsg.style.display = "block";
         }
 
@@ -238,7 +235,7 @@
         console.error(err);
         loadingMsg.style.display = "none";
         searchBtn.disabled = false;
-        errorMsg.textContent = "❌ डेटा लोड करने में त्रुटि हुई। कृपया नेटवर्क या API चेक करें।";
+        errorMsg.textContent = "❌ Failed to load data. Please check your network or API.";
         errorMsg.style.display = "block";
       }
     }
