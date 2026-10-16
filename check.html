@@ -1,256 +1,246 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Check Lottery Result</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-    body {
-      background: #f0f2f5;
-      margin: 0;
-      padding: 20px;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      min-height: 100vh;
-    }
-    .container {
-      background: #ffffff;
-      width: 100%;
-      max-width: 440px;
-      padding: 24px;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-    }
-    h2 {
-      text-align: center;
-      color: #1a73e8;
-      margin-top: 0;
-      margin-bottom: 20px;
-      font-size: 22px;
-    }
-    .search-box {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-    input[type="text"] {
-      flex: 1;
-      padding: 12px 14px;
-      border: 1.5px solid #dcdfe6;
-      border-radius: 8px;
-      font-size: 15px;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-    input[type="text"]:focus {
-      border-color: #1a73e8;
-    }
-    button {
-      padding: 12px 18px;
-      background: #1a73e8;
-      color: #ffffff;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 15px;
-      transition: background 0.2s;
-    }
-    button:hover {
-      background: #1557b0;
-    }
-    button:disabled {
-      background: #9bbdf3;
-      cursor: not-allowed;
-    }
-    .result-card {
-      display: none;
-      margin-top: 15px;
-      border: 1px solid #e8eaed;
-      border-radius: 8px;
-      padding: 16px;
-      background: #fafafa;
-    }
-    .data-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 10px 0;
-      border-bottom: 1px solid #eee;
-      font-size: 15px;
-    }
-    .data-row:last-child {
-      border-bottom: none;
-    }
-    .label {
-      color: #5f6368;
-      font-weight: 500;
-    }
-    .val {
-      color: #202124;
-      font-weight: 600;
-      text-align: right;
-    }
-    .badge {
-      display: inline-block;
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 13px;
-      font-weight: bold;
-    }
-    .badge-paid {
-      background: #ceead6;
-      color: #0d652d;
-    }
-    .badge-pending {
-      background: #feefc3;
-      color: #b06000;
-    }
-    .msg {
-      text-align: center;
-      margin-top: 15px;
-      font-size: 14px;
-      font-weight: 500;
-    }
-    .error-msg {
-      color: #d93025;
-      display: none;
-    }
-    .loading-msg {
-      color: #5f6368;
-      display: none;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Status Verification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .portal-container {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        h2 {
+            text-align: center;
+            color: #333333;
+            font-size: 20px;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: #555555;
+            font-size: 14px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+            font-size: 14px;
+            outline: none;
+        }
+        input[type="text"]:focus {
+            border-color: #1a73e8;
+        }
+        button {
+            width: 100%;
+            padding: 11px;
+            background-color: #1a73e8;
+            border: none;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #1557b0;
+        }
+        button:disabled {
+            background-color: #9bbdf3;
+            cursor: not-allowed;
+        }
+        .msg {
+            text-align: center;
+            font-size: 14px;
+            margin-top: 15px;
+            display: none;
+        }
+        .msg-error {
+            color: #d93025;
+        }
+        .msg-loading {
+            color: #5f6368;
+        }
+        .result-box {
+            display: none;
+            margin-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            padding-top: 15px;
+        }
+        .row-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #f1f1f1;
+            font-size: 14px;
+        }
+        .row-item:last-child {
+            border-bottom: none;
+        }
+        .row-label {
+            color: #666666;
+            font-weight: 500;
+        }
+        .row-val {
+            color: #222222;
+            font-weight: 600;
+            text-align: right;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .status-paid {
+            background-color: #ceead6;
+            color: #0d652d;
+        }
+        .status-pending {
+            background-color: #feefc3;
+            color: #b06000;
+        }
+    </style>
 </head>
 <body>
 
-  <div class="container">
-    <h2>Check Lottery Result</h2>
-    
-    <div class="search-box">
-      <input type="text" id="userInput" placeholder="Enter Ticket or Mobile Number...">
-      <button id="searchBtn" onclick="searchRecord()">Search</button>
+    <div class="portal-container">
+        <h2>Customer Status Verification</h2>
+        
+        <div class="form-group">
+            <label for="ticketInput">Ticket Number / Mobile Number</label>
+            <input type="text" id="ticketInput" placeholder="Enter number..." autocomplete="off">
+        </div>
+        <button id="submitBtn" onclick="verifyStatus()">Check Status</button>
+
+        <div id="loadingMsg" class="msg msg-loading">Searching records, please wait...</div>
+        <div id="errorMsg" class="msg msg-error"></div>
+
+        <div id="resultBox" class="result-box">
+            <div class="row-item"><span class="row-label">Ticket No:</span> <span class="row-val" id="resTicket">-</span></div>
+            <div class="row-item"><span class="row-label">Name:</span> <span class="row-val" id="resName">-</span></div>
+            <div class="row-item"><span class="row-label">Mobile:</span> <span class="row-val" id="resMobile">-</span></div>
+            <div class="row-item"><span class="row-label">Prize Level:</span> <span class="row-val" id="resPrize">-</span></div>
+            <div class="row-item"><span class="row-label">Prize Amount:</span> <span class="row-val" id="resAmount" style="color: #0d652d;">-</span></div>
+            <div class="row-item"><span class="row-label">Fee:</span> <span class="row-val" id="resFee">-</span></div>
+            <div class="row-item"><span class="row-label">UPI ID:</span> <span class="row-val" id="resUpi">-</span></div>
+            <div class="row-item">
+                <span class="row-label">Status:</span> 
+                <span class="row-val"><span id="resStatus" class="status-badge">-</span></span>
+            </div>
+        </div>
     </div>
 
-    <div id="loadingMsg" class="msg loading-msg">Searching data, please wait...</div>
-    <div id="errorMsg" class="msg error-msg"></div>
+    <script>
+        const API_URL = "https://sheetdb.io/api/v1/u2lswkzde626d";
 
-    <div id="resultCard" class="result-card">
-      <div class="data-row"><span class="label">Ticket Number:</span> <span class="val" id="resTicket">-</span></div>
-      <div class="data-row"><span class="label">Winner Name:</span> <span class="val" id="resName">-</span></div>
-      <div class="data-row"><span class="label">Mobile Number:</span> <span class="val" id="resMobile">-</span></div>
-      <div class="data-row"><span class="label">Prize Level:</span> <span class="val" id="resPrize">-</span></div>
-      <div class="data-row"><span class="label">Prize Amount:</span> <span class="val" id="resAmount" style="color: #137333;">-</span></div>
-      <div class="data-row"><span class="label">Registration Fee:</span> <span class="val" id="resFee">-</span></div>
-      <div class="data-row"><span class="label">UPI ID:</span> <span class="val" id="resUpi">-</span></div>
-      <div class="data-row">
-        <span class="label">Status:</span> 
-        <span class="val"><span id="resStatus" class="badge">-</span></span>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    // आपकी नई SheetDB API
-    const API_URL = "https://sheetdb.io/api/v1/u2lswkzde626d";
-
-    // टेक्स्ट को साफ़ करने का फ़ंक्शन (स्पेस और स्पेशल कैरेक्टर हटाकर मिलान करने के लिए)
-    function clean(str) {
-      return String(str || "").replace(/[^a-zA-Z0-9]/g, "").toLowerCase();
-    }
-
-    // शीट के किसी भी कॉलम का नाम ढूँढने के लिए फ़ंक्शन
-    function getVal(row, keyNames) {
-      for (const k in row) {
-        const cleanedKey = clean(k);
-        for (const target of keyNames) {
-          if (cleanedKey === clean(target)) {
-            return row[k];
-          }
-        }
-      }
-      return "";
-    }
-
-    async function searchRecord() {
-      const inputRaw = document.getElementById("userInput").value.trim();
-      const inputClean = clean(inputRaw);
-      const resultCard = document.getElementById("resultCard");
-      const errorMsg = document.getElementById("errorMsg");
-      const loadingMsg = document.getElementById("loadingMsg");
-      const searchBtn = document.getElementById("searchBtn");
-
-      if (!inputClean) {
-        errorMsg.textContent = "⚠️ Please enter Ticket or Mobile Number!";
-        errorMsg.style.display = "block";
-        resultCard.style.display = "none";
-        return;
-      }
-
-      errorMsg.style.display = "none";
-      resultCard.style.display = "none";
-      loadingMsg.style.display = "block";
-      searchBtn.disabled = true;
-
-      try {
-        const response = await fetch(API_URL);
-        const data = await response.json();
-
-        // टिकट नंबर या मोबाइल नंबर दोनों से मिलान
-        const record = data.find(item => {
-          const ticketVal = clean(getVal(item, ["ticket", "ticketnumber", "ticket_no"]) || Object.values(item)[0]);
-          const mobileVal = clean(getVal(item, ["mobile", "phone", "number", "contact", "mobileno"]));
-          return (ticketVal && ticketVal === inputClean) || (mobileVal && mobileVal === inputClean);
-        });
-
-        loadingMsg.style.display = "none";
-        searchBtn.disabled = false;
-
-        if (record) {
-          const ticket = getVal(record, ["ticket", "ticketnumber", "ticket_no"]);
-          const name = getVal(record, ["name", "winner", "winnername", "customer"]);
-          const mobile = getVal(record, ["mobile", "phone", "number", "contact"]);
-          const prize = getVal(record, ["prize", "prizelevel", "level"]);
-          const amount = getVal(record, ["amount", "prizeamount", "winningamount"]);
-          const fee = getVal(record, ["fee", "registrationfee", "charge", "charges"]);
-          const upi = getVal(record, ["upi", "upiid", "upi_id"]);
-          const status = getVal(record, ["status", "paymentstatus"]) || "Pending";
-
-          document.getElementById("resTicket").textContent = ticket || "-";
-          document.getElementById("resName").textContent = name || "-";
-          document.getElementById("resMobile").textContent = mobile || "-";
-          document.getElementById("resPrize").textContent = prize || "-";
-          document.getElementById("resAmount").textContent = amount ? "₹" + amount : "-";
-          document.getElementById("resFee").textContent = fee ? "₹" + fee : "-";
-          document.getElementById("resUpi").textContent = upi || "-";
-
-          const statusBadge = document.getElementById("resStatus");
-          statusBadge.textContent = status;
-
-          if (clean(status).includes("paid") || clean(status).includes("approved")) {
-            statusBadge.className = "badge badge-paid";
-          } else {
-            statusBadge.className = "badge badge-pending";
-          }
-
-          resultCard.style.display = "block";
-        } else {
-          errorMsg.textContent = "❌ No record found! Please check the details.";
-          errorMsg.style.display = "block";
+        function cleanText(val) {
+            return String(val || "").replace(/[^a-zA-Z0-9]/g, "").toLowerCase();
         }
 
-      } catch (err) {
-        console.error(err);
-        loadingMsg.style.display = "none";
-        searchBtn.disabled = false;
-        errorMsg.textContent = "❌ Failed to load data. Please check connection.";
-        errorMsg.style.display = "block";
-      }
-    }
-  </script>
+        function extractVal(row, fieldNames) {
+            for (const col in row) {
+                const cleanedCol = cleanText(col);
+                for (const target of fieldNames) {
+                    if (cleanedCol === cleanText(target)) {
+                        return row[col];
+                    }
+                }
+            }
+            return "";
+        }
+
+        async function verifyStatus() {
+            const queryRaw = document.getElementById("ticketInput").value.trim();
+            const queryClean = cleanText(queryRaw);
+            const resultBox = document.getElementById("resultBox");
+            const errorMsg = document.getElementById("errorMsg");
+            const loadingMsg = document.getElementById("loadingMsg");
+            const submitBtn = document.getElementById("submitBtn");
+
+            if (!queryClean) {
+                errorMsg.textContent = "Please enter a valid Ticket or Mobile Number.";
+                errorMsg.style.display = "block";
+                resultBox.style.display = "none";
+                return;
+            }
+
+            errorMsg.style.display = "none";
+            resultBox.style.display = "none";
+            loadingMsg.style.display = "block";
+            submitBtn.disabled = true;
+
+            try {
+                const res = await fetch(API_URL);
+                const data = await res.json();
+
+                const record = data.find(item => {
+                    const ticketVal = cleanText(extractVal(item, ["ticket", "ticketnumber", "ticket_no"]) || Object.values(item)[0]);
+                    const mobileVal = cleanText(extractVal(item, ["mobile", "phone", "number", "contact", "mobileno"]));
+                    return (ticketVal && ticketVal === queryClean) || (mobileVal && mobileVal === queryClean);
+                });
+
+                loadingMsg.style.display = "none";
+                submitBtn.disabled = false;
+
+                if (record) {
+                    document.getElementById("resTicket").textContent = extractVal(record, ["ticket", "ticketnumber", "ticket_no"]) || "-";
+                    document.getElementById("resName").textContent = extractVal(record, ["name", "winner", "customer"]) || "-";
+                    document.getElementById("resMobile").textContent = extractVal(record, ["mobile", "phone", "number"]) || "-";
+                    document.getElementById("resPrize").textContent = extractVal(record, ["prize", "prizelevel", "level"]) || "-";
+                    
+                    const amt = extractVal(record, ["amount", "prizeamount", "winningamount"]);
+                    document.getElementById("resAmount").textContent = amt ? "₹" + amt : "-";
+
+                    const fee = extractVal(record, ["fee", "registrationfee", "charge"]);
+                    document.getElementById("resFee").textContent = fee ? "₹" + fee : "-";
+
+                    document.getElementById("resUpi").textContent = extractVal(record, ["upi", "upiid", "upi_id"]) || "-";
+
+                    const status = extractVal(record, ["status", "paymentstatus"]) || "Pending";
+                    const badge = document.getElementById("resStatus");
+                    badge.textContent = status;
+
+                    if (cleanText(status).includes("paid") || cleanText(status).includes("approved")) {
+                        badge.className = "status-badge status-paid";
+                    } else {
+                        badge.className = "status-badge status-pending";
+                    }
+
+                    resultBox.style.display = "block";
+                } else {
+                    errorMsg.textContent = "No record found. Please verify the entered number.";
+                    errorMsg.style.display = "block";
+                }
+            } catch (err) {
+                loadingMsg.style.display = "none";
+                submitBtn.disabled = false;
+                errorMsg.textContent = "Unable to connect to the database. Please try again.";
+                errorMsg.style.display = "block";
+            }
+        }
+    </script>
 </body>
 </html>
