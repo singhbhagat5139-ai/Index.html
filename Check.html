@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>लॉटरी रिज़ल्ट चेक करें</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body {
+      background: #f0f2f5;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+    .container {
+      background: #ffffff;
+      width: 100%;
+      max-width: 440px;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
+    h2 {
+      text-align: center;
+      color: #1a73e8;
+      margin-top: 0;
+      margin-bottom: 20px;
+      font-size: 22px;
+    }
+    .search-box {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    input[type="text"] {
+      flex: 1;
+      padding: 12px 14px;
+      border: 1.5px solid #dcdfe6;
+      border-radius: 8px;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input[type="text"]:focus {
+      border-color: #1a73e8;
+    }
+    button {
+      padding: 12px 18px;
+      background: #1a73e8;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 15px;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background: #1557b0;
+    }
+    button:disabled {
+      background: #9bbdf3;
+      cursor: not-allowed;
+    }
+    .result-card {
+      display: none;
+      margin-top: 15px;
+      border: 1px solid #e8eaed;
+      border-radius: 8px;
+      padding: 16px;
+      background: #fafafa;
+    }
+    .data-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 9px 0;
+      border-bottom: 1px solid #eee;
+      font-size: 15px;
+    }
+    .data-row:last-child {
+      border-bottom: none;
+    }
+    .label {
+      color: #5f6368;
+      font-weight: 500;
+    }
+    .val {
+      color: #202124;
+      font-weight: 600;
+      text-align: right;
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: bold;
+    }
+    .badge-paid {
+      background: #ceead6;
+      color: #0d652d;
+    }
+    .badge-pending {
+      background: #feefc3;
+      color: #b06000;
+    }
+    .msg {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .error-msg {
+      color: #d93025;
+      display: none;
+    }
+    .loading-msg {
+      color: #5f6368;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>लॉटरी रिज़ल्ट चेक करें</h2>
+    
+    <div class="search-box">
+      <input type="text" id="ticketInput" placeholder="टिकट नंबर दर्ज करें...">
+      <button id="searchBtn" onclick="searchTicket()">सर्च करें</button>
+    </div>
+
+    <div id="loadingMsg" class="msg loading-msg">डेटा खोजा जा रहा है, कृपया प्रतीक्षा करें...</div>
+    <div id="errorMsg" class="msg error-msg"></div>
+
+    <div id="resultCard" class="result-card">
+      <div class="data-row"><span class="label">टिकट नंबर:</span> <span class="val" id="resTicket">-</span></div>
+      <div class="data-row"><span class="label">विजेता का नाम:</span> <span class="val" id="resName">-</span></div>
+      <div class="data-row"><span class="label">मोबाइल नंबर:</span> <span class="val" id="resMobile">-</span></div>
+      <div class="data-row"><span class="label">प्राइज़ लेवल:</span> <span class="val" id="resPrize">-</span></div>
+      <div class="data-row"><span class="label">प्राइज़ राशि:</span> <span class="val" id="resAmount" style="color: #137333;">-</span></div>
+      <div class="data-row"><span class="label">रजिस्ट्रेशन शुल्क:</span> <span class="val" id="resFee">-</span></div>
+      <div class="data-row"><span class="label">UPI ID:</span> <span class="val" id="resUpi">-</span></div>
+      <div class="data-row">
+        <span class="label">स्थिति:</span> 
+        <span class="val"><span id="resStatus" class="badge">-</span></span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // आपकी जोड़ी गई नई SheetDB API
+    const API_URL = "https://sheetdb.io/api/v1/u2lswkzde626d";
+
+    // कॉलम नामों में स्पेस या छोटे-बड़े अक्षरों को मैच करने वाला फ़ंक्शन
+    function getSheetValue(row, keyName) {
+      const cleanKey = keyName.toLowerCase().replace(/[^a-z0-9]/g, '');
+      for (const k in row) {
+        if (k.toLowerCase().replace(/[^a-z0-9]/g, '') === cleanKey) {
+          return row[k];
+        }
+      }
+      return "";
+    }
+
+    async function searchTicket() {
+      const input = document.getElementById("ticketInput").value.trim().toLowerCase();
+      const resultCard = document.getElementById("resultCard");
+      const errorMsg = document.getElementById("errorMsg");
+      const loadingMsg = document.getElementById("loadingMsg");
+      const searchBtn = document.getElementById("searchBtn");
+
+      if (!input) {
+        errorMsg.textContent = "⚠️ कृपया टिकट नंबर दर्ज करें!";
+        errorMsg.style.display = "block";
+        resultCard.style.display = "none";
+        return;
+      }
+
+      errorMsg.style.display = "none";
+      resultCard.style.display = "none";
+      loadingMsg.style.display = "block";
+      searchBtn.disabled = true;
+
+      try {
+        const response = await fetch(API_URL);
+        const data = await response.json();
+
+        // टिकट नंबर का मिलान
+        const record = data.find(item => {
+          const ticketVal = getSheetValue(item, "ticket") || Object.values(item)[0] || "";
+          return String(ticketVal).trim().toLowerCase() === input;
+        });
+
+        loadingMsg.style.display = "none";
+        searchBtn.disabled = false;
+
+        if (record) {
+          const ticket = getSheetValue(record, "ticket");
+          const name = getSheetValue(record, "name");
+          const mobile = getSheetValue(record, "mobile");
+          const prize = getSheetValue(record, "prize");
+          const amount = getSheetValue(record, "amount");
+          const fee = getSheetValue(record, "fee");
+          const upi = getSheetValue(record, "upi") || getSheetValue(record, "upiid");
+          const status = getSheetValue(record, "status") || "Pending";
+
+          document.getElementById("resTicket").textContent = ticket || "-";
+          document.getElementById("resName").textContent = name || "-";
+          document.getElementById("resMobile").textContent = mobile || "-";
+          document.getElementById("resPrize").textContent = prize || "-";
+          document.getElementById("resAmount").textContent = amount ? "₹" + amount : "-";
+          document.getElementById("resFee").textContent = fee ? "₹" + fee : "-";
+          document.getElementById("resUpi").textContent = upi || "-";
+
+          const statusBadge = document.getElementById("resStatus");
+          statusBadge.textContent = status;
+
+          if (status.toLowerCase().includes("paid") || status.toLowerCase().includes("approved")) {
+            statusBadge.className = "badge badge-paid";
+          } else {
+            statusBadge.className = "badge badge-pending";
+          }
+
+          resultCard.style.display = "block";
+        } else {
+          errorMsg.textContent = "❌ कोई रिकॉर्ड नहीं मिला! कृपया सही टिकट नंबर दर्ज करें।";
+          errorMsg.style.display = "block";
+        }
+
+      } catch (err) {
+        console.error(err);
+        loadingMsg.style.display = "none";
+        searchBtn.disabled = false;
+        errorMsg.textContent = "❌ डेटा लोड करने में त्रुटि हुई। कृपया नेटवर्क या API चेक करें।";
+        errorMsg.style.display = "block";
+      }
+    }
+  </script>
+</body>
+</html>
