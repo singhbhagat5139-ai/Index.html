@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="hi">
 <head>
   <meta charset="UTF-8">
@@ -27,7 +27,7 @@
 
 <div class="card">
   <h2>जाँचें लॉटरी रिज़ल्ट</h2>
-  
+
   <div class="search-box">
     <input type="text" id="ticketInput" placeholder="टिकट नंबर दर्ज करें (उदा. KL-1234)">
     <button id="searchBtn" onclick="checkResult()">सर्च करें</button>
@@ -45,7 +45,7 @@
     <div class="row"><span class="label">रजिस्ट्रेशन शुल्क:</span> <span class="value" id="resFee">-</span></div>
     <div class="row"><span class="label">UPI ID:</span> <span class="value" id="resUpi">-</span></div>
     <div class="row">
-      <span class="label">स्थिति:</span> 
+      <span class="label">स्थिति:</span>
       <span class="value"><span id="resStatus" class="status-badge">-</span></span>
     </div>
   </div>
@@ -54,8 +54,19 @@
 <script>
   const API_URL = "https://sheetdb.io/api/v1/u2lswkzde626d";
 
+  // ऑब्जेक्ट की किसी भी की (Key) को बिना स्पेस और छोटे अक्षरों में पढ़ने का फ़ंक्शन
+  function getVal(row, keyName) {
+    const targetKey = keyName.toLowerCase();
+    for (const k in row) {
+      if (k.trim().toLowerCase() === targetKey) {
+        return row[k];
+      }
+    }
+    return "";
+  }
+
   async function checkResult() {
-    const input = document.getElementById("ticketInput").value.trim();
+    const input = document.getElementById("ticketInput").value.trim().toLowerCase();
     const resultBox = document.getElementById("resultBox");
     const errorMsg = document.getElementById("errorMsg");
     const loadingMsg = document.getElementById("loadingMsg");
@@ -68,40 +79,46 @@
       return;
     }
 
-    // रीसेट UI
     errorMsg.style.display = "none";
     resultBox.style.display = "none";
     loadingMsg.style.display = "block";
     searchBtn.disabled = true;
 
     try {
-      // SheetDB से पूरा डेटा फेच करें
       const response = await fetch(API_URL);
       const data = await response.json();
 
-      // टिकट नंबर मैच करें (केस इनसेंसिटिव और ट्रिम के साथ)
-      const record = data.find(item => 
-        String(item.ticket || "").trim().toLowerCase() === input.toLowerCase()
-      );
+      // किसी भी तरह के टिकट फ़ील्ड से मिलान
+      const record = data.find(item => {
+        const ticketVal = getVal(item, "ticket") || Object.values(item)[0] || "";
+        return String(ticketVal).trim().toLowerCase() === input;
+      });
 
       loadingMsg.style.display = "none";
       searchBtn.disabled = false;
 
       if (record) {
-        // डेटा स्क्रीन पर दिखाना
-        document.getElementById("resTicket").textContent = record.ticket || "-";
-        document.getElementById("resName").textContent = record.name || "-";
-        document.getElementById("resMobile").textContent = record.mobile || "-";
-        document.getElementById("resPrize").textContent = record.prize || "-";
-        document.getElementById("resAmount").textContent = record.amount ? "₹" + record.amount : "-";
-        document.getElementById("resFee").textContent = record.fee ? "₹" + record.fee : "-";
-        document.getElementById("resUpi").textContent = record.upiId || "-";
+        const ticket = getVal(record, "ticket");
+        const name = getVal(record, "name");
+        const mobile = getVal(record, "mobile");
+        const prize = getVal(record, "prize");
+        const amount = getVal(record, "amount");
+        const fee = getVal(record, "fee");
+        const upi = getVal(record, "upiid") || getVal(record, "upi");
+        const status = getVal(record, "status") || "Pending";
+
+        document.getElementById("resTicket").textContent = ticket || "-";
+        document.getElementById("resName").textContent = name || "-";
+        document.getElementById("resMobile").textContent = mobile || "-";
+        document.getElementById("resPrize").textContent = prize || "-";
+        document.getElementById("resAmount").textContent = amount ? "₹" + amount : "-";
+        document.getElementById("resFee").textContent = fee ? "₹" + fee : "-";
+        document.getElementById("resUpi").textContent = upi || "-";
 
         const statusEl = document.getElementById("resStatus");
-        const statusText = record.status || "Pending";
-        statusEl.textContent = statusText;
+        statusEl.textContent = status;
 
-        if (statusText.toLowerCase() === "paid" || statusText.toLowerCase() === "approved") {
+        if (status.toLowerCase() === "paid" || status.toLowerCase() === "approved") {
           statusEl.className = "status-badge status-paid";
         } else {
           statusEl.className = "status-badge status-pending";
@@ -112,7 +129,6 @@
         errorMsg.textContent = "❌ कोई रिकॉर्ड नहीं मिला! कृपया टिकट नंबर दोबारा जाँचें।";
         errorMsg.style.display = "block";
       }
-
     } catch (err) {
       console.error(err);
       loadingMsg.style.display = "none";
