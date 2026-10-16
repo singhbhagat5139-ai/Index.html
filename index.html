@@ -1,258 +1,230 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard</title>
-  <style>
-    * { box-sizing: border-box; font-family: Arial, sans-serif; }
-    body { margin: 0; padding: 15px; background: #080f26; color: white; }
-    .box { max-width: 600px; margin: auto; background: #111c3d; border: 2px solid #ffcc00; border-radius: 12px; padding: 15px; margin-bottom: 20px; }
-    h2 { color: #ffcc00; margin-top: 0; text-align: center; }
-    label { display: block; margin: 10px 0 5px; color: #ffcc00; font-size: 14px; }
-    input, select, button { width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #354777; background: #050a17; color: white; font-size: 15px; }
-    button { background: #ffcc00; color: #000; font-weight: bold; border: none; margin-top: 15px; cursor: pointer; }
-    .pay-btn { display: inline-block; background: #28a745; color: white; text-decoration: none; padding: 6px 12px; border-radius: 5px; font-weight: bold; }
-    table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px; }
-    th, td { border: 1px solid #354777; padding: 8px; text-align: left; }
-    th { background: #17264f; color: #ffcc00; }
-    #msg { text-align: center; color: #ffcc00; margin-top: 10px; font-weight: bold; }
-    .scroll-tbl { overflow-x: auto; }
-    
-    /* Login Box Styles */
-    #loginOverlay {
-      position: fixed;
-      inset: 0;
-      background: #080f26;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-    }
-    #loginCard {
-      width: 90%;
-      max-width: 400px;
-      background: #111c3d;
-      border: 2px solid #ffcc00;
-      border-radius: 12px;
-      padding: 25px;
-    }
-    .logout-btn {
-      background: #dc3545;
-      color: white;
-      margin-top: 10px;
-    }
-    #loginError {
-      color: #ff4d4d;
-      text-align: center;
-      margin-top: 10px;
-      font-size: 14px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        * { box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { margin: 0; padding: 15px; background: #080f26; color: white; }
+        .box { max-width: 600px; margin: auto; background: #111c3d; border: 2px solid #ffcc00; border-radius: 12px; padding: 15px; margin-bottom: 20px; }
+        h2 { color: #ffcc00; margin-top: 0; text-align: center; }
+        label { display: block; margin: 10px 0 5px; color: #ffcc00; font-size: 14px; }
+        input, select, button { width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #354777; background: #050a17; color: white; font-size: 15px; }
+        button { background: #ffcc00; color: #000; font-weight: bold; border: none; margin-top: 15px; cursor: pointer; }
+        .pay-btn { display: inline-block; background: #28a745; color: white; text-decoration: none; padding: 6px 12px; border-radius: 5px; font-weight: bold; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px; }
+        th, td { border: 1px solid #354777; padding: 8px; text-align: left; }
+        th { background: #17264f; color: #ffcc00; }
+        #msg { text-align: center; color: #ffcc00; margin-top: 10px; font-weight: bold; }
+        .scroll-tbl { overflow-x: auto; }
+        /* Login Box Styles */
+        #loginOverlay { position: fixed; inset: 0; background: #080f26; display: flex; justify-content: center; align-items: center; z-index: 9999; }
+        #loginCard { width: 90%; max-width: 400px; background: #111c3d; border: 2px solid #ffcc00; border-radius: 12px; padding: 25px; }
+        .logout-btn { background: #dc3545; color: white; margin-top: 10px; }
+        #loginError { color: #ff4d4d; text-align: center; margin-top: 10px; font-size: 14px; }
+    </style>
 </head>
 <body>
 
-  <!-- Login Modal / Screen -->
-  <div id="loginOverlay">
-    <div id="loginCard">
-      <h2>🔐 Admin Login</h2>
-      <form id="authForm">
-        <label>Username:</label>
-        <input type="text" id="username" placeholder="Username दर्ज करें" required>
-        
-        <label>Password:</label>
-        <input type="password" id="password" placeholder="Password दर्ज करें" required>
-        
-        <button type="submit">Login</button>
-        <div id="loginError"></div>
-      </form>
-    </div>
-  </div>
-
-  <!-- Main Dashboard Content -->
-  <div id="mainDashboard" style="display: none;">
-    <div class="box">
-      <h2>⚙️ Settings & Payment</h2>
-      <label>UPI ID:</label>
-      <input id="upiId" value="keralaLottery@paytm">
-      <label>Registration Fee (₹):</label>
-      <input id="regFee" value="3250">
-      <button type="button" onclick="saveSettings()">Save Settings</button>
-      <button type="button" class="logout-btn" onclick="logout()">Logout</button>
+    <!-- Login Modal / Screen -->
+    <div id="loginOverlay">
+        <div id="loginCard">
+            <h2>🔐 Admin Login</h2>
+            <form id="authForm">
+                <label>Username:</label>
+                <input type="text" id="username" placeholder="Username दर्ज करें" required>
+                <label>Password:</label>
+                <input type="password" id="password" placeholder="Password दर्ज करें" required>
+                <button type="submit">Login</button>
+                <div id="loginError"></div>
+            </form>
+        </div>
     </div>
 
-    <div class="box">
-      <h2>➕ Add Winner Record</h2>
-      <form id="winnerForm">
-        <label>Winner Name:</label>
-        <input id="name" placeholder="Full Name" required>
-        
-        <label>Mobile Number:</label>
-        <input id="mobile" type="tel" maxlength="10" placeholder="10 Digit Number" required>
-        
-        <label>Lottery Number:</label>
-        <input id="ticket" placeholder="e.g. KL-584920" required>
-        
-        <label>Prize Level:</label>
-        <select id="prize">
-          <option>1st Prize</option>
-          <option>2nd Prize</option>
-          <option>3rd Prize</option>
-          <option>4th Prize</option>
-          <option>5th Prize</option>
-          <option>6th Prize</option>
-          <option>7th Prize</option>
-          <option>8th Prize</option>
-          <option>9th Prize</option>
-          <option>10th Prize</option>
-          <option>Consolation Prize</option>
-        </select>
-        
-        <label>Winning Amount:</label>
-        <input id="amount" placeholder="e.g. Rs 25,00,000/-" required>
-        
-        <button type="submit" id="subBtn">Add Record to Sheet</button>
-      </form>
-      <div id="msg"></div>
+    <!-- Main Dashboard Content -->
+    <div id="mainDashboard" style="display: none;">
+        <div class="box">
+            <h2>⚙️ Settings & Payment</h2>
+            <label>UPI ID:</label>
+            <input id="upiId" value="keralaLottery@paytm">
+            <label>Registration Fee (₹):</label>
+            <input id="regFee" value="3250">
+            <button type="button" onclick="saveSettings()">Save Settings</button>
+            <button type="button" class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+
+        <div class="box">
+            <h2>➕ Add Winner Record</h2>
+            <form id="winnerForm">
+                <label>Winner Name:</label>
+                <input id="name" placeholder="Full Name" required>
+                <label>Mobile Number:</label>
+                <input id="mobile" type="tel" maxlength="10" placeholder="10 Digit Number" required>
+                <label>Lottery Number:</label>
+                <input id="ticket" placeholder="e.g. KL-584920" required>
+                <label>Prize Level:</label>
+                <select id="prize">
+                    <option>1st Prize</option>
+                    <option>2nd Prize</option>
+                    <option>3rd Prize</option>
+                    <option>4th Prize</option>
+                    <option>5th Prize</option>
+                    <option>6th Prize</option>
+                    <option>7th Prize</option>
+                    <option>8th Prize</option>
+                    <option>9th Prize</option>
+                    <option>10th Prize</option>
+                    <option>Consolation Prize</option>
+                </select>
+                <label>Winning Amount:</label>
+                <input id="amount" placeholder="e.g. Rs 25,00,000/-" required>
+                <button type="submit" id="subBtn">Add Record to Sheet</button>
+            </form>
+            <div id="msg"></div>
+        </div>
+
+        <div class="box">
+            <h2>📊 Winner Records</h2>
+            <button type="button" onclick="loadData()">🔄 Refresh Table</button>
+            <div class="scroll-tbl">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Ticket</th>
+                            <th>Name</th>
+                            <th>Mobile</th>
+                            <th>Prize</th>
+                            <th>Amount</th>
+                            <th>Fee</th>
+                            <th>Pay Option</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody"></tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
-    <div class="box">
-      <h2>📊 Winner Records</h2>
-      <button type="button" onclick="loadData()">🔄 Refresh Table</button>
-      <div class="scroll-tbl">
-        <table>
-          <thead>
-            <tr>
-              <th>Ticket</th>
-              <th>Name</th>
-              <th>Mobile</th>
-              <th>Prize</th>
-              <th>Amount</th>
-              <th>Fee</th>
-              <th>Pay Option</th>
-            </tr>
-          </thead>
-          <tbody id="tbody"></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
+    <script>
+        // Updated API URL
+        const API_URL = "https://sheetdb.io/api/v1/u74uosej3yuv7";
+        const $ = id => document.getElementById(id);
 
-  <script>
-    const API_URL = "https://sheetdb.io/api/v1/vpi9mg3o0yk7q";
-    const $ = id => document.getElementById(id);
+        // Auth Logic
+        const VALID_USER = "Raja";
+        const VALID_PASS = "Raja@2580";
 
-    // Auth Logic
-    const VALID_USER = "Raja";
-    const VALID_PASS = "Raja@2580";
-
-    function checkAuth() {
-      if (sessionStorage.getItem("adminLoggedIn") === "true") {
-        $("loginOverlay").style.display = "none";
-        $("mainDashboard").style.display = "block";
-        loadData();
-      } else {
-        $("loginOverlay").style.display = "flex";
-        $("mainDashboard").style.display = "none";
-      }
-    }
-
-    $("authForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-      const u = $("username").value.trim();
-      const p = $("password").value;
-
-      if (u === VALID_USER && p === VALID_PASS) {
-        sessionStorage.setItem("adminLoggedIn", "true");
-        $("loginError").textContent = "";
-        checkAuth();
-      } else {
-        $("loginError").textContent = "गलत Username या Password!";
-      }
-    });
-
-    function logout() {
-      sessionStorage.removeItem("adminLoggedIn");
-      location.reload();
-    }
-
-    // Load saved UPI and Fee
-    $("upiId").value = localStorage.getItem("upi") || "keralaLottery@paytm";
-    $("regFee").value = localStorage.getItem("fee") || "3250";
-
-    function saveSettings() {
-      localStorage.setItem("upi", $("upiId").value.trim());
-      localStorage.setItem("fee", $("regFee").value.trim());
-      alert("Settings Saved!");
-      loadData();
-    }
-
-    // Save Data (POST)
-    $("winnerForm").addEventListener("submit", async function(e) {
-      e.preventDefault();
-      $("subBtn").disabled = true;
-      $("msg").textContent = "रिकॉर्ड सेव हो रहा है...";
-
-      const newRecord = {
-        ticket: $("ticket").value.trim(),
-        name: $("name").value.trim(),
-        mobile: $("mobile").value.trim(),
-        prize: $("prize").value,
-        amount: $("amount").value.trim(),
-        fee: $("regFee").value.trim(),
-        upiId: $("upiId").value.trim(),
-        status: "Pending"
-      };
-
-      try {
-        const res = await fetch(API_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ data: [newRecord] })
-        });
-        if (res.ok) {
-          $("msg").textContent = "सफलतापूर्वक सेव हो गया!";
-          $("winnerForm").reset();
-          loadData();
-        } else {
-          throw new Error();
+        function checkAuth() {
+            if (sessionStorage.getItem("adminLoggedIn") === "true") {
+                $("loginOverlay").style.display = "none";
+                $("mainDashboard").style.display = "block";
+                loadData();
+            } else {
+                $("loginOverlay").style.display = "flex";
+                $("mainDashboard").style.display = "none";
+            }
         }
-      } catch (err) {
-        $("msg").textContent = "एरर: डेटा सेव नहीं हुआ।";
-      }
-      $("subBtn").disabled = false;
-    });
 
-    // Load Data (GET)
-    async function loadData() {
-      try {
-        const res = await fetch(API_URL);
-        const data = await res.json();
-        const tbody = $("tbody");
-        tbody.innerHTML = "";
-        const activeUpi = $("upiId").value.trim();
+        $("authForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+            const u = $("username").value.trim();
+            const p = $("password").value;
 
-        data.forEach(r => {
-          const fee = r.fee || "3250";
-          const upi = r.upiId || activeUpi;
-          const payLink = `upi://pay?pa=${encodeURIComponent(upi)}&pn=Lottery&am=${fee}&cu=INR&tn=Fee`;
-          tbody.innerHTML += `<tr>
-            <td>${r.ticket || "-"}</td>
-            <td>${r.name || "-"}</td>
-            <td>${r.mobile || "-"}</td>
-            <td>${r.prize || "-"}</td>
-            <td>${r.amount || "-"}</td>
-            <td>₹${fee}</td>
-            <td><a class="pay-btn" href="${payLink}">Pay ₹${fee}</a></td>
-          </tr>`;
+            if (u === VALID_USER && p === VALID_PASS) {
+                sessionStorage.setItem("adminLoggedIn", "true");
+                $("loginError").textContent = "";
+                checkAuth();
+            } else {
+                $("loginError").textContent = "गलत Username या Password!";
+            }
         });
-      } catch (err) {
-        $("msg").textContent = "डेटा लोड नहीं हो सका।";
-      }
-    }
 
-    // Start with Auth Check
-    checkAuth();
-  </script>
+        function logout() {
+            sessionStorage.removeItem("adminLoggedIn");
+            location.reload();
+        }
+
+        // Load saved UPI and Fee
+        $("upiId").value = localStorage.getItem("upi") || "keralaLottery@paytm";
+        $("regFee").value = localStorage.getItem("fee") || "3250";
+
+        function saveSettings() {
+            localStorage.setItem("upi", $("upiId").value.trim());
+            localStorage.setItem("fee", $("regFee").value.trim());
+            alert("Settings Saved!");
+            loadData();
+        }
+
+        // Save Data (POST)
+        $("winnerForm").addEventListener("submit", async function(e) {
+            e.preventDefault();
+            $("subBtn").disabled = true;
+            $("msg").textContent = "रिकॉर्ड सेव हो रहा है...";
+
+            const newRecord = {
+                ticket: $("ticket").value.trim(),
+                name: $("name").value.trim(),
+                mobile: $("mobile").value.trim(),
+                prize: $("prize").value,
+                amount: $("amount").value.trim(),
+                fee: $("regFee").value.trim(),
+                upiId: $("upiId").value.trim(),
+                status: "Pending"
+            };
+
+            try {
+                const res = await fetch(API_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ data: [newRecord] })
+                });
+
+                if (res.ok) {
+                    $("msg").textContent = "सफलतापूर्वक सेव हो गया!";
+                    $("winnerForm").reset();
+                    loadData();
+                } else {
+                    throw new Error();
+                }
+            } catch (err) {
+                $("msg").textContent = "एरर: डेटा सेव नहीं हुआ।";
+            }
+            $("subBtn").disabled = false;
+        });
+
+        // Load Data (GET)
+        async function loadData() {
+            try {
+                const res = await fetch(API_URL);
+                const data = await res.json();
+                const tbody = $("tbody");
+                tbody.innerHTML = "";
+                
+                const activeUpi = $("upiId").value.trim();
+
+                data.forEach(r => {
+                    const fee = r.fee || "3250";
+                    const upi = r.upiId || activeUpi;
+                    const payLink = `upi://pay?pa=${encodeURIComponent(upi)}&pn=Lottery&am=${fee}&cu=INR&tn=Fee`;
+
+                    tbody.innerHTML += `<tr>
+                        <td>${r.ticket || "-"}</td>
+                        <td>${r.name || "-"}</td>
+                        <td>${r.mobile || "-"}</td>
+                        <td>${r.prize || "-"}</td>
+                        <td>${r.amount || "-"}</td>
+                        <td>₹${fee}</td>
+                        <td><a class="pay-btn" href="${payLink}">Pay ₹${fee}</a></td>
+                    </tr>`;
+                });
+            } catch (err) {
+                $("msg").textContent = "डेटा लोड नहीं हो सका।";
+            }
+        }
+
+        // Start with Auth Check
+        checkAuth();
+    </script>
 </body>
 </html>
