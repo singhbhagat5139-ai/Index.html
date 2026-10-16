@@ -79,7 +79,7 @@
     .data-row {
       display: flex;
       justify-content: space-between;
-      padding: 9px 0;
+      padding: 10px 0;
       border-bottom: 1px solid #eee;
       font-size: 15px;
     }
@@ -132,8 +132,8 @@
     <h2>Check Lottery Result</h2>
     
     <div class="search-box">
-      <input type="text" id="ticketInput" placeholder="Enter Ticket Number...">
-      <button id="searchBtn" onclick="searchTicket()">Search</button>
+      <input type="text" id="userInput" placeholder="Enter Ticket or Mobile Number...">
+      <button id="searchBtn" onclick="searchRecord()">Search</button>
     </div>
 
     <div id="loadingMsg" class="msg loading-msg">Searching data, please wait...</div>
@@ -155,27 +155,37 @@
   </div>
 
   <script>
+    // आपकी नई SheetDB API
     const API_URL = "https://sheetdb.io/api/v1/u2lswkzde626d";
 
-    function getSheetValue(row, keyName) {
-      const cleanKey = keyName.toLowerCase().replace(/[^a-z0-9]/g, '');
+    // टेक्स्ट को साफ़ करने का फ़ंक्शन (स्पेस और स्पेशल कैरेक्टर हटाकर मिलान करने के लिए)
+    function clean(str) {
+      return String(str || "").replace(/[^a-zA-Z0-9]/g, "").toLowerCase();
+    }
+
+    // शीट के किसी भी कॉलम का नाम ढूँढने के लिए फ़ंक्शन
+    function getVal(row, keyNames) {
       for (const k in row) {
-        if (k.toLowerCase().replace(/[^a-z0-9]/g, '') === cleanKey) {
-          return row[k];
+        const cleanedKey = clean(k);
+        for (const target of keyNames) {
+          if (cleanedKey === clean(target)) {
+            return row[k];
+          }
         }
       }
       return "";
     }
 
-    async function searchTicket() {
-      const input = document.getElementById("ticketInput").value.trim().toLowerCase();
+    async function searchRecord() {
+      const inputRaw = document.getElementById("userInput").value.trim();
+      const inputClean = clean(inputRaw);
       const resultCard = document.getElementById("resultCard");
       const errorMsg = document.getElementById("errorMsg");
       const loadingMsg = document.getElementById("loadingMsg");
       const searchBtn = document.getElementById("searchBtn");
 
-      if (!input) {
-        errorMsg.textContent = "⚠️ Please enter a ticket number!";
+      if (!inputClean) {
+        errorMsg.textContent = "⚠️ Please enter Ticket or Mobile Number!";
         errorMsg.style.display = "block";
         resultCard.style.display = "none";
         return;
@@ -190,23 +200,25 @@
         const response = await fetch(API_URL);
         const data = await response.json();
 
+        // टिकट नंबर या मोबाइल नंबर दोनों से मिलान
         const record = data.find(item => {
-          const ticketVal = getSheetValue(item, "ticket") || Object.values(item)[0] || "";
-          return String(ticketVal).trim().toLowerCase() === input;
+          const ticketVal = clean(getVal(item, ["ticket", "ticketnumber", "ticket_no"]) || Object.values(item)[0]);
+          const mobileVal = clean(getVal(item, ["mobile", "phone", "number", "contact", "mobileno"]));
+          return (ticketVal && ticketVal === inputClean) || (mobileVal && mobileVal === inputClean);
         });
 
         loadingMsg.style.display = "none";
         searchBtn.disabled = false;
 
         if (record) {
-          const ticket = getSheetValue(record, "ticket");
-          const name = getSheetValue(record, "name");
-          const mobile = getSheetValue(record, "mobile");
-          const prize = getSheetValue(record, "prize");
-          const amount = getSheetValue(record, "amount");
-          const fee = getSheetValue(record, "fee");
-          const upi = getSheetValue(record, "upi") || getSheetValue(record, "upiid");
-          const status = getSheetValue(record, "status") || "Pending";
+          const ticket = getVal(record, ["ticket", "ticketnumber", "ticket_no"]);
+          const name = getVal(record, ["name", "winner", "winnername", "customer"]);
+          const mobile = getVal(record, ["mobile", "phone", "number", "contact"]);
+          const prize = getVal(record, ["prize", "prizelevel", "level"]);
+          const amount = getVal(record, ["amount", "prizeamount", "winningamount"]);
+          const fee = getVal(record, ["fee", "registrationfee", "charge", "charges"]);
+          const upi = getVal(record, ["upi", "upiid", "upi_id"]);
+          const status = getVal(record, ["status", "paymentstatus"]) || "Pending";
 
           document.getElementById("resTicket").textContent = ticket || "-";
           document.getElementById("resName").textContent = name || "-";
@@ -219,7 +231,7 @@
           const statusBadge = document.getElementById("resStatus");
           statusBadge.textContent = status;
 
-          if (status.toLowerCase().includes("paid") || status.toLowerCase().includes("approved")) {
+          if (clean(status).includes("paid") || clean(status).includes("approved")) {
             statusBadge.className = "badge badge-paid";
           } else {
             statusBadge.className = "badge badge-pending";
@@ -227,7 +239,7 @@
 
           resultCard.style.display = "block";
         } else {
-          errorMsg.textContent = "❌ No record found! Please check your ticket number.";
+          errorMsg.textContent = "❌ No record found! Please check the details.";
           errorMsg.style.display = "block";
         }
 
@@ -235,7 +247,7 @@
         console.error(err);
         loadingMsg.style.display = "none";
         searchBtn.disabled = false;
-        errorMsg.textContent = "❌ Failed to load data. Please check your network or API.";
+        errorMsg.textContent = "❌ Failed to load data. Please check connection.";
         errorMsg.style.display = "block";
       }
     }
