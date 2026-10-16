@@ -205,7 +205,6 @@
     const API_URL = "https://sheetdb.io/api/v1/u2lswkzde626d";
     const $ = id => document.getElementById(id);
 
-    // Login Credentials
     const VALID_USER = "Raja";
     const VALID_PASS = "Raja@2580";
 
@@ -220,7 +219,6 @@
       }
     }
 
-    // 1. Auth Form Handling
     $("authForm").addEventListener("submit", function(e) {
       e.preventDefault();
       const u = $("username").value.trim();
@@ -239,7 +237,6 @@
       location.reload();
     }
 
-    // Default Settings
     $("upiId").value = localStorage.getItem("upi") || "keralaLottery@paytm";
     $("regFee").value = localStorage.getItem("fee") || "3250";
 
@@ -250,7 +247,6 @@
       loadData();
     }
 
-    // 2. Winner Form Submission (Save Data to Sheet)
     $("winnerForm").addEventListener("submit", async function(e) {
       e.preventDefault();
       const subBtn = $("subBtn");
@@ -300,7 +296,6 @@
       }
     });
 
-    // 3. Load Data from Sheet
     async function loadData() {
       const tbody = $("tbody");
       try {
@@ -333,7 +328,6 @@
       }
     }
 
-    // Auto Run on Page Open
     checkAuth();
   </script>
 </body>
