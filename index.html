@@ -5,26 +5,119 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Dashboard</title>
   <style>
-    * { box-sizing: border-box; font-family: Arial, sans-serif; }
-    body { margin: 0; padding: 15px; background: #080f26; color: white; }
-    .box { max-width: 600px; margin: auto; background: #111c3d; border: 2px solid #ffcc00; border-radius: 12px; padding: 15px; margin-bottom: 20px; }
-    h2 { color: #ffcc00; margin-top: 0; text-align: center; }
-    label { display: block; margin: 10px 0 5px; color: #ffcc00; font-size: 14px; }
-    input, select, button { width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #354777; background: #050a17; color: white; font-size: 15px; }
-    button { background: #ffcc00; color: #000; font-weight: bold; border: none; margin-top: 15px; cursor: pointer; }
-    button:disabled { opacity: 0.6; cursor: not-allowed; }
-    .pay-btn { display: inline-block; background: #28a745; color: white; text-decoration: none; padding: 6px 12px; border-radius: 5px; font-weight: bold; }
-    table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px; }
-    th, td { border: 1px solid #354777; padding: 8px; text-align: left; }
-    th { background: #17264f; color: #ffcc00; }
-    #msg { text-align: center; margin-top: 12px; font-weight: bold; font-size: 15px; }
-    .scroll-tbl { overflow-x: auto; }
-    
+    * {
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+    body {
+      margin: 0;
+      padding: 15px;
+      background: #080f26;
+      color: white;
+    }
+    .box {
+      max-width: 600px;
+      margin: auto;
+      background: #111c3d;
+      border: 2px solid #ffcc00;
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 20px;
+    }
+    h2 {
+      color: #ffcc00;
+      margin-top: 0;
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin: 10px 0 5px;
+      color: #ffcc00;
+      font-size: 14px;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 12px;
+      border-radius: 6px;
+      border: 1px solid #354777;
+      background: #050a17;
+      color: white;
+      font-size: 15px;
+    }
+    button {
+      background: #ffcc00;
+      color: #000;
+      font-weight: bold;
+      border: none;
+      margin-top: 15px;
+      cursor: pointer;
+    }
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    .pay-btn {
+      display: inline-block;
+      background: #28a745;
+      color: white;
+      text-decoration: none;
+      padding: 6px 12px;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid #354777;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background: #17264f;
+      color: #ffcc00;
+    }
+    #msg {
+      text-align: center;
+      margin-top: 12px;
+      font-weight: bold;
+      font-size: 15px;
+    }
+    .scroll-tbl {
+      overflow-x: auto;
+    }
     /* Login Box Styles */
-    #loginOverlay { position: fixed; inset: 0; background: #080f26; display: flex; justify-content: center; align-items: center; z-index: 9999; }
-    #loginCard { width: 90%; max-width: 400px; background: #111c3d; border: 2px solid #ffcc00; border-radius: 12px; padding: 25px; }
-    .logout-btn { background: #dc3545; color: white; margin-top: 10px; }
-    #loginError { color: #ff4d4d; text-align: center; margin-top: 10px; font-size: 14px; }
+    #loginOverlay {
+      position: fixed;
+      inset: 0;
+      background: #080f26;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+    #loginCard {
+      width: 90%;
+      max-width: 400px;
+      background: #111c3d;
+      border: 2px solid #ffcc00;
+      border-radius: 12px;
+      padding: 25px;
+    }
+    .logout-btn {
+      background: #dc3545;
+      color: white;
+      margin-top: 10px;
+    }
+    #loginError {
+      color: #ff4d4d;
+      text-align: center;
+      margin-top: 10px;
+      font-size: 14px;
+    }
   </style>
 </head>
 <body>
@@ -127,6 +220,7 @@
       }
     }
 
+    // 1. Auth Form Handling
     $("authForm").addEventListener("submit", function(e) {
       e.preventDefault();
       const u = $("username").value.trim();
@@ -156,7 +250,7 @@
       loadData();
     }
 
-    // Form Submit (Save to Sheet)
+    // 2. Winner Form Submission (Save Data to Sheet)
     $("winnerForm").addEventListener("submit", async function(e) {
       e.preventDefault();
       const subBtn = $("subBtn");
@@ -180,9 +274,9 @@
       try {
         const res = await fetch(API_URL, {
           method: "POST",
-          headers: { 
+          headers: {
             "Accept": "application/json",
-            "Content-Type": "application/json" 
+            "Content-Type": "application/json"
           },
           body: JSON.stringify({ data: [newRecord] })
         });
@@ -206,7 +300,7 @@
       }
     });
 
-    // Load Data from Sheet
+    // 3. Load Data from Sheet
     async function loadData() {
       const tbody = $("tbody");
       try {
@@ -220,12 +314,10 @@
         }
 
         const activeUpi = $("upiId").value.trim();
-
         data.forEach(r => {
           const fee = r.fee || $("regFee").value.trim();
           const upi = r.upiId || activeUpi;
           const payLink = `upi://pay?pa=${encodeURIComponent(upi)}&pn=Lottery&am=${fee}&cu=INR&tn=Fee`;
-          
           tbody.innerHTML += `<tr>
             <td>${r.ticket || "-"}</td>
             <td>${r.name || "-"}</td>
