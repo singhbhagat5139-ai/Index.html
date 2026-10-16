@@ -12,11 +12,12 @@
     label { display: block; margin: 10px 0 5px; color: #ffcc00; font-size: 14px; }
     input, select, button { width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #354777; background: #050a17; color: white; font-size: 15px; }
     button { background: #ffcc00; color: #000; font-weight: bold; border: none; margin-top: 15px; cursor: pointer; }
+    button:disabled { opacity: 0.6; cursor: not-allowed; }
     .pay-btn { display: inline-block; background: #28a745; color: white; text-decoration: none; padding: 6px 12px; border-radius: 5px; font-weight: bold; }
     table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px; }
     th, td { border: 1px solid #354777; padding: 8px; text-align: left; }
     th { background: #17264f; color: #ffcc00; }
-    #msg { text-align: center; color: #ffcc00; margin-top: 10px; font-weight: bold; }
+    #msg { text-align: center; margin-top: 12px; font-weight: bold; font-size: 15px; }
     .scroll-tbl { overflow-x: auto; }
     
     /* Login Box Styles */
@@ -108,11 +109,10 @@
   </div>
 
   <script>
-    // Updated SheetDB API URL
     const API_URL = "https://sheetdb.io/api/v1/u2lswkzde626d";
     const $ = id => document.getElementById(id);
 
-    // Auth Logic
+    // Login Credentials
     const VALID_USER = "Raja";
     const VALID_PASS = "Raja@2580";
 
@@ -145,7 +145,7 @@
       location.reload();
     }
 
-    // Settings
+    // Default Settings
     $("upiId").value = localStorage.getItem("upi") || "keralaLottery@paytm";
     $("regFee").value = localStorage.getItem("fee") || "3250";
 
@@ -156,11 +156,15 @@
       loadData();
     }
 
-    // Save Data (POST)
+    // Form Submit (Save to Sheet)
     $("winnerForm").addEventListener("submit", async function(e) {
       e.preventDefault();
-      $("subBtn").disabled = true;
-      $("msg").textContent = "रिकॉर्ड सेव हो रहा है...";
+      const subBtn = $("subBtn");
+      const msg = $("msg");
+
+      subBtn.disabled = true;
+      msg.style.color = "#ffcc00";
+      msg.textContent = "डेटा सेव हो रहा है, कृपया प्रतीक्षा करें...";
 
       const newRecord = {
         ticket: $("ticket").value.trim(),
@@ -183,33 +187,45 @@
           body: JSON.stringify({ data: [newRecord] })
         });
 
-        if (res.ok) {
-          $("msg").textContent = "सफलतापूर्वक सेव हो गया!";
+        const result = await res.json();
+
+        if (res.ok && (result.created === 1 || result.created > 0)) {
+          msg.style.color = "#28a745";
+          msg.textContent = "✅ डेटा सफलतापूर्वक Google Sheet में सेव हो गया!";
           $("winnerForm").reset();
           loadData();
         } else {
-          throw new Error();
+          msg.style.color = "#ff4d4d";
+          msg.textContent = "❌ सेव नहीं हो सका: " + (result.error || "कृपया शीट चेक करें");
         }
       } catch (err) {
-        $("msg").textContent = "एरर: डेटा सेव नहीं हुआ।";
+        msg.style.color = "#ff4d4d";
+        msg.textContent = "❌ नेटवर्क एरर: डेटा सेव नहीं हुआ।";
+      } finally {
+        subBtn.disabled = false;
       }
-      $("subBtn").disabled = false;
     });
 
-    // Load Data (GET)
+    // Load Data from Sheet
     async function loadData() {
+      const tbody = $("tbody");
       try {
         const res = await fetch(API_URL);
         const data = await res.json();
-        const tbody = $("tbody");
         tbody.innerHTML = "";
+
+        if (!Array.isArray(data) || data.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:15px;">कोई रिकॉर्ड नहीं मिला।</td></tr>`;
+          return;
+        }
 
         const activeUpi = $("upiId").value.trim();
 
         data.forEach(r => {
-          const fee = r.fee || "3250";
+          const fee = r.fee || $("regFee").value.trim();
           const upi = r.upiId || activeUpi;
           const payLink = `upi://pay?pa=${encodeURIComponent(upi)}&pn=Lottery&am=${fee}&cu=INR&tn=Fee`;
+          
           tbody.innerHTML += `<tr>
             <td>${r.ticket || "-"}</td>
             <td>${r.name || "-"}</td>
@@ -221,11 +237,11 @@
           </tr>`;
         });
       } catch (err) {
-        $("msg").textContent = "डेटा लोड नहीं हो सका।";
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:#ff4d4d;">डेटा लोड नहीं हो सका।</td></tr>`;
       }
     }
 
-    // Initial Auth Check
+    // Auto Run on Page Open
     checkAuth();
   </script>
 </body>
