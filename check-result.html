@@ -5,139 +5,213 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Check Lottery Result</title>
   <style>
-    * { box-sizing: border-box; font-family: Arial, sans-serif; }
-    body { background-color: #f4f6f9; margin: 0; padding: 20px; display: flex; justify-content: center; }
-    .card { background: #fff; width: 100%; max-width: 480px; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-    h2 { text-align: center; color: #1a73e8; margin-top: 0; }
-    .search-box { display: flex; gap: 8px; margin-bottom: 20px; }
-    input[type="text"] { flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; outline: none; }
-    button { padding: 10px 16px; background: #1a73e8; color: #fff; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
-    button:disabled { background: #9bbdf3; }
-    .result-box { display: none; margin-top: 15px; border-top: 2px dashed #eee; padding-top: 15px; }
-    .row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f0f0f0; }
-    .label { color: #555; font-weight: bold; }
-    .value { color: #222; text-align: right; }
-    .status-badge { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 14px; font-weight: bold; }
-    .status-paid { background: #e6f4ea; color: #137333; }
-    .status-pending { background: #fef7e0; color: #b06000; }
-    .msg { text-align: center; color: #d93025; margin-top: 10px; font-weight: bold; }
+    * {
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+    body {
+      background-color: #f4f6f9;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+    .card {
+      background: #fff;
+      width: 100%;
+      max-width: 480px;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #1a73e8;
+      margin-top: 0;
+    }
+    .search-box {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    input[type="text"] {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+      outline: none;
+    }
+    button {
+      padding: 10px 16px;
+      background: #1a73e8;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:disabled {
+      background: #9bbdf3;
+    }
+    .result-box {
+      display: none;
+      margin-top: 15px;
+      border-top: 2px dashed #eee;
+      padding-top: 15px;
+    }
+    .row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .label {
+      color: #555;
+      font-weight: bold;
+    }
+    .value {
+      color: #222;
+      text-align: right;
+    }
+    .status-badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+    .status-paid {
+      background: #e6f4ea;
+      color: #137333;
+    }
+    .status-pending {
+      background: #fef7e0;
+      color: #b06000;
+    }
+    .msg {
+      text-align: center;
+      color: #d93025;
+      margin-top: 10px;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
 
-<div class="card">
-  <h2>जाँचें लॉटरी रिज़ल्ट</h2>
+  <div class="card">
+    <h2>जाँचें लॉटरी रिज़ल्ट</h2>
+    
+    <div class="search-box">
+      <input type="text" id="ticketInput" placeholder="टिकट नंबर दर्ज करें (उदा. KL-1234)">
+      <button id="searchBtn" onclick="checkResult()">सर्च करें</button>
+    </div>
 
-  <div class="search-box">
-    <input type="text" id="ticketInput" placeholder="टिकट नंबर दर्ज करें (उदा. KL-1234)">
-    <button id="searchBtn" onclick="checkResult()">सर्च करें</button>
-  </div>
+    <div id="loadingMsg" class="msg" style="color: #666; display: none;">डेटा खोजा जा रहा है...</div>
+    <div id="errorMsg" class="msg" style="display: none;"></div>
 
-  <div id="loadingMsg" class="msg" style="color: #666; display: none;">डेटा खोजा जा रहा है...</div>
-  <div id="errorMsg" class="msg" style="display: none;"></div>
-
-  <div id="resultBox" class="result-box">
-    <div class="row"><span class="label">टिकट नंबर:</span> <span class="value" id="resTicket">-</span></div>
-    <div class="row"><span class="label">विजेता का नाम:</span> <span class="value" id="resName">-</span></div>
-    <div class="row"><span class="label">मोबाइल नंबर:</span> <span class="value" id="resMobile">-</span></div>
-    <div class="row"><span class="label">प्राइज़ लेवल:</span> <span class="value" id="resPrize">-</span></div>
-    <div class="row"><span class="label">प्राइज़ राशि:</span> <span class="value" id="resAmount" style="color: #137333; font-weight: bold;">-</span></div>
-    <div class="row"><span class="label">रजिस्ट्रेशन शुल्क:</span> <span class="value" id="resFee">-</span></div>
-    <div class="row"><span class="label">UPI ID:</span> <span class="value" id="resUpi">-</span></div>
-    <div class="row">
-      <span class="label">स्थिति:</span>
-      <span class="value"><span id="resStatus" class="status-badge">-</span></span>
+    <div id="resultBox" class="result-box">
+      <div class="row"><span class="label">टिकट नंबर:</span> <span class="value" id="resTicket">-</span></div>
+      <div class="row"><span class="label">विजेता का नाम:</span> <span class="value" id="resName">-</span></div>
+      <div class="row"><span class="label">मोबाइल नंबर:</span> <span class="value" id="resMobile">-</span></div>
+      <div class="row"><span class="label">प्राइज़ लेवल:</span> <span class="value" id="resPrize">-</span></div>
+      <div class="row"><span class="label">प्राइज़ राशि:</span> <span class="value" id="resAmount" style="color: #137333; font-weight: bold;">-</span></div>
+      <div class="row"><span class="label">रजिस्ट्रेशन शुल्क:</span> <span class="value" id="resFee">-</span></div>
+      <div class="row"><span class="label">UPI ID:</span> <span class="value" id="resUpi">-</span></div>
+      <div class="row">
+        <span class="label">स्थिति:</span> 
+        <span class="value"><span id="resStatus" class="status-badge">-</span></span>
+      </div>
     </div>
   </div>
-</div>
 
-<script>
-  const API_URL = "https://sheetdb.io/api/v1/u2lswkzde626d";
+  <script>
+    // आपकी जोड़ी गई नई SheetDB API
+    const API_URL = "https://sheetdb.io/api/v1/u2lswkzde626d";
 
-  // ऑब्जेक्ट की किसी भी की (Key) को बिना स्पेस और छोटे अक्षरों में पढ़ने का फ़ंक्शन
-  function getVal(row, keyName) {
-    const targetKey = keyName.toLowerCase();
-    for (const k in row) {
-      if (k.trim().toLowerCase() === targetKey) {
-        return row[k];
+    // कॉलम हेडर में छोटे-बड़े अक्षर (Case-insensitive) और स्पेस को हैंडल करने वाला फ़ंक्शन
+    function getVal(row, keyName) {
+      const targetKey = keyName.toLowerCase();
+      for (const k in row) {
+        if (k.trim().toLowerCase() === targetKey) {
+          return row[k];
+        }
       }
+      return "";
     }
-    return "";
-  }
 
-  async function checkResult() {
-    const input = document.getElementById("ticketInput").value.trim().toLowerCase();
-    const resultBox = document.getElementById("resultBox");
-    const errorMsg = document.getElementById("errorMsg");
-    const loadingMsg = document.getElementById("loadingMsg");
-    const searchBtn = document.getElementById("searchBtn");
+    async function checkResult() {
+      const input = document.getElementById("ticketInput").value.trim().toLowerCase();
+      const resultBox = document.getElementById("resultBox");
+      const errorMsg = document.getElementById("errorMsg");
+      const loadingMsg = document.getElementById("loadingMsg");
+      const searchBtn = document.getElementById("searchBtn");
 
-    if (!input) {
-      errorMsg.textContent = "कृपया टिकट नंबर दर्ज करें!";
-      errorMsg.style.display = "block";
+      if (!input) {
+        errorMsg.textContent = "कृपया टिकट नंबर दर्ज करें!";
+        errorMsg.style.display = "block";
+        resultBox.style.display = "none";
+        return;
+      }
+
+      errorMsg.style.display = "none";
       resultBox.style.display = "none";
-      return;
-    }
+      loadingMsg.style.display = "block";
+      searchBtn.disabled = true;
 
-    errorMsg.style.display = "none";
-    resultBox.style.display = "none";
-    loadingMsg.style.display = "block";
-    searchBtn.disabled = true;
+      try {
+        const response = await fetch(API_URL);
+        const data = await response.json();
 
-    try {
-      const response = await fetch(API_URL);
-      const data = await response.json();
+        // टिकट नंबर का मिलान
+        const record = data.find(item => {
+          const ticketVal = getVal(item, "ticket") || Object.values(item)[0] || "";
+          return String(ticketVal).trim().toLowerCase() === input;
+        });
 
-      // किसी भी तरह के टिकट फ़ील्ड से मिलान
-      const record = data.find(item => {
-        const ticketVal = getVal(item, "ticket") || Object.values(item)[0] || "";
-        return String(ticketVal).trim().toLowerCase() === input;
-      });
+        loadingMsg.style.display = "none";
+        searchBtn.disabled = false;
 
-      loadingMsg.style.display = "none";
-      searchBtn.disabled = false;
+        if (record) {
+          const ticket = getVal(record, "ticket");
+          const name = getVal(record, "name");
+          const mobile = getVal(record, "mobile");
+          const prize = getVal(record, "prize");
+          const amount = getVal(record, "amount");
+          const fee = getVal(record, "fee");
+          const upi = getVal(record, "upiid") || getVal(record, "upi");
+          const status = getVal(record, "status") || "Pending";
 
-      if (record) {
-        const ticket = getVal(record, "ticket");
-        const name = getVal(record, "name");
-        const mobile = getVal(record, "mobile");
-        const prize = getVal(record, "prize");
-        const amount = getVal(record, "amount");
-        const fee = getVal(record, "fee");
-        const upi = getVal(record, "upiid") || getVal(record, "upi");
-        const status = getVal(record, "status") || "Pending";
+          document.getElementById("resTicket").textContent = ticket || "-";
+          document.getElementById("resName").textContent = name || "-";
+          document.getElementById("resMobile").textContent = mobile || "-";
+          document.getElementById("resPrize").textContent = prize || "-";
+          document.getElementById("resAmount").textContent = amount ? "₹" + amount : "-";
+          document.getElementById("resFee").textContent = fee ? "₹" + fee : "-";
+          document.getElementById("resUpi").textContent = upi || "-";
 
-        document.getElementById("resTicket").textContent = ticket || "-";
-        document.getElementById("resName").textContent = name || "-";
-        document.getElementById("resMobile").textContent = mobile || "-";
-        document.getElementById("resPrize").textContent = prize || "-";
-        document.getElementById("resAmount").textContent = amount ? "₹" + amount : "-";
-        document.getElementById("resFee").textContent = fee ? "₹" + fee : "-";
-        document.getElementById("resUpi").textContent = upi || "-";
+          const statusEl = document.getElementById("resStatus");
+          statusEl.textContent = status;
+          if (status.toLowerCase() === "paid" || status.toLowerCase() === "approved") {
+            statusEl.className = "status-badge status-paid";
+          } else {
+            statusEl.className = "status-badge status-pending";
+          }
 
-        const statusEl = document.getElementById("resStatus");
-        statusEl.textContent = status;
-
-        if (status.toLowerCase() === "paid" || status.toLowerCase() === "approved") {
-          statusEl.className = "status-badge status-paid";
+          resultBox.style.display = "block";
         } else {
-          statusEl.className = "status-badge status-pending";
+          errorMsg.textContent = "❌ कोई रिकॉर्ड नहीं मिला! कृपया टिकट नंबर दोबारा जाँचें।";
+          errorMsg.style.display = "block";
         }
 
-        resultBox.style.display = "block";
-      } else {
-        errorMsg.textContent = "❌ कोई रिकॉर्ड नहीं मिला! कृपया टिकट नंबर दोबारा जाँचें।";
+      } catch (err) {
+        console.error(err);
+        loadingMsg.style.display = "none";
+        searchBtn.disabled = false;
+        errorMsg.textContent = "❌ डेटा लोड करने में समस्या आई। कृपया इंटरनेट या API चेक करें।";
         errorMsg.style.display = "block";
       }
-    } catch (err) {
-      console.error(err);
-      loadingMsg.style.display = "none";
-      searchBtn.disabled = false;
-      errorMsg.textContent = "❌ डेटा लोड करने में समस्या आई। कृपया इंटरनेट या API चेक करें।";
-      errorMsg.style.display = "block";
     }
-  }
-</script>
-
+  </script>
 </body>
 </html>
