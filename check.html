@@ -10,24 +10,21 @@
     body { font-family: Arial, sans-serif; background: #091921; min-height: 100vh; margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center; color: #e2e8f0; }
     .box { background: #0f2838; padding: 20px; border-radius: 12px; width: 100%; max-width: 420px; box-sizing: border-box; margin-bottom: 15px; border: 1px solid #1e4a66; }
     .text-center { text-align: center; }
-    .live-dot { width: 10px; height: 10px; background: #ff1744; border-radius: 50%; display: inline-block; margin-right: 5px; }
-    input { width: 100%; padding: 11px; margin: 8px 0 14px; box-sizing: border-box; background: #091a26; border: 1px solid #295d80; border-radius: 6px; color: #38bdf8; outline: none; font-size: 14px; }
-    button { width: 100%; padding: 12px; background: #0284c7; color: #fff; border: none; border-radius: 6px; font-weight: bold; font-size: 15px; cursor: pointer; }
-    .btn-green { background: #16a34a; margin-top: 10px; }
-    .btn-gold { background: #f59e0b; color: #000; font-weight: bold; margin-top: 10px; }
-    .btn-back { background: transparent; color: #94a3b8; border: 1px solid #295d80; margin-top: 8px; }
-    .row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #1a3c52; font-size: 14px; }
-    .val-text { color: #38bdf8; font-weight: bold; }
+    input { width: 100%; padding: 11px; margin: 8px 0 14px; box-sizing: border-box; background: #091a26; border: 1px solid #295d80; border-radius: 6px; color: #38bdf8; outline: none; }
+    button { width: 100%; padding: 12px; background: #0284c7; color: #fff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 8px; }
+    .btn-green { background: #16a34a; }
+    .btn-gold { background: #f59e0b; color: #000; }
+    .btn-back { background: transparent; color: #94a3b8; border: 1px solid #295d80; }
+    .row { display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid #1a3c52; font-size: 14px; }
     .badges { display: flex; flex-wrap: wrap; gap: 4px; max-height: 80px; overflow-y: auto; }
-    .badge { background: #081721; color: #38bdf8; padding: 2px 6px; border-radius: 4px; font-size: 11px; border: 1px solid #1b425b; font-family: monospace; }
-    .badge-highlight { background: #261c04 !important; color: #fbbf24 !important; border: 1px solid #fbbf24 !important; font-weight: bold; }
+    .badge { background: #081721; color: #38bdf8; padding: 2px 6px; border-radius: 4px; font-size: 11px; border: 1px solid #1b425b; }
+    .badge-hl { background: #261c04 !important; color: #fbbf24 !important; border: 1px solid #fbbf24 !important; }
     .prize-card { background: #0a1f2d; border: 1px solid #183e57; border-radius: 6px; padding: 8px; margin-bottom: 6px; }
-    .notice-box { background: #061c24; border: 1px solid #0284c7; padding: 10px; border-radius: 6px; margin: 12px 0 6px; font-size: 13px; line-height: 1.5; }
-    #certificateWrapper { display: none; }
-    #certificateArea { width: 700px; padding: 30px; background: #fff; color: #1e293b; font-family: Arial; box-sizing: border-box; border: 8px double #b45309; }
-    .cert-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-    .cert-table td { padding: 10px; border: 1px solid #cbd5e1; font-size: 14px; }
-    .cert-table td.label { font-weight: bold; background: #f8fafc; width: 35%; }
+    #certWrap { display: none; }
+    #certArea { width: 680px; padding: 25px; background: #fff; color: #1e293b; border: 6px double #b45309; box-sizing: border-box; }
+    .c-tbl { width: 100%; border-collapse: collapse; margin-top: 15px; }
+    .c-tbl td { padding: 8px; border: 1px solid #cbd5e1; font-size: 13px; }
+    .c-tbl td.lbl { font-weight: bold; background: #f8fafc; width: 35%; }
   </style>
 </head>
 <body>
@@ -36,7 +33,7 @@
   <div id="step1" class="box text-center">
     <div id="clock" style="color:#38bdf8; font-weight:bold; font-size:13px">🕒 Time</div>
     <div style="font-size:13px; margin:6px 0; color:#cbd5e1">Helpline: <a href="tel:8709171965" style="color:#fb7185; font-weight:bold; text-decoration:none">8709171965</a></div>
-    <h3 style="margin:10px 0; color:#f8fafc"><span class="live-dot"></span>Live Result Check</h3>
+    <h3 style="margin:10px 0; color:#f8fafc">🔴 Live Result Check</h3>
     <input type="text" id="userInput" placeholder="Ticket Number / Mobile Number">
     <button id="chkBtn" onclick="checkResult()">Check Status</button>
     <div id="msg" style="color:#fb7185; font-size:13px; margin-top:8px; font-weight:bold"></div>
@@ -45,12 +42,12 @@
   <!-- STEP 2 -->
   <div id="step2" class="box text-center" style="display:none; border-top:4px solid #f59e0b">
     <h2 style="color:#fbbf24; margin:5px 0">🎉 Congratulations! 🎉</h2>
-    <div style="background:#091a26; padding:12px; border-radius:8px; border:1px dashed #f59e0b; text-align:left; margin:12px 0">
-      <div class="row"><span>Ticket Number:</span><b id="winTicket" style="color:#38bdf8; font-family:monospace"></b></div>
-      <div class="row"><span>Customer Name:</span><b id="winName" class="val-text"></b></div>
-      <div class="row"><span>Mobile Number:</span><b id="winMobile" class="val-text"></b></div>
+    <div style="background:#091a26; padding:12px; border-radius:8px; text-align:left; margin:10px 0">
+      <div class="row"><span>Ticket:</span><b id="winTicket" style="color:#38bdf8"></b></div>
+      <div class="row"><span>Name:</span><b id="winName" style="color:#38bdf8"></b></div>
+      <div class="row"><span>Mobile:</span><b id="winMobile" style="color:#38bdf8"></b></div>
       <div class="row"><span>Prize Level:</span><b id="winLevel" style="color:#fbbf24"></b></div>
-      <div class="row"><span>Winning Prize:</span><b id="winPrize" style="color:#4ade80; font-size:18px"></b></div>
+      <div class="row"><span>Winning Prize:</span><b id="winPrize" style="color:#4ade80; font-size:17px"></b></div>
     </div>
     <button class="btn-green" onclick="showStep(3)">Withdraw Winning Amount</button>
     <button class="btn-back" onclick="showStep(1)">← Back</button>
@@ -59,11 +56,8 @@
   <!-- STEP 3 -->
   <div id="step3" class="box" style="display:none; border-top:4px solid #22c55e">
     <h3 class="text-center" style="color:#4ade80; margin-top:0">Bank Withdrawal Details</h3>
-    <label style="font-size:12px; color:#94a3b8">Bank Name</label>
     <input type="text" id="bankName" placeholder="Bank Name">
-    <label style="font-size:12px; color:#94a3b8">Account Number</label>
     <input type="text" id="bankAcc" placeholder="Account Number">
-    <label style="font-size:12px; color:#94a3b8">IFSC Code</label>
     <input type="text" id="bankIfsc" placeholder="IFSC Code" style="text-transform:uppercase">
     <button class="btn-green" onclick="submitBank()">Submit Withdrawal Request</button>
     <button class="btn-back" onclick="showStep(2)">← Back</button>
@@ -71,58 +65,54 @@
 
   <!-- STEP 4 -->
   <div id="step4" class="box text-center" style="display:none; border-top:4px solid #f59e0b">
-    <div style="font-size:35px">⏳</div>
-    <h3 style="color:#fbbf24; margin:5px 0">Request Under Review</h3>
-    <div style="background:#091a26; padding:12px; border-radius:8px; border:1px solid #854d0e; text-align:left; margin:12px 0">
-      <div class="row"><span>Ticket Number:</span><b id="revTicket" style="color:#38bdf8; font-family:monospace"></b></div>
-      <div class="row"><span>Holder Name:</span><b id="revName" class="val-text"></b></div>
+    <h3 style="color:#fbbf24; margin:5px 0">⏳ Request Under Review</h3>
+    <div style="background:#091a26; padding:12px; border-radius:8px; text-align:left; margin:10px 0">
+      <div class="row"><span>Ticket:</span><b id="revTicket" style="color:#38bdf8"></b></div>
+      <div class="row"><span>Name:</span><b id="revName" style="color:#38bdf8"></b></div>
       <div class="row"><span>Prize Level:</span><b id="revLevel" style="color:#fbbf24"></b></div>
-      <div class="row"><span>Bank:</span><b id="revBank" class="val-text"></b></div>
-      <div class="row"><span>Account No:</span><b id="revAcc" style="color:#38bdf8; font-family:monospace"></b></div>
-      <div class="row"><span>IFSC:</span><b id="revIfsc" class="val-text"></b></div>
-      <div class="row"><span>Prize Amount:</span><b id="revPrize" style="color:#4ade80"></b></div>
+      <div class="row"><span>Bank:</span><b id="revBank" style="color:#38bdf8"></b></div>
+      <div class="row"><span>Account No:</span><b id="revAcc" style="color:#38bdf8"></b></div>
+      <div class="row"><span>IFSC:</span><b id="revIfsc" style="color:#38bdf8"></b></div>
+      <div class="row"><span>Amount:</span><b id="revPrize" style="color:#4ade80"></b></div>
       <div class="row"><span>Status:</span><b style="color:#fbbf24">Pending Approval</b></div>
     </div>
-    <div class="notice-box">
-      <div style="color:#4ade80; font-weight:bold; margin-bottom:4px">⚡ Amount will be credited into your account within 15 minutes.</div>
+    <div style="background:#061c24; border:1px solid #0284c7; padding:10px; border-radius:6px; font-size:13px; line-height:1.4">
+      <div style="color:#4ade80; font-weight:bold">⚡ Amount will be credited into your account within 15 minutes.</div>
       <div style="color:#38bdf8">✔ Transfer will be Kerala State Government Approved.</div>
     </div>
     <button class="btn-gold" id="dlCertBtn" onclick="downloadCertificate()">📄 Download Winner Certificate (PDF)</button>
     <button class="btn-back" onclick="showStep(1)">← Check Another</button>
   </div>
 
-  <!-- Hidden PDF Certificate -->
-  <div id="certificateWrapper">
-    <div id="certificateArea">
-      <div style="text-align:center; border-bottom:2px solid #b45309; padding-bottom:10px;">
-        <h1 style="margin:0; color:#92400e; font-size:24px;">KERALA STATE LOTTERIES</h1>
-        <p style="margin:5px 0; color:#475569; font-size:13px; font-weight:bold;">GOVERNMENT OF KERALA • OFFICIAL PRIZE CLAIM CERTIFICATE</p>
+  <!-- PDF Layout -->
+  <div id="certWrap">
+    <div id="certArea">
+      <div style="text-align:center; border-bottom:2px solid #b45309; padding-bottom:8px">
+        <h2 style="margin:0; color:#92400e">KERALA STATE LOTTERIES</h2>
+        <p style="margin:3px 0; color:#475569; font-size:12px; font-weight:bold">GOVERNMENT OF KERALA • OFFICIAL PRIZE CLAIM</p>
       </div>
-      <div style="text-align:center; margin:15px 0;">
-        <h2 style="color:#1e3a8a; margin:0; font-size:18px;">WINNER VERIFICATION CERTIFICATE</h2>
-      </div>
-      <table class="cert-table">
-        <tr><td class="label">Date:</td><td id="pdfDate"></td></tr>
-        <tr><td class="label">Beneficiary Name:</td><td id="pdfName" style="font-weight:bold;"></td></tr>
-        <tr><td class="label">Ticket Number:</td><td id="pdfTicket" style="font-weight:bold; color:#0369a1; font-family:monospace;"></td></tr>
-        <tr><td class="label">Prize Level:</td><td id="pdfLevel" style="font-weight:bold; color:#b45309;"></td></tr>
-        <tr><td class="label">Winning Amount:</td><td id="pdfPrize" style="font-weight:bold; color:#15803d; font-size:16px;"></td></tr>
-        <tr><td class="label">Bank Name:</td><td id="pdfBank"></td></tr>
-        <tr><td class="label">Account Number:</td><td id="pdfAcc" style="font-family:monospace;"></td></tr>
-        <tr><td class="label">IFSC Code:</td><td id="pdfIfsc" style="font-family:monospace;"></td></tr>
-        <tr><td class="label">Approval Status:</td><td style="color:#d97706; font-weight:bold;">Verified & Approved</td></tr>
+      <h3 style="text-align:center; color:#1e3a8a; margin:12px 0 6px">WINNER VERIFICATION CERTIFICATE</h3>
+      <table class="c-tbl">
+        <tr><td class="lbl">Date:</td><td id="pdfDate"></td></tr>
+        <tr><td class="lbl">Winner Name:</td><td id="pdfName" style="font-weight:bold"></td></tr>
+        <tr><td class="lbl">Ticket Number:</td><td id="pdfTicket" style="font-weight:bold; color:#0369a1"></td></tr>
+        <tr><td class="lbl">Prize Level:</td><td id="pdfLevel" style="font-weight:bold; color:#b45309"></td></tr>
+        <tr><td class="lbl">Amount:</td><td id="pdfPrize" style="font-weight:bold; color:#15803d"></td></tr>
+        <tr><td class="lbl">Bank Name:</td><td id="pdfBank"></td></tr>
+        <tr><td class="lbl">Account Number:</td><td id="pdfAcc"></td></tr>
+        <tr><td class="lbl">IFSC Code:</td><td id="pdfIfsc"></td></tr>
+        <tr><td class="lbl">Status:</td><td style="color:#d97706; font-weight:bold">Verified & Approved</td></tr>
       </table>
-      <div style="display:flex; justify-content:space-between; margin-top:30px;">
-        <div style="border:2px dashed #16a34a; color:#16a34a; padding:6px 12px; font-weight:bold; font-size:12px;">✔ GOVT APPROVED SYSTEM</div>
-        <div style="text-align:right;">
-          <div style="border-bottom:1px solid #000; width:140px; margin-bottom:4px;"></div>
-          <div style="font-size:11px; font-weight:bold;">Director / Signatory</div>
+      <div style="display:flex; justify-content:space-between; margin-top:25px">
+        <div style="border:2px dashed #16a34a; color:#16a34a; padding:5px 10px; font-weight:bold; font-size:11px">✔ GOVT APPROVED</div>
+        <div style="text-align:right">
+          <div style="border-bottom:1px solid #000; width:120px; margin-bottom:3px"></div>
+          <div style="font-size:11px; font-weight:bold">Director / Signatory</div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Winners Box -->
   <div class="box" style="border-top:4px solid #0284c7">
     <h4 class="text-center" style="color:#f43f5e; margin:0 0 10px">🏆 Today's Lucky Winners 🏆</h4>
     <div id="winnersList"></div>
@@ -130,189 +120,89 @@
 
   <script>
     var API_URL = "https://sheetdb.io/api/v1/u2lswkzde626d";
-
-    setInterval(function() {
-      var clockEl = document.getElementById('clock');
-      if (clockEl) clockEl.textContent = '🕒 ' + new Date().toLocaleString('en-IN');
-    }, 1000);
+    setInterval(function(){ var el=document.getElementById('clock'); if(el) el.textContent='🕒 '+new Date().toLocaleString('en-IN'); }, 1000);
 
     var prizeTable = {
-      1: { name: "1st Prize", amount: "₹25 Crore", count: 1 },
-      2: { name: "2nd Prize", amount: "₹10 Crore", count: 1 },
-      3: { name: "3rd Prize", amount: "₹75 Lakh", count: 1 },
-      4: { name: "4th Prize", amount: "₹25 Lakh", count: 12 },
-      5: { name: "5th Prize", amount: "₹12 Lakh", count: 16 },
-      6: { name: "6th Prize", amount: "₹1 Lakh", count: 36 },
-      7: { name: "7th Prize", amount: "₹75,000", count: 99 },
-      8: { name: "8th Prize", amount: "₹25,000", count: 120 },
-      9: { name: "9th Prize", amount: "₹10,000", count: 179 },
-      10: { name: "10th Prize", amount: "₹2,500", count: 200 }
+      1: { name: "1st Prize", amount: "₹25 Crore", count: 1 }, 2: { name: "2nd Prize", amount: "₹10 Crore", count: 1 },
+      3: { name: "3rd Prize", amount: "₹75 Lakh", count: 1 },  4: { name: "4th Prize", amount: "₹25 Lakh", count: 12 },
+      5: { name: "5th Prize", amount: "₹12 Lakh", count: 16 }, 6: { name: "6th Prize", amount: "₹1 Lakh", count: 36 },
+      7: { name: "7th Prize", amount: "₹75,000", count: 99 },  8: { name: "8th Prize", amount: "₹25,000", count: 120 },
+      9: { name: "9th Prize", amount: "₹10,000", count: 179 }, 10: { name: "10th Prize", amount: "₹2,500", count: 200 }
     };
 
-    function showStep(num) {
-      for (var i = 1; i <= 4; i++) {
-        var el = document.getElementById('step' + i);
-        if (el) el.style.display = (i === num) ? 'block' : 'none';
-      }
-    }
+    function showStep(n){ for(var i=1;i<=4;i++){ var el=document.getElementById('step'+i); if(el) el.style.display=(i===n)?'block':'none'; } }
 
-    function renderWinners(matchedTicket, matchedRank) {
-      var html = "";
-      for (var rank = 1; rank <= 10; rank++) {
-        var item = prizeTable[rank];
-        var badges = "";
-        var isMatch = (rank === matchedRank);
-        for (var i = 0; i < item.count; i++) {
-          if (isMatch && i === 0 && matchedTicket) {
-            badges += '<span class="badge badge-highlight">' + matchedTicket + ' ⭐</span>';
-          } else {
-            badges += '<span class="badge">' + Math.floor(100000 + Math.random() * 900000) + '</span>';
-          }
+    function renderWinners(ticket, rank) {
+      var h = "";
+      for (var r = 1; r <= 10; r++) {
+        var p = prizeTable[r], b = "";
+        for (var i = 0; i < p.count; i++) {
+          if (r === rank && i === 0 && ticket) b += '<span class="badge badge-hl">' + ticket + ' ⭐</span>';
+          else b += '<span class="badge">' + Math.floor(100000 + Math.random() * 900000) + '</span>';
         }
-        html += '<div class="prize-card"><div style="font-size:12px; font-weight:bold; color:#f59e0b; margin-bottom:4px;">' + item.name + ': ' + item.amount + '</div><div class="badges">' + badges + '</div></div>';
+        h += '<div class="prize-card"><div style="font-size:12px;font-weight:bold;color:#f59e0b">' + p.name + ': ' + p.amount + '</div><div class="badges">' + b + '</div></div>';
       }
-      var list = document.getElementById('winnersList');
-      if (list) list.innerHTML = html;
+      var wl = document.getElementById('winnersList'); if (wl) wl.innerHTML = h;
     }
     renderWinners(null, null);
 
     async function checkResult() {
-      var input = document.getElementById('userInput').value.trim();
-      var msg = document.getElementById('msg');
-      var btn = document.getElementById('chkBtn');
-      msg.innerText = "";if (!input) {
-        msg.innerText = "Please enter ticket or mobile number";
-        return;
-      }
-      btn.disabled = true;
-      msg.style.color = "#38bdf8";
-      msg.innerText = "Checking results, please wait...";
+      var inp = document.getElementById('userInput').value.trim();
+      var msg = document.getElementById('msg'), btn = document.getElementById('chkBtn');
+      msg.innerText = "";
+      if (!inp) { msg.innerText = "Please enter ticket or mobile number"; return; }
+
+      btn.disabled = true; msg.style.color = "#38bdf8"; msg.innerText = "Checking results, please wait...";
 
       try {
         var res = await fetch(API_URL);
         var data = await res.json();
-        var matched = null;
-        if (Array.isArray(data)) {
-          matched = data.find(function(item) {
-            return (item.ticket && item.ticket.trim().toLowerCase() === input.toLowerCase()) ||
-                   (item.mobile && item.mobile.trim() === input);
-          });
-        }
-        if (!matched) {
-          msg.style.color = "#fb7185";
-          msg.innerText = "No Record Found! Please verify your ticket/mobile number.";
-          btn.disabled = false;
-          return;
-        }
+        var match = Array.isArray(data) ? data.find(function(d){
+          return (d.ticket && d.ticket.trim().toLowerCase() === inp.toLowerCase()) || (d.mobile && d.mobile.trim() === inp);
+        }) : null;
 
-        var rawLevel = matched.prize || "1st Prize";
-        var match = String(rawLevel).match(/\d+/);
-        var rank = match ? parseInt(match[0], 10) : 1;
+        if (!match) { msg.style.color = "#fb7185"; msg.innerText = "No Record Found!"; btn.disabled = false; return; }
+
+        var rawL = match.prize || "1st Prize";
+        var rMatch = String(rawL).match(/\d+/);
+        var rank = rMatch ? parseInt(rMatch[0], 10) : 1;
         if (!prizeTable[rank]) rank = 1;
 
-        var finalLevel = rawLevel;
-        var finalAmount = matched.amount || prizeTable[rank].amount;
-        var finalTicket = matched.ticket || input;
-        var finalName = matched.name || "Customer";
-        var finalMobile = matched.mobile || input;
+        var lvl = rawL, amt = match.amount || prizeTable[rank].amount;
+        var tkt = match.ticket || inp, name = match.name || "Customer", mob = match.mobile || inp;
 
-        document.getElementById('winTicket').innerText = finalTicket;
-        document.getElementById('winName').innerText = finalName;
-        document.getElementById('winMobile').innerText = finalMobile;
-        document.getElementById('winLevel').innerText = finalLevel;
-        document.getElementById('winPrize').innerText = finalAmount;
+        document.getElementById('winTicket').innerText = tkt;
+        document.getElementById('winName').innerText = name;
+        document.getElementById('winMobile').innerText = mob;
+        document.getElementById('winLevel').innerText = lvl;
+        document.getElementById('winPrize').innerText = amt;
 
-        document.getElementById('revTicket').innerText = finalTicket;
-        document.getElementById('revName').innerText = finalName;
-        document.getElementById('revLevel').innerText = finalLevel;
+        document.getElementById('revTicket').innerText = tkt;
+        document.getElementById('revName').innerText = name;
+        document.getElementById('revLevel').innerText = lvl;
+        document.getElementById('revPrize').innerText = amt;
 
-      if (!input) {
-        msg.innerText = "Please enter ticket or mobile number";
-        return;
-      }
-
-      btn.disabled = true;
-      msg.style.color = "#38bdf8";
-      msg.innerText = "Checking results, please wait...";
-
-      try {
-        var res = await fetch(API_URL);
-        var data = await res.json();
-        var matched = null;
-
-        if (Array.isArray(data)) {
-          matched = data.find(function(item) {
-            return (item.ticket && item.ticket.trim().toLowerCase() === input.toLowerCase()) ||
-                   (item.mobile && item.mobile.trim() === input);
-          });
-        }
-
-        if (!matched) {
-          msg.style.color = "#fb7185";
-          msg.innerText = "No Record Found! Please verify your ticket/mobile number.";
-          btn.disabled = false;
-          return;
-        }
-
-        var rawLevel = matched.prize || "1st Prize";
-        var match = String(rawLevel).match(/\d+/);
-        var rank = match ? parseInt(match[0], 10) : 1;
-        if (!prizeTable[rank]) rank = 1;
-
-        var finalLevel = rawLevel;
-        var finalAmount = matched.amount || prizeTable[rank].amount;
-        var finalTicket = matched.ticket || input;
-        var finalName = matched.name || "Customer";
-        var finalMobile = matched.mobile || input;
-
-        document.getElementById('winTicket').innerText = finalTicket;
-        document.getElementById('winName').innerText = finalName;
-        document.getElementById('winMobile').innerText = finalMobile;
-        document.getElementById('winLevel').innerText = finalLevel;
-        document.getElementById('winPrize').innerText = finalAmount;
-
-        document.getElementById('revTicket').innerText = finalTicket;
-        document.getElementById('revName').innerText = finalName;
-        document.getElementById('revLevel').innerText = finalLevel;
-        document.getElementById('revPrize').innerText = finalAmount;
-
-        renderWinners(finalTicket, rank);
-
-        if (typeof confetti === 'function') {
-          confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 } });
-        }
-
+        renderWinners(tkt, rank);
+        if (typeof confetti === 'function') confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 } });
         showStep(2);
-      } catch (err) {
-        msg.style.color = "#fb7185";
-        msg.innerText = "Server Error: Unable to fetch live result. Try again!";
-      } finally {
-        btn.disabled = false;
-      }
+      } catch (e) {
+        msg.style.color = "#fb7185"; msg.innerText = "Network Error! Please try again.";
+      } finally { btn.disabled = false; }
     }
 
     function submitBank() {
-      var bank = document.getElementById('bankName').value.trim();
-      var acc = document.getElementById('bankAcc').value.trim();
-      var ifsc = document.getElementById('bankIfsc').value.trim();
-
-      if (!bank || !acc || !ifsc) {
-        alert("Please fill all bank details");
-        return;
-      }
-
-      document.getElementById('revBank').innerText = bank;
-      document.getElementById('revAcc').innerText = acc;
-      document.getElementById('revIfsc').innerText = ifsc;
-
+      var b = document.getElementById('bankName').value.trim();
+      var a = document.getElementById('bankAcc').value.trim();
+      var f = document.getElementById('bankIfsc').value.trim();
+      if (!b || !a || !f) { alert("Please fill all bank details"); return; }
+      document.getElementById('revBank').innerText = b;
+      document.getElementById('revAcc').innerText = a;
+      document.getElementById('revIfsc').innerText = f;
       showStep(4);
     }
 
     function downloadCertificate() {
-      var btn = document.getElementById('dlCertBtn');
-      btn.innerText = "Generating PDF...";
-      btn.disabled = true;
-
+      var btn = document.getElementById('dlCertBtn'); btn.innerText = "Generating PDF..."; btn.disabled = true;
       document.getElementById('pdfDate').innerText = new Date().toLocaleDateString('en-IN');
       document.getElementById('pdfName').innerText = document.getElementById('revName').innerText;
       document.getElementById('pdfTicket').innerText = document.getElementById('revTicket').innerText;
@@ -322,27 +212,20 @@
       document.getElementById('pdfAcc').innerText = document.getElementById('revAcc').innerText;
       document.getElementById('pdfIfsc').innerText = document.getElementById('revIfsc').innerText;
 
-      var element = document.getElementById('certificateArea');
-      var wrapper = document.getElementById('certificateWrapper');
-      wrapper.style.display = 'block';
+      var area = document.getElementById('certArea'), wrap = document.getElementById('certWrap');
+      wrap.style.display = 'block';
 
-      var opt = {
+      html2pdf().set({
         margin: 10,
         filename: 'Winner_Certificate_' + document.getElementById('revTicket').innerText + '.pdf',
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 2 },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-      };
-
-      html2pdf().set(opt).from(element).save().then(function() {
-        wrapper.style.display = 'none';
-        btn.innerText = "📄 Download Winner Certificate (PDF)";
-        btn.disabled = false;
-      }).catch(function() {
-        wrapper.style.display = 'none';
-        btn.innerText = "📄 Download Winner Certificate (PDF)";
-        btn.disabled = false;
-        alert("Certificate generate nahi ho saka, kripya dobara koshish karein.");
+      }).from(area).save().then(function(){
+        wrap.style.display = 'none'; btn.innerText = "📄 Download Winner Certificate (PDF)"; btn.disabled = false;
+      }).catch(function(){
+        wrap.style.display = 'none'; btn.innerText = "📄 Download Winner Certificate (PDF)"; btn.disabled = false;
+        alert("PDF download nahi ho saka, dobara koshish karein.");
       });
     }
   </script>
