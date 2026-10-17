@@ -6,76 +6,80 @@
   <title>Customer Status Verification</title>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
-    body { font-family: sans-serif; background: linear-gradient(135deg, #091921, #13334c, #1a506b); min-height: 100vh; margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center; color: #333; }
-    .box { background: #fff; padding: 20px; border-radius: 12px; width: 100%; max-width: 420px; box-sizing: border-box; margin-bottom: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
+    body { font-family: sans-serif; background: linear-gradient(135deg, #091921, #13334c, #1a506b); min-height: 100vh; margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center; color: #e2e8f0; }
+    .box { background: #0f2838; padding: 20px; border-radius: 12px; width: 100%; max-width: 420px; box-sizing: border-box; margin-bottom: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.5); border: 1px solid #1e4a66; }
     .text-center { text-align: center; }
     .live-dot { width: 10px; height: 10px; background: #ff1744; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px #ff1744; margin-right: 5px; }
-    input { width: 100%; padding: 11px; margin: 8px 0 14px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; outline: none; }
-    button { width: 100%; padding: 12px; background: #1a73e8; color: #fff; border: none; border-radius: 6px; font-weight: bold; font-size: 15px; cursor: pointer; }
-    .btn-green { background: #16a34a; margin-top: 10px; }
-    .btn-back { background: transparent; color: #555; border: 1px solid #ccc; margin-top: 8px; }
-    .row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; font-size: 14px; }
+    input { width: 100%; padding: 11px; margin: 8px 0 14px; box-sizing: border-box; background: #091a26; border: 1px solid #295d80; border-radius: 6px; font-size: 14px; color: #38bdf8; outline: none; }
+    input:focus { border-color: #38bdf8; }
+    button { width: 100%; padding: 12px; background: linear-gradient(135deg, #0284c7, #0369a1); color: #fff; border: none; border-radius: 6px; font-weight: bold; font-size: 15px; cursor: pointer; }
+    .btn-green { background: linear-gradient(135deg, #16a34a, #15803d); margin-top: 10px; }
+    .btn-back { background: transparent; color: #94a3b8; border: 1px solid #295d80; margin-top: 8px; }
+    .row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #1a3c52; font-size: 14px; }
+    .row span { color: #94a3b8; }
+    .val-text { color: #38bdf8; font-weight: bold; }
     .badges { display: flex; flex-wrap: wrap; gap: 4px; max-height: 80px; overflow-y: auto; }
-    .badge { background: #f1f5f9; padding: 2px 5px; border-radius: 4px; font-size: 11px; font-family: monospace; border: 1px solid #e2e8f0; }
+    .badge { background: #081721; color: #38bdf8; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-family: monospace; border: 1px solid #1b425b; }
+    .prize-card { background: #0a1f2d; border: 1px solid #183e57; border-radius: 6px; padding: 8px; margin-bottom: 6px; }
   </style>
 </head>
 <body>
 
   <!-- STEP 1: Search -->
   <div id="step1" class="box text-center">
-    <div id="clock" style="color: #1a73e8; font-weight: bold; font-size: 13px;">🕒 Time</div>
-    <div style="font-size: 13px; margin: 6px 0;">Helpline: <a href="tel:8709171965" style="color: #e11d48; font-weight: bold; text-decoration: none;">8709171965</a></div>
-    <h3 style="margin: 10px 0;"><span class="live-dot"></span>Live Result Check</h3>
+    <div id="clock" style="color: #38bdf8; font-weight: bold; font-size: 13px;">🕒 Time</div>
+    <div style="font-size: 13px; margin: 6px 0; color: #cbd5e1;">Helpline: <a href="tel:8709171965" style="color: #fb7185; font-weight: bold; text-decoration: none;">8709171965</a></div>
+    <h3 style="margin: 10px 0; color: #f8fafc;"><span class="live-dot"></span>Live Result Check</h3>
     <input type="text" id="userInput" placeholder="Ticket Number / Mobile Number">
     <button onclick="checkResult()">Check Status</button>
-    <div id="msg" style="color: #e11d48; font-size: 13px; margin-top: 8px; font-weight: bold;"></div>
+    <div id="msg" style="color: #fb7185; font-size: 13px; margin-top: 8px; font-weight: bold;"></div>
   </div>
 
   <!-- STEP 2: Celebration -->
   <div id="step2" class="box text-center" style="display: none; border-top: 4px solid #f59e0b;">
-    <h2 style="color: #b45309; margin: 5px 0;">🎉 Congratulations! 🎉</h2>
-    <div style="text-align: left; margin: 12px 0;">
-      <div class="row"><span>Ticket Number:</span><b id="winTicket" style="color: #1a73e8; font-family: monospace;"></b></div>
-      <div class="row"><span>Customer Name:</span><b id="winName"></b></div>
-      <div class="row"><span>Mobile Number:</span><b id="winMobile"></b></div>
-      <div class="row"><span>Winning Prize:</span><b id="winPrize" style="color: #16a34a; font-size: 18px;"></b></div>
+    <h2 style="color: #fbbf24; margin: 5px 0;">🎉 Congratulations! 🎉</h2>
+    <div style="background: #091a26; padding: 12px; border-radius: 8px; border: 1px dashed #f59e0b; text-align: left; margin: 12px 0;">
+      <div class="row"><span>Ticket Number:</span><b id="winTicket" style="color: #38bdf8; font-family: monospace;"></b></div>
+      <div class="row"><span>Customer Name:</span><b id="winName" class="val-text"></b></div>
+      <div class="row"><span>Mobile Number:</span><b id="winMobile" class="val-text"></b></div>
+      <div class="row"><span>Winning Prize:</span><b id="winPrize" style="color: #4ade80; font-size: 18px;"></b></div>
     </div>
     <button class="btn-green" onclick="showStep(3)">Withdraw Winning Amount</button>
     <button class="btn-back" onclick="showStep(1)">← Back</button>
   </div>
 
   <!-- STEP 3: Form -->
-  <div id="step3" class="box" style="display: none; border-top: 4px solid #16a34a;">
-    <h3 class="text-center" style="color: #16a34a; margin-top: 0;">Bank Withdrawal Details</h3>
-    <label style="font-size: 12px; font-weight: bold;">Bank Name</label>
+  <div id="step3" class="box" style="display: none; border-top: 4px solid #22c55e;">
+    <h3 class="text-center" style="color: #4ade80; margin-top: 0;">Bank Withdrawal Details</h3>
+    <label style="font-size: 12px; font-weight: bold; color: #94a3b8;">Bank Name</label>
     <input type="text" id="bankName" placeholder="Bank Name">
-    <label style="font-size: 12px; font-weight: bold;">Account Number</label>
+    <label style="font-size: 12px; font-weight: bold; color: #94a3b8;">Account Number</label>
     <input type="text" id="bankAcc" placeholder="Account Number">
-    <label style="font-size: 12px; font-weight: bold;">IFSC Code</label>
+    <label style="font-size: 12px; font-weight: bold; color: #94a3b8;">IFSC Code</label>
     <input type="text" id="bankIfsc" placeholder="IFSC Code" style="text-transform: uppercase;">
     <button class="btn-green" onclick="submitBank()">Submit Withdrawal Request</button>
     <button class="btn-back" onclick="showStep(2)">← Back</button>
   </div>
 
   <!-- STEP 4: Under Review -->
-  <div id="step4" class="box text-center" style="display: none; border-top: 4px solid #d97706;">
+  <div id="step4" class="box text-center" style="display: none; border-top: 4px solid #f59e0b;">
     <div style="font-size: 35px;">⏳</div>
-    <h3 style="color: #b45309; margin: 5px 0;">Request Under Review</h3>
-    <div style="text-align: left; margin: 12px 0;">
-      <div class="row"><span>Ticket Number:</span><b id="revTicket" style="color: #1a73e8; font-family: monospace;"></b></div>
-      <div class="row"><span>Holder Name:</span><b id="revName"></b></div>
-      <div class="row"><span>Bank:</span><b id="revBank"></b></div>
-      <div class="row"><span>Account No:</span><b id="revAcc" style="letter-spacing: 1px;"></b></div>
-      <div class="row"><span>IFSC:</span><b id="revIfsc"></b></div>
-      <div class="row"><span>Prize Amount:</span><b id="revPrize" style="color: #16a34a;"></b></div>
-      <div class="row"><span>Status:</span><b style="color: #d97706;">Pending Approval</b></div>
+    <h3 style="color: #fbbf24; margin: 5px 0;">Request Under Review</h3>
+    <div style="background: #091a26; padding: 12px; border-radius: 8px; border: 1px solid #854d0e; text-align: left; margin: 12px 0;">
+      <div class="row"><span>Ticket Number:</span><b id="revTicket" style="color: #38bdf8; font-family: monospace;"></b></div>
+      <div class="row"><span>Holder Name:</span><b id="revName" class="val-text"></b></div>
+      <div class="row"><span>Bank:</span><b id="revBank" class="val-text"></b></div>
+      <div class="row"><span>Account No:</span><b id="revAcc" style="letter-spacing: 1px; color: #38bdf8;"></b></div>
+      <div class="row"><span>IFSC:</span><b id="revIfsc" class="val-text"></b></div>
+      <div class="row"><span>Prize Amount:</span><b id="revPrize" style="color: #4ade80;"></b></div>
+      <div class="row"><span>Status:</span><b style="color: #fbbf24;">Pending Approval</b></div>
     </div>
     <button class="btn-back" onclick="showStep(1)">← Check Another</button>
   </div>
 
   <!-- 1st to 10th Winners -->
-  <div class="box" style="border-top: 4px solid #3b82f6;">
-    <h4 class="text-center" style="color: #dc2626; margin: 0 0 10px;">🏆 Today's Lucky Winners 🏆</h4>
+  <div class="box" style="border-top: 4px solid #0284c7;">
+    <h4 class="text-center" style="color: #f43f5e; margin: 0 0 10px;">🏆 Today's Lucky Winners 🏆</h4>
     <div id="winnersList"></div>
   </div>
 
@@ -91,7 +95,7 @@
     fullPrizes.forEach(p => {
       let b = "";
       for (let i = 0; i < p[1]; i++) b += `<span class="badge">KL ${Math.floor(100000 + Math.random() * 900000)}</span>`;
-      winHtml += `<div style="margin-bottom: 6px;"><div class="row"><b>${p[0]}</b><span>(${p[1]})</span></div><div class="badges">${b}</div></div>`;
+      winHtml += `<div class="prize-card"><div class="row" style="border-bottom:none; padding: 2px 0;"><b style="color:#38bdf8;">${p[0]}</b><span style="color:#94a3b8;">(${p[1]})</span></div><div class="badges">${b}</div></div>`;
     });
     document.getElementById("winnersList").innerHTML = winHtml;
 
