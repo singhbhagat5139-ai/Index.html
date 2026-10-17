@@ -26,20 +26,8 @@
     .prize-card { background: #0a1f2d; border: 1px solid #183e57; border-radius: 6px; padding: 8px; margin-bottom: 6px; }
     .notice-box { background: #061c24; border: 1px solid #0284c7; padding: 10px; border-radius: 6px; margin: 12px 0 6px; font-size: 13px; line-height: 1.5; }
 
-    /* Hidden Certificate Design for PDF */
-    #certificateWrapper {
-      display: none;
-    }
-    #certificateArea {
-      width: 700px;
-      padding: 30px;
-      background: #ffffff;
-      color: #1e293b;
-      font-family: Arial, sans-serif;
-      box-sizing: border-box;
-      border: 8px double #b45309;
-      position: relative;
-    }
+    #certificateWrapper { display: none; }
+    #certificateArea { width: 700px; padding: 30px; background: #ffffff; color: #1e293b; font-family: Arial, sans-serif; box-sizing: border-box; border: 8px double #b45309; position: relative; }
     .cert-header { text-align: center; border-bottom: 2px solid #b45309; padding-bottom: 15px; margin-bottom: 20px; }
     .cert-header h1 { margin: 0; color: #92400e; font-size: 26px; text-transform: uppercase; letter-spacing: 1px; }
     .cert-header p { margin: 5px 0 0; color: #475569; font-size: 13px; font-weight: bold; }
@@ -111,13 +99,12 @@
       <div style="color:#38bdf8">✔ Transfer will be Kerala State Government Approved.</div>
     </div>
 
-    <!-- Certificate Download Button -->
+    <!-- Certificate Button -->
     <button class="btn-gold" id="dlCertBtn" onclick="downloadCertificate()">📄 Download Winner Certificate (PDF)</button>
-    
     <button class="btn-back" onclick="showStep(1)">← Check Another</button>
   </div>
 
-  <!-- Hidden Printable Certificate Template -->
+  <!-- Hidden PDF Certificate -->
   <div id="certificateWrapper">
     <div id="certificateArea">
       <div class="cert-header">
@@ -129,42 +116,15 @@
         <p style="font-size: 13px; color: #475569; margin: 5px 0;">This document certifies that the winning ticket and bank information have been submitted and verified.</p>
       </div>
       <table class="cert-table">
-        <tr>
-          <td class="label">Date of Claim:</td>
-          <td id="pdfDate"></td>
-        </tr>
-        <tr>
-          <td class="label">Beneficiary Name:</td>
-          <td id="pdfName" style="font-weight:bold;"></td>
-        </tr>
-        <tr>
-          <td class="label">Lottery Ticket Number:</td>
-          <td id="pdfTicket" style="font-family:monospace; font-weight:bold; color:#0369a1;"></td>
-        </tr>
-        <tr>
-          <td class="label">Prize Level:</td>
-          <td id="pdfLevel" style="font-weight:bold; color:#b45309;"></td>
-        </tr>
-        <tr>
-          <td class="label">Winning Amount:</td>
-          <td id="pdfPrize" style="font-weight:bold; color:#15803d; font-size:16px;"></td>
-        </tr>
-        <tr>
-          <td class="label">Credited Bank Name:</td>
-          <td id="pdfBank"></td>
-        </tr>
-        <tr>
-          <td class="label">Account Number:</td>
-          <td id="pdfAcc" style="font-family:monospace;"></td>
-        </tr>
-        <tr>
-          <td class="label">IFSC Code:</td>
-          <td id="pdfIfsc" style="font-family:monospace;"></td>
-        </tr>
-        <tr>
-          <td class="label">Approval Status:</td>
-          <td style="color:#d97706; font-weight:bold;">Verified & Clearance in Process</td>
-        </tr>
+        <tr><td class="label">Date of Claim:</td><td id="pdfDate"></td></tr>
+        <tr><td class="label">Beneficiary Name:</td><td id="pdfName" style="font-weight:bold;"></td></tr>
+        <tr><td class="label">Lottery Ticket Number:</td><td id="pdfTicket" style="font-family:monospace; font-weight:bold; color:#0369a1;"></td></tr>
+        <tr><td class="label">Prize Level:</td><td id="pdfLevel" style="font-weight:bold; color:#b45309;"></td></tr>
+        <tr><td class="label">Winning Amount:</td><td id="pdfPrize" style="font-weight:bold; color:#15803d; font-size:16px;"></td></tr>
+        <tr><td class="label">Credited Bank Name:</td><td id="pdfBank"></td></tr>
+        <tr><td class="label">Account Number:</td><td id="pdfAcc" style="font-family:monospace;"></td></tr>
+        <tr><td class="label">IFSC Code:</td><td id="pdfIfsc" style="font-family:monospace;"></td></tr>
+        <tr><td class="label">Approval Status:</td><td style="color:#d97706; font-weight:bold;">Verified & Clearance in Process</td></tr>
       </table>
       <div class="cert-footer">
         <div>
@@ -287,14 +247,12 @@
         let finalName = matched.name || "Customer";
         let finalMobile = matched.mobile || input;
 
-        // Step 2 update
         document.getElementById('winTicket').innerText = finalTicket;
         document.getElementById('winName').innerText = finalName;
         document.getElementById('winMobile').innerText = finalMobile;
         document.getElementById('winLevel').innerText = finalLevel;
         document.getElementById('winPrize').innerText = finalAmount;
 
-        // Step 4 update
         document.getElementById('revTicket').innerText = finalTicket;
         document.getElementById('revName').innerText = finalName;
         document.getElementById('revLevel').innerText = finalLevel;
@@ -332,13 +290,11 @@
       showStep(4);
     }
 
-    // PDF Certificate Generation Function
     function downloadCertificate() {
       const btn = document.getElementById('dlCertBtn');
       btn.innerText = "Generating PDF...";
       btn.disabled = true;
 
-      // Fill Certificate Template with dynamic values
       document.getElementById('pdfDate').innerText = new Date().toLocaleDateString('en-IN', {
         day: '2-digit', month: 'short', year: 'numeric'
       });
