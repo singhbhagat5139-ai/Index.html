@@ -133,9 +133,7 @@
 
     setInterval(function() {
       var clockEl = document.getElementById('clock');
-      if (clockEl) {
-        clockEl.textContent = '🕒 ' + new Date().toLocaleString('en-IN');
-      }
+      if (clockEl) clockEl.textContent = '🕒 ' + new Date().toLocaleString('en-IN');
     }, 1000);
 
     var prizeTable = {
@@ -168,8 +166,7 @@
           if (isMatch && i === 0 && matchedTicket) {
             badges += '<span class="badge badge-highlight">' + matchedTicket + ' ⭐</span>';
           } else {
-            var rnd = Math.floor(100000 + Math.random() * 900000);
-            badges += '<span class="badge">' + rnd + '</span>';
+            badges += '<span class="badge">' + Math.floor(100000 + Math.random() * 900000) + '</span>';
           }
         }
         html += '<div class="prize-card"><div style="font-size:12px; font-weight:bold; color:#f59e0b; margin-bottom:4px;">' + item.name + ': ' + item.amount + '</div><div class="badges">' + badges + '</div></div>';
@@ -177,7 +174,6 @@
       var list = document.getElementById('winnersList');
       if (list) list.innerHTML = html;
     }
-
     renderWinners(null, null);
 
     async function checkResult() {
