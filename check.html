@@ -1,688 +1,226 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Customer Status Verification & Withdrawal</title>
-  <!-- Confetti Celebration Library -->
+  <title>Customer Status Verification</title>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: Arial, sans-serif;
       background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      min-height: 100vh;
+      margin: 0;
+      padding: 15px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-height: 100vh;
-      margin: 0;
-      padding: 20px;
-      box-sizing: border-box;
     }
-    .portal-container, .winners-container {
+    .box {
       background: #ffffff;
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+      padding: 20px;
+      border-radius: 10px;
       width: 100%;
-      max-width: 450px;
-      margin-bottom: 20px;
+      max-width: 420px;
       box-sizing: border-box;
-    }
-    .header-box {
-      text-align: center;
       margin-bottom: 15px;
-      border-bottom: 2px solid #eef2f5;
-      padding-bottom: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
-    .live-clock {
-      font-size: 14px;
-      font-weight: 600;
-      color: #1a73e8;
-      margin-bottom: 6px;
-    }
-    .helpline {
-      font-size: 14px;
-      color: #333333;
-      font-weight: bold;
-    }
-    .helpline a {
-      color: #d93025;
-      text-decoration: none;
-    }
-    .title-wrapper {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      margin: 15px 0;
-    }
-    h2 {
-      text-align: center;
-      color: #333333;
-      font-size: 19px;
-      margin: 0;
-    }
-    /* Blinking Live Indicator */
-    .red-live-dot {
-      width: 12px;
-      height: 12px;
-      background-color: #ff1744;
+    .text-center { text-align: center; }
+    .live-dot {
+      width: 10px;
+      height: 10px;
+      background: #ff1744;
       border-radius: 50%;
       display: inline-block;
-      animation: pulse-red 1.2s infinite ease-in-out;
+      box-shadow: 0 0 8px #ff1744;
     }
-    @keyframes pulse-red {
-      0% {
-        transform: scale(0.9);
-        box-shadow: 0 0 0 0 rgba(255, 23, 68, 0.7);
-      }
-      70% {
-        transform: scale(1.1);
-        box-shadow: 0 0 0 8px rgba(255, 23, 68, 0);
-      }
-      100% {
-        transform: scale(0.9);
-        box-shadow: 0 0 0 0 rgba(255, 23, 68, 0);
-      }
-    }
-    .form-group {
-      margin-bottom: 14px;
-      text-align: left;
-    }
-    label {
-      display: block;
-      margin-bottom: 6px;
-      color: #444444;
-      font-size: 13px;
-      font-weight: 600;
-    }
-    input[type="text"] {
+    input {
       width: 100%;
-      padding: 11px;
+      padding: 10px;
+      margin: 8px 0 15px;
       box-sizing: border-box;
-      border: 1px solid #cccccc;
-      border-radius: 6px;
-      font-size: 14px;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-    input[type="text"]:focus {
-      border-color: #1a73e8;
+      border: 1px solid #ccc;
+      border-radius: 5px;
     }
     button {
       width: 100%;
-      padding: 12px;
-      background-color: #1a73e8;
+      padding: 11px;
+      background: #1a73e8;
+      color: #fff;
       border: none;
-      color: white;
-      font-size: 15px;
+      border-radius: 5px;
       font-weight: bold;
-      border-radius: 6px;
       cursor: pointer;
-      transition: background 0.2s;
     }
-    button:hover {
-      background-color: #1557b0;
-    }
-    button:disabled {
-      background-color: #9bbdf3;
-      cursor: not-allowed;
-    }
-    .msg {
-      text-align: center;
-      font-size: 14px;
-      margin-top: 15px;
-      display: none;
-    }
-    .msg-error {
-      color: #d93025;
-      font-weight: 500;
-    }
-    .msg-loading {
-      color: #5f6368;
-    }
-
-    /* Step 2: Celebration Card */
-    #celebrationPage {
-      display: none;
-      background: #ffffff;
-      padding: 25px 20px;
-      border-radius: 12px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-      width: 100%;
-      max-width: 450px;
-      text-align: center;
-      box-sizing: border-box;
-      border: 2px solid #f1c40f;
-      margin-bottom: 20px;
-      animation: popIn 0.4s ease-out;
-    }
-    @keyframes popIn {
-      0% { transform: scale(0.9); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
-    }
-    .congrats-badge {
-      font-size: 42px;
-      margin-bottom: 5px;
-    }
-    .congrats-title {
-      font-size: 22px;
-      font-weight: bold;
-      color: #d93025;
-      margin-bottom: 15px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .details-box {
-      background: #fffdf5;
-      border: 1px dashed #f1c40f;
-      border-radius: 8px;
-      padding: 15px;
-      margin-bottom: 20px;
-      text-align: left;
-    }
-    .detail-item {
+    .btn-green { background: #27ae60; margin-top: 10px; }
+    .btn-link { background: none; color: #555; border: 1px solid #ccc; margin-top: 8px; }
+    .item {
       display: flex;
       justify-content: space-between;
       padding: 8px 0;
-      border-bottom: 1px solid #f9edd4;
+      border-bottom: 1px solid #eee;
       font-size: 14px;
     }
-    .detail-item:last-child {
-      border-bottom: none;
-    }
-    .detail-label {
-      color: #666;
-      font-weight: 500;
-    }
-    .detail-val {
-      color: #222;
-      font-weight: bold;
-    }
-    .prize-highlight {
-      color: #27ae60 !important;
-      font-size: 20px;
-    }
-    .btn-withdraw {
-      background: linear-gradient(135deg, #27ae60, #2ecc71);
-      color: white;
-      font-size: 16px;
-      padding: 13px;
-      border-radius: 6px;
-      border: none;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(46, 204, 113, 0.35);
-      margin-bottom: 10px;
-    }
-    .btn-withdraw:hover {
-      background: linear-gradient(135deg, #219150, #27ae60);
-    }
-    .btn-back {
-      background-color: transparent;
-      color: #666;
-      border: 1px solid #ccc;
-      font-size: 13px;
-      padding: 8px;
-    }
-    .btn-back:hover {
-      background-color: #f1f1f1;
-      color: #111;
-    }
-
-    /* Step 3: Withdrawal Form Card */
-    #withdrawPage {
-      display: none;
-      background: #ffffff;
-      padding: 25px 20px;
-      border-radius: 12px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-      width: 100%;
-      max-width: 450px;
-      box-sizing: border-box;
-      margin-bottom: 20px;
-      animation: popIn 0.4s ease-out;
-    }
-    .readonly-box {
-      background-color: #f8f9fa;
-      cursor: not-allowed;
-      font-weight: bold;
-    }
-
-    /* Step 4: Request Under Review Page */
-    #reviewPage {
-      display: none;
-      background: #ffffff;
-      padding: 25px 20px;
-      border-radius: 12px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-      width: 100%;
-      max-width: 450px;
-      box-sizing: border-box;
-      text-align: center;
-      margin-bottom: 20px;
-      border-top: 5px solid #f39c12;
-      animation: popIn 0.4s ease-out;
-    }
-    .review-badge {
-      font-size: 44px;
-      margin-bottom: 8px;
-    }
-    .status-pill {
-      display: inline-block;
-      background-color: #fef9e7;
-      color: #d68910;
-      border: 1px solid #f9e79f;
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: bold;
-    }
-
-    /* Random Winners Styling */
-    .winners-header {
-      text-align: center;
-      font-size: 18px;
-      font-weight: bold;
-      color: #d93025;
-      margin-bottom: 15px;
-      border-bottom: 2px dashed #e0e0e0;
-      padding-bottom: 10px;
-    }
-    .prize-card {
-      background: #fdfdfd;
-      border: 1px solid #ececec;
-      border-radius: 6px;
-      padding: 10px;
-      margin-bottom: 10px;
-    }
-    .prize-title {
-      font-weight: bold;
-      color: #1a73e8;
-      font-size: 14px;
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 6px;
-    }
-    .ticket-list {
+    .badges {
       display: flex;
       flex-wrap: wrap;
       gap: 5px;
-      max-height: 110px;
+      max-height: 90px;
       overflow-y: auto;
-      padding-right: 3px;
     }
-    .ticket-badge {
-      background: #f1f3f4;
-      color: #333333;
-      font-size: 11px;
-      font-weight: 600;
+    .badge {
+      background: #eee;
       padding: 3px 6px;
       border-radius: 4px;
+      font-size: 11px;
       font-family: monospace;
-      border: 1px solid #e0e0e0;
     }
   </style>
 </head>
 <body>
 
-  <!-- STEP 1: Search Portal -->
-  <div id="mainSearchPortal" class="portal-container">
-    <div class="header-box">
-      <div id="liveClock" class="live-clock">Loading live time...</div>
-      <div class="helpline">Helpline No: <a href="tel:8709171965">8709171965</a></div>
-    </div>
-
-    <div class="title-wrapper">
-      <span class="red-live-dot"></span>
-      <h2>Live Result Check</h2>
-    </div>
-
-    <div class="form-group">
-      <label for="ticketInput">Ticket Number / Mobile Number</label>
-      <input type="text" id="ticketInput" placeholder="Enter number..." autocomplete="off">
-    </div>
-    <button id="submitBtn" onclick="verifyStatus()">Check Status</button>
-
-    <div id="loadingMsg" class="msg msg-loading">Searching records, please wait...</div>
-    <div id="errorMsg" class="msg msg-error"></div>
+  <!-- STEP 1: Search -->
+  <div id="step1" class="box text-center">
+    <div id="clock" style="color: #1a73e8; font-size: 13px; font-weight: bold;"></div>
+    <div style="font-size: 13px; margin: 5px 0;">Helpline: <a href="tel:8709171965" style="color: #d93025; font-weight: bold;">8709171965</a></div>
+    <h3 style="margin: 12px 0;"><span class="live-dot"></span> Live Result Check</h3>
+    <input type="text" id="userInput" placeholder="Ticket Number / Mobile Number">
+    <button onclick="checkResult()">Check Status</button>
+    <div id="msg" style="color: red; font-size: 13px; margin-top: 10px;"></div>
   </div>
 
-  <!-- STEP 2: Celebration & Prize Page -->
-  <div id="celebrationPage">
-    <div class="congrats-badge">🎉 🏆 🎉</div>
-    <div class="congrats-title">Congratulations!</div>
-    
-    <div class="details-box">
-      <div class="detail-item">
-        <span class="detail-label">Customer Name:</span>
-        <span class="detail-val" id="winName">-</span>
-      </div>
-      <div class="detail-item">
-        <span class="detail-label">Mobile Number:</span>
-        <span class="detail-val" id="winMobile">-</span>
-      </div>
-      <div class="detail-item">
-        <span class="detail-label">Prize Level:</span>
-        <span class="detail-val" id="winPrizeLevel">-</span>
-      </div>
-      <div class="detail-item">
-        <span class="detail-label">Winning Prize:</span>
-        <span class="detail-val prize-highlight" id="winAmount">-</span>
-      </div>
+  <!-- STEP 2: Celebration -->
+  <div id="step2" class="box text-center" style="display: none; border: 2px solid #f1c40f;">
+    <h2 style="color: #d93025; margin: 5px 0;">🎉 Congratulations! 🎉</h2>
+    <div style="text-align: left; margin: 15px 0;">
+      <div class="item"><span>Name:</span><b id="winName"></b></div>
+      <div class="item"><span>Mobile:</span><b id="winMobile"></b></div>
+      <div class="item"><span>Winning Prize:</span><b id="winPrize" style="color: #27ae60; font-size: 18px;"></b></div>
     </div>
-
-    <button class="btn-withdraw" onclick="goToWithdrawPage()">Withdraw Winning Amount</button>
-    <button class="btn-back" onclick="goBackToSearch()">← Check Another Result</button>
+    <button class="btn-green" onclick="showStep(3)">Withdraw Winning Amount</button>
+    <button class="btn-link" onclick="showStep(1)">Back</button>
   </div>
 
-  <!-- STEP 3: Withdrawal Form Page -->
-  <div id="withdrawPage">
-    <h2 style="color: #27ae60; margin-top: 0;">Bank Withdrawal Details</h2>
-    <p style="font-size: 13px; color: #666; text-align: center; margin-bottom: 20px;">
-      Enter your bank account details to receive your winning amount.
-    </p>
-
-    <div class="form-group">
-      <label>Customer Name</label>
-      <input type="text" id="wdrName" class="readonly-box" readonly>
-    </div>
-
-    <div class="form-group">
-      <label>Winning Prize</label>
-      <input type="text" id="wdrAmount" class="readonly-box" readonly style="color: #27ae60; font-weight: bold;">
-    </div>
-
-    <div class="form-group">
-      <label for="bankNameInput">Bank Name</label>
-      <input type="text" id="bankNameInput" placeholder="e.g. State Bank of India, HDFC, ICICI...">
-    </div>
-
-    <div class="form-group">
-      <label for="accountNumInput">Account Number</label>
-      <input type="text" id="accountNumInput" placeholder="Enter bank account number">
-    </div>
-
-    <div class="form-group">
-      <label for="ifscInput">IFSC Code</label>
-      <input type="text" id="ifscInput" placeholder="e.g. SBIN0001234" style="text-transform: uppercase;">
-    </div>
-
-    <button class="btn-withdraw" style="margin-top: 10px;" onclick="submitWithdrawal()">Submit Withdrawal Request</button>
-    <button class="btn-back" onclick="goBackToCelebration()">← Back</button>
+  <!-- STEP 3: Form -->
+  <div id="step3" class="box" style="display: none;">
+    <h3 class="text-center" style="color: #27ae60; margin-top: 0;">Bank Withdrawal Details</h3>
+    <label>Bank Name</label>
+    <input type="text" id="bankName" placeholder="Bank Name">
+    <label>Account Number</label>
+    <input type="text" id="bankAcc" placeholder="Account Number">
+    <label>IFSC Code</label>
+    <input type="text" id="bankIfsc" placeholder="IFSC Code" style="text-transform: uppercase;">
+    <button class="btn-green" onclick="submitBank()">Submit Withdrawal Request</button>
+    <button class="btn-link" onclick="showStep(2)">Back</button>
   </div>
 
-  <!-- STEP 4: Request Under Review Status Page -->
-  <div id="reviewPage">
-    <div class="review-badge">⏳</div>
-    <h2 style="color: #d68910; margin-top: 0; margin-bottom: 6px;">Request Under Review</h2>
-    <p style="font-size: 13px; color: #666; margin-bottom: 18px;">
-      Your withdrawal request has been received and is currently under verification.
-    </p>
-
-    <div class="details-box" style="background: #fefdf9; border-color: #f5b041;">
-      <div class="detail-item">
-        <span class="detail-label">Beneficiary Name:</span>
-        <span class="detail-val" id="revName">-</span>
-      </div>
-      <div class="detail-item">
-        <span class="detail-label">Bank Name:</span>
-        <span class="detail-val" id="revBank">-</span>
-      </div>
-      <div class="detail-item">
-        <span class="detail-label">Account Number:</span>
-        <span class="detail-val" id="revAccount" style="letter-spacing: 1px;">-</span>
-      </div>
-      <div class="detail-item">
-        <span class="detail-label">IFSC Code:</span>
-        <span class="detail-val" id="revIfsc">-</span>
-      </div>
-      <div class="detail-item">
-        <span class="detail-label">Winning Prize:</span>
-        <span class="detail-val prize-highlight" id="revAmount">-</span>
-      </div>
-      <div class="detail-item">
-        <span class="detail-label">Current Status:</span>
-        <span class="detail-val"><span class="status-pill">Pending Approval</span></span>
-      </div>
+  <!-- STEP 4: Under Review -->
+  <div id="step4" class="box text-center" style="display: none; border-top: 4px solid #f39c12;">
+    <h3 style="color: #d68910; margin-top: 0;">⏳ Request Under Review</h3>
+    <div style="text-align: left; margin: 15px 0;">
+      <div class="item"><span>Holder Name:</span><b id="revName"></b></div>
+      <div class="item"><span>Bank:</span><b id="revBank"></b></div>
+      <div class="item"><span>Account No:</span><b id="revAcc"></b></div>
+      <div class="item"><span>IFSC:</span><b id="revIfsc"></b></div>
+      <div class="item"><span>Prize Amount:</span><b id="revPrize" style="color: #27ae60;"></b></div>
+      <div class="item"><span>Status:</span><b style="color: #d68910;">Pending Approval</b></div>
     </div>
-
-    <button class="btn-back" onclick="goBackToSearch()">← Done / Check Another</button>
+    <button class="btn-link" onclick="showStep(1)">Check Another</button>
   </div>
 
-  <!-- Random Winners List (Always Visible at Bottom) -->
-  <div id="winnersSection" class="winners-container">
-    <div class="winners-header">🏆 Today's Lucky Winners 🏆</div>
+  <!-- Winners List (Always Visible) -->
+  <div class="box">
+    <h4 class="text-center" style="color: #d93025; margin: 0 0 10px;">🏆 Today's Lucky Winners 🏆</h4>
     <div id="winnersList"></div>
   </div>
 
   <script>
-    // 1. Live Date & Time
-    function updateClock() {
-      const now = new Date();
-      const options = { 
-        weekday: 'short', year: 'numeric', month: 'short', 
-        day: 'numeric', hour: '2-digit', minute: '2-digit', 
-        second: '2-digit', hour12: true 
-      };
-      document.getElementById('liveClock').textContent = '🕒 ' + now.toLocaleString('en-IN', options);
-    }
-    setInterval(updateClock, 1000);
-    updateClock();
+    // Live Clock
+    setInterval(() => {
+      document.getElementById('clock').textContent = '🕒 ' + new Date().toLocaleString('en-IN');
+    }, 1000);
 
-    // 2. Random Ticket Number Generator
-    function getRandomTicket() {
-      const num = Math.floor(100000 + Math.random() * 900000);
-      return `KL ${num}`;
-    }
-
-    // 3. Render 1st to 10th Prize Winners
-    const prizesConfig = [
-      { prize: "1st Prize: ₹25 Crore", count: 1 },
-      { prize: "2nd Prize: ₹10 Crore", count: 1 },
-      { prize: "3rd Prize: ₹75 Lakh", count: 1 },
-      { prize: "4th Prize: ₹25 Lakh", count: 12 },
-      { prize: "5th Prize: ₹12 Lakh", count: 16 },
-      { prize: "6th Prize: ₹1 Lakh", count: 36 },
-      { prize: "7th Prize: ₹75,000", count: 99 },
-      { prize: "8th Prize: ₹25,000", count: 120 },
-      { prize: "9th Prize: ₹10,000", count: 179 },
-      { prize: "10th Prize: ₹2,500", count: 200 }
+    // Winners Setup
+    const list = [
+      ["1st Prize: ₹25 Crore", 1],
+      ["2nd Prize: ₹10 Crore", 1],
+      ["3rd Prize: ₹75 Lakh", 1],
+      ["4th Prize: ₹25 Lakh", 12],
+      ["5th Prize: ₹1 Lakh", 36]
     ];
+    let winHtml = "";
+    list.forEach(item => {
+      let b = "";
+      for (let i = 0; i < item[1]; i++) {
+        b += `<span class="badge">KL ${Math.floor(100000 + Math.random() * 900000)}</span>`;
+      }
+      winHtml += `<div style="margin-bottom: 8px;"><div class="item"><b>${item[0]}</b><span>(${item[1]})</span></div><div class="badges">${b}</div></div>`;
+    });
+    document.getElementById("winnersList").innerHTML = winHtml;
 
-    function renderWinners() {
-      const container = document.getElementById("winnersList");
-      let html = "";
-      prizesConfig.forEach(item => {
-        let ticketBadges = "";
-        for (let i = 0; i < item.count; i++) {
-          ticketBadges += `<span class="ticket-badge">${getRandomTicket()}</span>`;
-        }
-        html += `
-          <div class="prize-card">
-            <div class="prize-title">
-              <span>${item.prize}</span>
-              <span>(${item.count} ${item.count === 1 ? 'Person' : 'Persons'})</span>
-            </div>
-            <div class="ticket-list">${ticketBadges}</div>
-          </div>
-        `;
+    // Navigation Helper
+    function showStep(num) {
+      ['step1', 'step2', 'step3', 'step4'].forEach((id, idx) => {
+        document.getElementById(id).style.display = (idx + 1 === num) ? 'block' : 'none';
       });
-      container.innerHTML = html;
-    }
-    renderWinners();
-
-    // 4. API & Helper Logic
-    const API_URL = "https://sheetdb.io/api/v1/u2lswkzde626d";
-    let currentUserData = {};
-
-    function cleanText(val) {
-      return String(val || "").replace(/[^a-zA-Z0-9]/g, "").toLowerCase();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function extractVal(row, fieldNames) {
-      for (const col in row) {
-        const cleanedCol = cleanText(col);
-        for (const target of fieldNames) {
-          if (cleanedCol === cleanText(target)) {
-            return row[col];
-          }
-        }
-      }
-      return "";
-    }
-
-    // Fireworks Celebration Trigger
-    function launchCelebration() {
-      const duration = 3 * 1000;
-      const end = Date.now() + duration;
-
-      (function frame() {
-        confetti({
-          particleCount: 5,
-          angle: 60,
-          spread: 55,
-          origin: { x: 0 }
-        });
-        confetti({
-          particleCount: 5,
-          angle: 120,
-          spread: 55,
-          origin: { x: 1 }
-        });
-
-        if (Date.now() < end) {
-          requestAnimationFrame(frame);
-        }
-      }());
-    }
-
-    // Step 1 -> Step 2
-    async function verifyStatus() {
-      const queryRaw = document.getElementById("ticketInput").value.trim();
-      const queryClean = cleanText(queryRaw);
-      const errorMsg = document.getElementById("errorMsg");
-      const loadingMsg = document.getElementById("loadingMsg");
-      const submitBtn = document.getElementById("submitBtn");
-
-      if (!queryClean) {
-        errorMsg.textContent = "Please enter a valid Ticket or Mobile Number.";
-        errorMsg.style.display = "block";
-        return;
-      }
-
-      errorMsg.style.display = "none";
-      loadingMsg.style.display = "block";
-      submitBtn.disabled = true;
+    // SheetDB Result Search
+    let curData = {};
+    async function checkResult() {
+      const q = document.getElementById("userInput").value.trim().toLowerCase();
+      const msg = document.getElementById("msg");
+      if (!q) { msg.textContent = "Please enter ticket/mobile number."; return; }
+      msg.textContent = "Searching...";
 
       try {
-        const res = await fetch(API_URL);
+        const res = await fetch("https://sheetdb.io/api/v1/u2lswkzde626d");
         const data = await res.json();
-
-        const record = data.find(item => {
-          const ticketVal = cleanText(extractVal(item, ["ticket", "ticketnumber", "ticket_no"]) || Object.values(item)[0]);
-          const mobileVal = cleanText(extractVal(item, ["mobile", "phone", "number", "contact", "mobileno"]));
-          return (ticketVal && ticketVal === queryClean) || (mobileVal && mobileVal === queryClean);
-        });
-
-        loadingMsg.style.display = "none";
-        submitBtn.disabled = false;
+        const record = data.find(r => Object.values(r).some(v => String(v).trim().toLowerCase() === q));
 
         if (record) {
-          const customerName = extractVal(record, ["name", "winner", "customer"]) || "Valued Customer";
-          const customerMobile = extractVal(record, ["mobile", "phone", "number"]) || queryRaw;
-          const prizeLevel = extractVal(record, ["prize", "prizelevel", "level"]) || "Lucky Draw Prize";
-          const amt = extractVal(record, ["amount", "prizeamount", "winningamount"]);
-          const prizeAmountFormatted = amt ? "₹" + amt : "₹25,00,000";
-
-          currentUserData = {
-            name: customerName,
-            prize: prizeAmountFormatted
+          msg.textContent = "";
+          curData = {
+            name: record.name || record.Name || "Customer",
+            mobile: record.mobile || record.Mobile || q,
+            prize: record.amount || record.Amount || "₹25,00,000"
           };
+          if (!curData.prize.includes("₹")) curData.prize = "₹" + curData.prize;
 
-          // Update Celebration Page
-          document.getElementById("winName").textContent = customerName;
-          document.getElementById("winMobile").textContent = customerMobile;
-          document.getElementById("winPrizeLevel").textContent = prizeLevel;
-          document.getElementById("winAmount").textContent = prizeAmountFormatted;
+          document.getElementById("winName").textContent = curData.name;
+          document.getElementById("winMobile").textContent = curData.mobile;
+          document.getElementById("winPrize").textContent = curData.prize;
 
-          // Switch View to Celebration
-          document.getElementById("mainSearchPortal").style.display = "none";
-          document.getElementById("celebrationPage").style.display = "block";
-
-          launchCelebration();
-          window.scrollTo({ top: 0, behavior: 'smooth' });
+          showStep(2);
+          confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 } });
         } else {
-          errorMsg.textContent = "No record found. Please verify the entered number.";
-          errorMsg.style.display = "block";
+          msg.textContent = "No record found. Please verify number.";
         }
-      } catch (err) {
-        loadingMsg.style.display = "none";
-        submitBtn.disabled = false;
-        errorMsg.textContent = "Unable to connect to the database. Please try again.";
-        errorMsg.style.display = "block";
+      } catch (e) {
+        msg.textContent = "Database connection error.";
       }
     }
 
-    // Step 2 -> Step 3 (Open Withdrawal Form)
-    function goToWithdrawPage() {
-      document.getElementById("celebrationPage").style.display = "none";
-      
-      document.getElementById("wdrName").value = currentUserData.name || "";
-      document.getElementById("wdrAmount").value = currentUserData.prize || "";
-      document.getElementById("bankNameInput").value = "";
-      document.getElementById("accountNumInput").value = "";
-      document.getElementById("ifscInput").value = "";
+    // Submit Bank Details
+    function submitBank() {
+      const bank = document.getElementById("bankName").value.trim();
+      const acc = document.getElementById("bankAcc").value.trim();
+      const ifsc = document.getElementById("bankIfsc").value.trim().toUpperCase();
 
-      document.getElementById("withdrawPage").style.display = "block";
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    // Step 3 -> Step 2 (Back)
-    function goBackToCelebration() {
-      document.getElementById("withdrawPage").style.display = "none";
-      document.getElementById("celebrationPage").style.display = "block";
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    // Reset Back to Search
-    function goBackToSearch() {
-      document.getElementById("celebrationPage").style.display = "none";
-      document.getElementById("withdrawPage").style.display = "none";
-      document.getElementById("reviewPage").style.display = "none";
-      document.getElementById("mainSearchPortal").style.display = "block";
-      document.getElementById("ticketInput").value = "";
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    // Step 3 -> Step 4 (Submit Withdrawal & Show Under Review)
-    function submitWithdrawal() {
-      const bank = document.getElementById("bankNameInput").value.trim();
-      const account = document.getElementById("accountNumInput").value.trim();
-      const ifsc = document.getElementById("ifscInput").value.trim().toUpperCase();
-
-      if (!bank || !account || !ifsc) {
-        alert("Please fill all bank details (Bank Name, Account Number, and IFSC Code).");
+      if (!bank || !acc || !ifsc) {
+        alert("Please fill all details.");
         return;
       }
 
-      // Hide all digits except last 4
-      let maskedAccount = account;
-      if (account.length > 4) {
-        const last4 = account.slice(-4);
-        maskedAccount = "XXXX-XXXX-" + last4;
-      }
-
-      // Populate Under Review Page
-      document.getElementById("revName").textContent = currentUserData.name || "-";
+      document.getElementById("revName").textContent = curData.name || "-";
       document.getElementById("revBank").textContent = bank;
-      document.getElementById("revAccount").textContent = maskedAccount;
+      document.getElementById("revAcc").textContent = acc.length > 4 ? "XXXX-XXXX-" + acc.slice(-4) : acc;
       document.getElementById("revIfsc").textContent = ifsc;
-      document.getElementById("revAmount").textContent = currentUserData.prize || "-";
+      document.getElementById("revPrize").textContent = curData.prize || "-";
 
-      // Show Page 4
-      document.getElementById("withdrawPage").style.display = "none";
-      document.getElementById("reviewPage").style.display = "block";
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      showStep(4);
     }
   </script>
 </body>
