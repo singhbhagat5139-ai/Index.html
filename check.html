@@ -180,7 +180,51 @@
       var input = document.getElementById('userInput').value.trim();
       var msg = document.getElementById('msg');
       var btn = document.getElementById('chkBtn');
-      msg.innerText = "";
+      msg.innerText = "";if (!input) {
+        msg.innerText = "Please enter ticket or mobile number";
+        return;
+      }
+      btn.disabled = true;
+      msg.style.color = "#38bdf8";
+      msg.innerText = "Checking results, please wait...";
+
+      try {
+        var res = await fetch(API_URL);
+        var data = await res.json();
+        var matched = null;
+        if (Array.isArray(data)) {
+          matched = data.find(function(item) {
+            return (item.ticket && item.ticket.trim().toLowerCase() === input.toLowerCase()) ||
+                   (item.mobile && item.mobile.trim() === input);
+          });
+        }
+        if (!matched) {
+          msg.style.color = "#fb7185";
+          msg.innerText = "No Record Found! Please verify your ticket/mobile number.";
+          btn.disabled = false;
+          return;
+        }
+
+        var rawLevel = matched.prize || "1st Prize";
+        var match = String(rawLevel).match(/\d+/);
+        var rank = match ? parseInt(match[0], 10) : 1;
+        if (!prizeTable[rank]) rank = 1;
+
+        var finalLevel = rawLevel;
+        var finalAmount = matched.amount || prizeTable[rank].amount;
+        var finalTicket = matched.ticket || input;
+        var finalName = matched.name || "Customer";
+        var finalMobile = matched.mobile || input;
+
+        document.getElementById('winTicket').innerText = finalTicket;
+        document.getElementById('winName').innerText = finalName;
+        document.getElementById('winMobile').innerText = finalMobile;
+        document.getElementById('winLevel').innerText = finalLevel;
+        document.getElementById('winPrize').innerText = finalAmount;
+
+        document.getElementById('revTicket').innerText = finalTicket;
+        document.getElementById('revName').innerText = finalName;
+        document.getElementById('revLevel').innerText = finalLevel;
 
       if (!input) {
         msg.innerText = "Please enter ticket or mobile number";
