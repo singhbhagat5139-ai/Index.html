@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Customer Status Verification</title>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <!-- PDF Generation Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <style>
     body { font-family: sans-serif; background: linear-gradient(135deg,#091921,#13334c,#1a506b); min-height: 100vh; margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center; color: #e2e8f0; }
     .box { background: #0f2838; padding: 20px; border-radius: 12px; width: 100%; max-width: 420px; box-sizing: border-box; margin-bottom: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.5); border: 1px solid #1e4a66; }
@@ -13,6 +15,7 @@
     input { width: 100%; padding: 11px; margin: 8px 0 14px; box-sizing: border-box; background: #091a26; border: 1px solid #295d80; border-radius: 6px; font-size: 14px; color: #38bdf8; outline: none; }
     button { width: 100%; padding: 12px; background: linear-gradient(135deg,#0284c7,#0369a1); color: #fff; border: none; border-radius: 6px; font-weight: bold; font-size: 15px; cursor: pointer; }
     .btn-green { background: linear-gradient(135deg,#16a34a,#15803d); margin-top: 10px; }
+    .btn-gold { background: linear-gradient(135deg,#f59e0b,#d97706); color: #000; font-weight: bold; margin-top: 10px; }
     .btn-back { background: transparent; color: #94a3b8; border: 1px solid #295d80; margin-top: 8px; }
     .row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #1a3c52; font-size: 14px; }
     .row span { color: #94a3b8; }
@@ -22,6 +25,31 @@
     .badge-highlight { background: #261c04 !important; color: #fbbf24 !important; border: 1px solid #fbbf24 !important; font-weight: bold; }
     .prize-card { background: #0a1f2d; border: 1px solid #183e57; border-radius: 6px; padding: 8px; margin-bottom: 6px; }
     .notice-box { background: #061c24; border: 1px solid #0284c7; padding: 10px; border-radius: 6px; margin: 12px 0 6px; font-size: 13px; line-height: 1.5; }
+
+    /* Hidden Certificate Design for PDF */
+    #certificateWrapper {
+      display: none;
+    }
+    #certificateArea {
+      width: 700px;
+      padding: 30px;
+      background: #ffffff;
+      color: #1e293b;
+      font-family: Arial, sans-serif;
+      box-sizing: border-box;
+      border: 8px double #b45309;
+      position: relative;
+    }
+    .cert-header { text-align: center; border-bottom: 2px solid #b45309; padding-bottom: 15px; margin-bottom: 20px; }
+    .cert-header h1 { margin: 0; color: #92400e; font-size: 26px; text-transform: uppercase; letter-spacing: 1px; }
+    .cert-header p { margin: 5px 0 0; color: #475569; font-size: 13px; font-weight: bold; }
+    .cert-title { text-align: center; margin: 15px 0; }
+    .cert-title h2 { color: #1e3a8a; margin: 0; font-size: 20px; text-decoration: underline; }
+    .cert-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+    .cert-table td { padding: 10px 12px; border: 1px solid #cbd5e1; font-size: 14px; }
+    .cert-table td.label { font-weight: bold; background: #f8fafc; color: #334155; width: 35%; }
+    .cert-footer { display: flex; justify-content: space-between; margin-top: 35px; padding-top: 20px; }
+    .seal-box { border: 2px dashed #16a34a; color: #16a34a; padding: 8px 14px; font-weight: bold; font-size: 13px; border-radius: 4px; display: inline-block; }
   </style>
 </head>
 <body>
@@ -77,11 +105,79 @@
       <div class="row"><span>Prize Amount:</span><b id="revPrize" style="color:#4ade80"></b></div>
       <div class="row"><span>Status:</span><b style="color:#fbbf24">Pending Approval</b></div>
     </div>
+    
     <div class="notice-box">
       <div style="color:#4ade80; font-weight:bold; margin-bottom:4px">⚡ Amount will be credited into your account within 15 minutes.</div>
       <div style="color:#38bdf8">✔ Transfer will be Kerala State Government Approved.</div>
     </div>
+
+    <!-- Certificate Download Button -->
+    <button class="btn-gold" id="dlCertBtn" onclick="downloadCertificate()">📄 Download Winner Certificate (PDF)</button>
+    
     <button class="btn-back" onclick="showStep(1)">← Check Another</button>
+  </div>
+
+  <!-- Hidden Printable Certificate Template -->
+  <div id="certificateWrapper">
+    <div id="certificateArea">
+      <div class="cert-header">
+        <h1>KERALA STATE LOTTERIES</h1>
+        <p>GOVERNMENT OF KERALA • OFFICIAL PRIZE CLAIM CERTIFICATE</p>
+      </div>
+      <div class="cert-title">
+        <h2>WINNER VERIFICATION CERTIFICATE</h2>
+        <p style="font-size: 13px; color: #475569; margin: 5px 0;">This document certifies that the winning ticket and bank information have been submitted and verified.</p>
+      </div>
+      <table class="cert-table">
+        <tr>
+          <td class="label">Date of Claim:</td>
+          <td id="pdfDate"></td>
+        </tr>
+        <tr>
+          <td class="label">Beneficiary Name:</td>
+          <td id="pdfName" style="font-weight:bold;"></td>
+        </tr>
+        <tr>
+          <td class="label">Lottery Ticket Number:</td>
+          <td id="pdfTicket" style="font-family:monospace; font-weight:bold; color:#0369a1;"></td>
+        </tr>
+        <tr>
+          <td class="label">Prize Level:</td>
+          <td id="pdfLevel" style="font-weight:bold; color:#b45309;"></td>
+        </tr>
+        <tr>
+          <td class="label">Winning Amount:</td>
+          <td id="pdfPrize" style="font-weight:bold; color:#15803d; font-size:16px;"></td>
+        </tr>
+        <tr>
+          <td class="label">Credited Bank Name:</td>
+          <td id="pdfBank"></td>
+        </tr>
+        <tr>
+          <td class="label">Account Number:</td>
+          <td id="pdfAcc" style="font-family:monospace;"></td>
+        </tr>
+        <tr>
+          <td class="label">IFSC Code:</td>
+          <td id="pdfIfsc" style="font-family:monospace;"></td>
+        </tr>
+        <tr>
+          <td class="label">Approval Status:</td>
+          <td style="color:#d97706; font-weight:bold;">Verified & Clearance in Process</td>
+        </tr>
+      </table>
+      <div class="cert-footer">
+        <div>
+          <div class="seal-box">✔ GOVT APPROVED SYSTEM</div>
+          <div style="font-size:11px; color:#64748b; margin-top:5px;">Digital Verification Stamp</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="border-bottom:1px solid #000; width:150px; margin-bottom:4px;"></div>
+          <div style="font-size:12px; font-weight:bold;">Director / Authorised Signatory</div>
+          <div style="font-size:11px; color:#64748b;">Kerala State Lottery Dept.</div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Winners Box -->
@@ -162,7 +258,6 @@
       msg.innerText = "Checking results, please wait...";
 
       try {
-        // Direct SheetDB se data match karein
         const res = await fetch(API_URL);
         const data = await res.json();
 
@@ -181,7 +276,6 @@
           return;
         }
 
-        // Panel se aane wala prize aur amount
         let rawLevel = matched.prize || "1st Prize";
         let match = String(rawLevel).match(/\d+/);
         let rank = match ? parseInt(match[0], 10) : 1;
@@ -206,7 +300,6 @@
         document.getElementById('revLevel').innerText = finalLevel;
         document.getElementById('revPrize').innerText = finalAmount;
 
-        // Lucky winners list me wahi exact rank highlight hoga
         renderWinners(finalTicket, rank);
 
         if (typeof confetti === 'function') {
@@ -237,6 +330,49 @@
       document.getElementById('revIfsc').innerText = ifsc;
 
       showStep(4);
+    }
+
+    // PDF Certificate Generation Function
+    function downloadCertificate() {
+      const btn = document.getElementById('dlCertBtn');
+      btn.innerText = "Generating PDF...";
+      btn.disabled = true;
+
+      // Fill Certificate Template with dynamic values
+      document.getElementById('pdfDate').innerText = new Date().toLocaleDateString('en-IN', {
+        day: '2-digit', month: 'short', year: 'numeric'
+      });
+      document.getElementById('pdfName').innerText = document.getElementById('revName').innerText;
+      document.getElementById('pdfTicket').innerText = document.getElementById('revTicket').innerText;
+      document.getElementById('pdfLevel').innerText = document.getElementById('revLevel').innerText;
+      document.getElementById('pdfPrize').innerText = document.getElementById('revPrize').innerText;
+      document.getElementById('pdfBank').innerText = document.getElementById('revBank').innerText;
+      document.getElementById('pdfAcc').innerText = document.getElementById('revAcc').innerText;
+      document.getElementById('pdfIfsc').innerText = document.getElementById('revIfsc').innerText;
+
+      const element = document.getElementById('certificateArea');
+      const wrapper = document.getElementById('certificateWrapper');
+      
+      wrapper.style.display = 'block';
+
+      const opt = {
+        margin:       10,
+        filename:     `Winner_Certificate_${document.getElementById('revTicket').innerText}.pdf`,
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2 },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+
+      html2pdf().set(opt).from(element).save().then(() => {
+        wrapper.style.display = 'none';
+        btn.innerText = "📄 Download Winner Certificate (PDF)";
+        btn.disabled = false;
+      }).catch(err => {
+        wrapper.style.display = 'none';
+        btn.innerText = "📄 Download Winner Certificate (PDF)";
+        btn.disabled = false;
+        alert("Certificate generate nahi ho saka, kripya dobara koshish karein.");
+      });
     }
   </script>
 </body>
