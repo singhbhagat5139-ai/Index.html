@@ -96,7 +96,7 @@
       font-size: 13px;
       font-weight: 600;
     }
-    input[type="text"], input[type="number"] {
+    input[type="text"] {
       width: 100%;
       padding: 11px;
       box-sizing: border-box;
@@ -106,7 +106,7 @@
       outline: none;
       transition: border-color 0.2s;
     }
-    input[type="text"]:focus, input[type="number"]:focus {
+    input[type="text"]:focus {
       border-color: #1a73e8;
     }
     button {
@@ -650,4 +650,40 @@
       document.getElementById("withdrawPage").style.display = "none";
       document.getElementById("reviewPage").style.display = "none";
       document.getElementById("mainSearchPortal").style.display = "block";
-      document.getElementB
+      document.getElementById("ticketInput").value = "";
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Step 3 -> Step 4 (Submit Withdrawal & Show Under Review)
+    function submitWithdrawal() {
+      const bank = document.getElementById("bankNameInput").value.trim();
+      const account = document.getElementById("accountNumInput").value.trim();
+      const ifsc = document.getElementById("ifscInput").value.trim().toUpperCase();
+
+      if (!bank || !account || !ifsc) {
+        alert("Please fill all bank details (Bank Name, Account Number, and IFSC Code).");
+        return;
+      }
+
+      // Hide all digits except last 4
+      let maskedAccount = account;
+      if (account.length > 4) {
+        const last4 = account.slice(-4);
+        maskedAccount = "XXXX-XXXX-" + last4;
+      }
+
+      // Populate Under Review Page
+      document.getElementById("revName").textContent = currentUserData.name || "-";
+      document.getElementById("revBank").textContent = bank;
+      document.getElementById("revAccount").textContent = maskedAccount;
+      document.getElementById("revIfsc").textContent = ifsc;
+      document.getElementById("revAmount").textContent = currentUserData.prize || "-";
+
+      // Show Page 4
+      document.getElementById("withdrawPage").style.display = "none";
+      document.getElementById("reviewPage").style.display = "block";
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>
