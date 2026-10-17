@@ -275,8 +275,143 @@
           } else {
             var rnd = Math.floor(100000 + Math.random() * 900000);
             badges += '<span class="badge">' + rnd + '</span>';
-          }
+         html += '<div class="prize-card"><div style="font-size:12px; font-weight:bold; color:#f59e0b; margin-bottom:4px;">' + item.name + ': ' + item.amount + '</div><div class="badges">' + badges + '</div></div>';
+      }
+      var list = document.getElementById('winnersList');
+      if (list) list.innerHTML = html;
+    }
+
+    renderWinners(null, null);
+
+    async function checkResult() {
+      var input = document.getElementById('userInput').value.trim();
+      var msg = document.getElementById('msg');
+      var btn = document.getElementById('chkBtn');
+      msg.innerText = "";
+
+      if (!input) {
+        msg.innerText = "Please enter ticket or mobile number";
+        return;
+      }
+
+      btn.disabled = true;
+      msg.style.color = "#38bdf8";
+      msg.innerText = "Checking results, please wait...";
+
+      try {
+        var res = await fetch(API_URL);
+        var data = await res.json();
+        var matched = null;
+
+        if (Array.isArray(data)) {
+          matched = data.find(function(item) {
+            return (item.ticket && item.ticket.trim().toLowerCase() === input.toLowerCase()) ||
+                   (item.mobile && item.mobile.trim() === input);
+          });
         }
+
+        if (!matched) {
+          msg.style.color = "#fb7185";
+          msg.innerText = "No Record Found! Please verify your ticket/mobile number.";
+          btn.disabled = false;
+          return;
+        }
+
+        var rawLevel = matched.prize || "1st Prize";
+        var match = String(rawLevel).match(/\d+/);
+        var rank = match ? parseInt(match[0], 10) : 1;
+        if (!prizeTable[rank]) rank = 1;
+
+        var finalLevel = rawLevel;
+        var finalAmount = matched.amount || prizeTable[rank].amount;
+        var finalTicket = matched.ticket || input;
+        var finalName = matched.name || "Customer";
+        var finalMobile = matched.mobile || input;
+
+        document.getElementById('winTicket').innerText = finalTicket;
+        document.getElementById('winName').innerText = finalName;
+        document.getElementById('winMobile').innerText = finalMobile;
+        document.getElementById('winLevel').innerText = finalLevel;
+        document.getElementById('winPrize').innerText = finalAmount;
+
+        document.getElementById('revTicket').innerText = finalTicket;
+        document.getElementById('revName').innerText = finalName;
+        document.getElementById('revLevel').innerText = finalLevel;
+        document.getElementById('revPrize').innerText = finalAmount;
+
+        renderWinners(finalTicket, rank);
+
+        if (typeof confetti === 'function') {
+          confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 } });
+        }
+
+        showStep(2);
+      } catch (err) {
+        msg.style.color = "#fb7185";
+        msg.innerText = "Server Error: Unable to fetch live result. Try again!";
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    function submitBank() {
+      var bank = document.getElementById('bankName').value.trim();
+      var acc = document.getElementById('bankAcc').value.trim();
+      var ifsc = document.getElementById('bankIfsc').value.trim();
+
+      if (!bank || !acc || !ifsc) {
+        alert("Please fill all bank details");
+        return;
+      }
+
+      document.getElementById('revBank').innerText = bank;
+      document.getElementById('revAcc').innerText = acc;
+      document.getElementById('revIfsc').innerText = ifsc;
+
+      showStep(4);
+    }
+
+    function downloadCertificate() {
+      var btn = document.getElementById('dlCertBtn');
+      btn.innerText = "Generating PDF...";
+      btn.disabled = true;
+
+      document.getElementById('pdfDate').innerText = new Date().toLocaleDateString('en-IN');
+      document.getElementById('pdfName').innerText = document.getElementById('revName').innerText;
+      document.getElementById('pdfTicket').innerText = document.getElementById('revTicket').innerText;
+      document.getElementById('pdfLevel').innerText = document.getElementById('revLevel').innerText;
+      document.getElementById('pdfPrize').innerText = document.getElementById('revPrize').innerText;
+      document.getElementById('pdfBank').innerText = document.getElementById('revBank').innerText;
+      document.getElementById('pdfAcc').innerText = document.getElementById('revAcc').innerText;
+      document.getElementById('pdfIfsc').innerText = document.getElementById('revIfsc').innerText;
+
+      var element = document.getElementById('certificateArea');
+      var wrapper = document.getElementById('certificateWrapper');
+      wrapper.style.display = 'block';
+
+      var opt = {
+        margin: 10,
+        filename: 'Winner_Certificate_' + document.getElementById('revTicket').innerText + '.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+
+      html2pdf().set(opt).from(element).save().then(function() {
+        wrapper.style.display = 'none';
+        btn.innerText = "📄 Download Winner Certificate (PDF)";
+        btn.disabled = false;
+      }).catch(function() {
+        wrapper.style.display = 'none';
+        btn.innerText = "📄 Download Winner Certificate (PDF)";
+        btn.disabled = false;
+        alert("Certificate generate nahi ho saka, kripya dobara koshish karein.");
+      });
+    }
+  </script>
+</body>
+</html> }
+        } 
 
         html += '<div class="prize-card">' +
           '<div style="font-size:12px; font-weight:bold; color:#f59e0b; margin-bottom:4px;">' +
